@@ -1,0 +1,31 @@
+<% if (pagination.totalPages > 1) { %>
+  <nav class="admin-pagination" aria-label="Phân trang">
+    <ul class="pagination flex-wrap mb-0">
+      <li class="page-item<%= pagination.previousUrl ? '' : ' disabled' %>">
+        <% if (pagination.previousUrl) { %>
+          <a class="page-link" href="<%= pagination.previousUrl %>" rel="prev">Trước</a>
+        <% } else { %>
+          <span class="page-link" aria-disabled="true">Trước</span>
+        <% } %>
+      </li>
+
+      <% pagination.pages.forEach((item) => { %>
+        <li class="page-item<%= item.isCurrent ? ' active' : '' %>">
+          <% if (item.isCurrent) { %>
+            <span class="page-link" aria-current="page"><%= item.number %></span>
+          <% } else { %>
+            <a class="page-link" href="<%= item.url %>"><%= item.number %></a>
+          <% } %>
+        </li>
+      <% }); %>
+
+      <li class="page-item<%= pagination.nextUrl ? '' : ' disabled' %>">
+        <% if (pagination.nextUrl) { %>
+          <a class="page-link" href="<%= pagination.nextUrl %>" rel="next">Sau</a>
+        <% } else { %>
+          <span class="page-link" aria-disabled="true">Sau</span>
+        <% } %>
+      </li>
+    </ul>
+  </nav>
+<% } %>

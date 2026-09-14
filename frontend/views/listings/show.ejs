@@ -1,0 +1,918 @@
+<%- include('../partials/header', { pageStyles: ['/css/listing-detail.css'] }) %>
+
+<%
+  const detailImages = listing.hasImages
+    ? listing.images
+    : [listing.primaryImage];
+
+  const firstImageAlt = listing.hasImages
+    ? `Ảnh 1 của ${listing.title}`
+    : `Bài đăng ${listing.title} chưa có ảnh`;
+%>
+
+<section class="listing-detail-page" aria-labelledby="listing-detail-title">
+
+  <div class="listing-detail-container">
+
+    <!-- THÔNG BÁO -->
+    <div class="listing-detail-notices">
+
+      <% if (successMessage) { %>
+        <div
+          class="alert alert-success listing-detail-alert"
+          role="status"
+        >
+          <%= successMessage %>
+        </div>
+      <% } %>
+
+      <% if (errors.general) { %>
+        <div
+          class="alert alert-danger listing-detail-alert"
+          role="alert"
+        >
+          <%= errors.general %>
+        </div>
+      <% } %>
+
+    </div>
+
+
+    <!-- ===================================================
+         KHỐI CHÍNH
+         =================================================== -->
+    <section class="listing-detail-main-card">
+
+
+      <!-- =================================================
+           ẢNH SẢN PHẨM
+           ================================================= -->
+      <div
+        class="listing-detail-gallery"
+        data-product-gallery
+      >
+
+        <div class="listing-detail-main-media">
+
+          <% if (listing.hasImages) { %>
+
+            <a
+              class="listing-detail-main-link"
+              href="<%= detailImages[0] %>"
+              target="_blank"
+              rel="noopener"
+              data-gallery-link
+              aria-label="Mở ảnh sản phẩm kích thước đầy đủ"
+            >
+
+              <img
+                class="listing-detail-image"
+                src="<%= detailImages[0] %>"
+                alt="<%= firstImageAlt %>"
+                width="1000"
+                height="1000"
+                fetchpriority="high"
+                data-gallery-main
+              >
+
+            </a>
+
+          <% } else { %>
+
+            <img
+              class="listing-detail-image"
+              src="<%= detailImages[0] %>"
+              alt="<%= firstImageAlt %>"
+              width="1000"
+              height="1000"
+              fetchpriority="high"
+              data-gallery-main
+            >
+
+          <% } %>
+
+
+          <!-- BỘ ĐẾM ẢNH -->
+          <span
+            class="listing-detail-image-counter"
+            data-gallery-counter
+          >
+
+            <%= listing.hasImages
+              ? `Ảnh 1 / ${listing.imageCount}`
+              : 'Chưa có ảnh'
+            %>
+
+          </span>
+
+        </div>
+
+
+        <!-- THUMBNAIL -->
+        <% if (detailImages.length > 1) { %>
+
+          <div
+            class="listing-detail-thumbnails"
+            role="group"
+            aria-label="Chọn ảnh sản phẩm"
+          >
+
+            <% detailImages.forEach((imagePath, index) => { %>
+
+              <button
+                class="
+                  listing-detail-thumbnail
+                  <%= index === 0 ? 'is-active' : '' %>
+                "
+                type="button"
+                data-gallery-thumbnail
+                data-gallery-src="<%= imagePath %>"
+                data-gallery-alt="Ảnh <%= index + 1 %> của <%= listing.title %>"
+                data-gallery-index="<%= index + 1 %>"
+                aria-label="Xem ảnh <%= index + 1 %>"
+                aria-pressed="<%= index === 0 ? 'true' : 'false' %>"
+              >
+
+                <img
+                  src="<%= imagePath %>"
+                  alt=""
+                  width="160"
+                  height="160"
+                  loading="<%= index === 0 ? 'eager' : 'lazy' %>"
+                >
+
+              </button>
+
+            <% }); %>
+
+          </div>
+
+        <% } %>
+
+      </div>
+
+
+
+      <!-- =================================================
+           THÔNG TIN BÊN PHẢI
+           ================================================= -->
+      <aside
+        class="listing-detail-info"
+        aria-label="Thông tin sản phẩm"
+      >
+
+
+        <!-- TIÊU ĐỀ + LƯU -->
+        <div class="listing-detail-title-row">
+
+          <div class="listing-detail-title-copy">
+
+            <h1
+              class="listing-detail-title"
+              id="listing-detail-title"
+            >
+              <%= listing.title %>
+            </h1>
+
+
+            <div class="listing-detail-submeta">
+
+              <% if (listing.category) { %>
+
+                <a href="/categories/<%= listing.category.slug %>">
+                  <%= listing.category.name %>
+                </a>
+
+              <% } %>
+
+              <span aria-hidden="true">
+                •
+              </span>
+
+              <span>
+                <%= listing.conditionLabel %>
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- LƯU -->
+          <div class="listing-detail-save">
+
+            <%- include(
+              '../favorites/_favorite-button',
+              {
+                listing,
+                currentUser,
+                returnTo: currentUrl,
+                compact: false,
+                isFavorited: listing.isFavorited
+              }
+            ) %>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- GIÁ -->
+        <p class="listing-detail-price">
+          <%= listing.formattedPrice %>
+        </p>
+
+
+
+        <!-- ĐỊA ĐIỂM + NGÀY ĐĂNG -->
+        <div class="listing-detail-location-date">
+
+          <div class="listing-detail-meta-line">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              aria-hidden="true"
+            >
+
+              <path
+                d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"
+              ></path>
+
+              <circle
+                cx="12"
+                cy="10"
+                r="2.5"
+              ></circle>
+
+            </svg>
+
+            <span>
+              <%= listing.location %>
+            </span>
+
+          </div>
+
+
+          <div class="listing-detail-meta-line">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              aria-hidden="true"
+            >
+
+              <circle
+                cx="12"
+                cy="12"
+                r="9"
+              ></circle>
+
+              <path d="M12 7v5l3 2"></path>
+
+            </svg>
+
+            <span>
+              Đăng ngày <%= listing.formattedCreatedAt %>
+            </span>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- TRẠNG THÁI -->
+        <div class="listing-detail-status-row">
+
+          <span
+            class="
+              listing-detail-status
+              listing-detail-status--<%= listing.status %>
+            "
+          >
+            <%= listing.statusLabel %>
+          </span>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SỐ ĐIỆN THOẠI + CHAT
+             ================================================= -->
+      <div class="listing-detail-contact-actions">
+
+        <!-- SỐ ĐIỆN THOẠI -->
+        <% if (
+          listing.seller &&
+          listing.seller.phone
+        ) { %>
+
+          <%
+            const sellerPhone =
+              String(listing.seller.phone);
+
+            const maskedPhone =
+              sellerPhone.length > 4
+                ? sellerPhone.slice(0, -4) + '****'
+                : '****';
+          %>
+
+          <button
+            class="listing-detail-phone-action listing-phone-reveal"
+            type="button"
+            data-full-phone="<%= sellerPhone %>"
+            aria-label="Hiện đầy đủ số điện thoại người bán"
+          >
+
+            <span class="listing-phone-label">
+              Số điện thoại liên lạc
+            </span>
+
+            <strong class="listing-phone-number">
+              <%= maskedPhone %>
+            </strong>
+
+          </button>
+
+        <% } else { %>
+
+          <div
+            class="
+              listing-detail-phone-action
+              is-empty
+            "
+          >
+
+            <span>
+              Số điện thoại
+            </span>
+
+            <strong>
+              Chưa cập nhật
+            </strong>
+
+          </div>
+
+        <% } %>
+
+
+        <!-- CHAT -->
+        <% if (!isOwner) { %>
+
+          <div class="listing-detail-message-action">
+
+            <% if (messageConversationId) { %>
+
+              <a
+                class="
+                  btn
+                  listing-detail-chat-button
+                "
+                href="/messages/<%= messageConversationId %>#latest"
+              >
+                Chat
+              </a>
+
+
+            <% } else if (
+              listing.status === 'active' &&
+              currentUser
+            ) { %>
+
+              <form
+                method="POST"
+                action="/listings/<%= listing._id %>/conversations"
+              >
+
+                <%- include('../partials/csrf') %>
+
+                <button
+                  class="
+                    btn
+                    listing-detail-chat-button
+                  "
+                  type="submit"
+                >
+                  Chat
+                </button>
+
+              </form>
+
+
+            <% } else if (
+              listing.status === 'active'
+            ) { %>
+
+              <a
+                class="
+                  btn
+                  listing-detail-chat-button
+                "
+                href="/login"
+              >
+                Chat
+              </a>
+
+
+            <% } else if (
+              listing.status === 'sold'
+            ) { %>
+
+              <button
+                class="
+                  btn
+                  listing-detail-chat-button
+                  is-disabled
+                "
+                type="button"
+                disabled
+              >
+                Đã bán
+              </button>
+
+            <% } %>
+
+          </div>
+
+        <% } %>
+
+      </div>
+      <!-- NHẮN HỎI MUA HÀNG -->
+        <% if (!isOwner && listing.status === 'active') { %>
+
+          <% if (messageConversationId) { %>
+
+            <form
+              class="detail-quick-chat"
+              method="POST"
+              action="/messages/<%= messageConversationId %>"
+            >
+
+              <%- include('../partials/csrf') %>
+
+              <div class="detail-quick-chat__input">
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"
+                  ></path>
+                </svg>
+
+                <textarea
+                  name="content"
+                  rows="1"
+                  maxlength="2000"
+                  required
+                  placeholder="Nhắn hỏi mua hàng..."
+                ></textarea>
+
+              </div>
+
+              <button
+                class="detail-quick-chat__send"
+                type="submit"
+              >
+                Gửi
+              </button>
+
+            </form>
+
+          <% } else if (currentUser) { %>
+
+            <form
+              class="detail-quick-chat"
+              method="POST"
+              action="/listings/<%= listing._id %>/conversations"
+            >
+
+              <%- include('../partials/csrf') %>
+
+              <div class="detail-quick-chat__input">
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"
+                  ></path>
+                </svg>
+
+                <textarea
+                  name="content"
+                  rows="1"
+                  maxlength="2000"
+                  required
+                  placeholder="Nhắn hỏi mua hàng..."
+                ></textarea>
+
+              </div>
+
+              <button
+                class="detail-quick-chat__send"
+                type="submit"
+              >
+                Gửi
+              </button>
+
+            </form>
+
+          <% } else { %>
+
+            <div class="detail-quick-chat">
+
+              <div class="detail-quick-chat__input">
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"
+                  ></path>
+                </svg>
+
+                <textarea
+                  rows="1"
+                  disabled
+                  placeholder="Đăng nhập để nhắn hỏi mua hàng..."
+                ></textarea>
+
+              </div>
+
+              <a
+                class="detail-quick-chat__send"
+                href="/login"
+              >
+                Gửi
+              </a>
+
+            </div>
+
+          <% } %>
+
+        <% } %>
+        <!-- =================================================
+             NGƯỜI BÁN
+             ================================================= -->
+        <section
+          class="listing-detail-seller"
+          aria-labelledby="listing-seller-title"
+        >
+
+          <% if (listing.seller) { %>
+
+            <a
+              class="listing-detail-seller-profile-link"
+              href="/users/<%= listing.seller._id %>"
+              aria-label="Xem trang cá nhân của <%= listing.seller.name %>"
+            >
+
+              <!-- AVATAR -->
+              <% if (listing.sellerAvatar) { %>
+
+                <img
+                  class="listing-detail-seller-avatar"
+                  src="<%= listing.sellerAvatar %>"
+                  alt="Ảnh đại diện của <%= listing.seller.name %>"
+                  width="48"
+                  height="48"
+                >
+
+              <% } else { %>
+
+                <div
+                  class="listing-detail-seller-placeholder"
+                  aria-hidden="true"
+                >
+                  <%= listing.seller.name
+                    ? listing.seller.name.charAt(0).toUpperCase()
+                    : 'N'
+                  %>
+                </div>
+
+              <% } %>
+
+
+              <!-- THÔNG TIN NGƯỜI BÁN -->
+              <div class="listing-detail-seller-copy">
+
+                <h2 id="listing-seller-title">
+                  <%= listing.seller.name %>
+                </h2>
+
+                <p>
+                  Xem trang người bán
+                </p>
+
+              </div>
+
+
+              <!-- MŨI TÊN -->
+              <span
+                class="listing-detail-seller-arrow"
+                aria-hidden="true"
+              >
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m9 18 6-6-6-6"></path>
+                </svg>
+
+              </span>
+
+            </a>
+
+
+          <% } else { %>
+
+            <!-- NGƯỜI DÙNG KHÔNG CÒN TỒN TẠI -->
+            <div class="listing-detail-seller-main">
+
+              <div
+                class="listing-detail-seller-placeholder"
+                aria-hidden="true"
+              >
+                N
+              </div>
+
+
+              <div class="listing-detail-seller-copy">
+
+                <h2 id="listing-seller-title">
+                  Người dùng không còn tồn tại
+                </h2>
+
+                <p>
+                  Người đăng sản phẩm
+                </p>
+
+              </div>
+
+            </div>
+
+          <% } %>
+
+        </section>
+        <!-- =================================================
+             QUẢN LÝ BÀI ĐĂNG
+             ================================================= -->
+        <% if (canManage) { %>
+
+          <section
+            class="listing-detail-owner"
+            aria-labelledby="listing-owner-title"
+          >
+
+            <div class="listing-detail-owner-heading">
+
+              <h2 id="listing-owner-title">
+                Quản lý bài đăng
+              </h2>
+
+              <p>
+
+                <%= isOwner
+                  ? 'Bạn là người đăng sản phẩm này.'
+                  : 'Bạn đang quản lý bài đăng với quyền quản trị.'
+                %>
+
+              </p>
+
+            </div>
+
+
+            <div class="listing-detail-owner-actions">
+
+              <%- include(
+                '_actions',
+                { listing }
+              ) %>
+
+            </div>
+
+          </section>
+
+        <% } %>
+
+      </aside>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         PHẦN DƯỚI
+         ===================================================== -->
+    <div class="listing-detail-lower">
+      <!-- MÔ TẢ -->
+      <section
+        class="listing-detail-description-card"
+        aria-labelledby="listing-description-title"
+      >
+
+        <h2 id="listing-description-title">
+          Mô tả chi tiết
+        </h2>
+
+        <p>
+          <%= listing.description %>
+        </p>
+
+      </section>
+
+      <!-- THÔNG TIN CHI TIẾT -->
+      <section
+        class="listing-detail-spec-card"
+        aria-labelledby="listing-spec-title"
+      >
+        <h2 id="listing-spec-title">
+          Thông tin chi tiết
+        </h2>
+        <dl class="listing-detail-spec-list">
+          <% if (listing.category) { %>
+            <div>
+              <dt>
+                Danh mục
+              </dt>
+              <dd>
+                <a
+                  href="/categories/<%= listing.category.slug %>"
+                >
+                  <%= listing.category.name %>
+                </a>
+
+              </dd>
+
+            </div>
+
+          <% } %>
+          <div>
+
+            <dt>
+              Tình trạng
+            </dt>
+
+            <dd>
+              <%= listing.conditionLabel %>
+            </dd>
+
+          </div>
+          <div>
+            <dt>
+              Trạng thái
+            </dt>
+
+            <dd>
+              <%= listing.statusLabel %>
+            </dd>
+
+          </div>
+
+
+          <div>
+
+            <dt>
+              Địa điểm
+            </dt>
+
+            <dd>
+              <%= listing.location %>
+            </dd>
+
+          </div>
+
+
+          <div>
+
+            <dt>
+              Ngày đăng
+            </dt>
+
+            <dd>
+              <%= listing.formattedCreatedAt %>
+            </dd>
+
+          </div>
+
+
+          <div>
+
+            <dt>
+              Người bán
+            </dt>
+
+            <dd>
+
+              <%= listing.seller
+                ? listing.seller.name
+                : 'Không còn tồn tại'
+              %>
+
+            </dd>
+
+          </div>
+
+        </dl>
+
+      </section>
+
+    </div>
+    <!-- =====================================================
+     SẢN PHẨM LIÊN QUAN
+     ===================================================== -->
+    <% if (
+      typeof relatedListings !== 'undefined' &&
+      relatedListings.length > 0
+    ) { %>
+
+      <section
+        class="listing-related-section"
+        aria-labelledby="relatedListingsTitle"
+      >
+
+        <div class="listing-related-heading">
+
+          <div>
+            <h2 id="relatedListingsTitle">
+              Sản phẩm liên quan
+            </h2>
+
+          </div>
+
+          <% if (listing.category) { %>
+            <a
+              class="listing-related-view-all"
+              href="/categories/<%= listing.category.slug %>"
+            >
+              Xem thêm
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14"></path>
+                <path d="m13 6 6 6-6 6"></path>
+              </svg>
+
+            </a>
+
+          <% } %>
+
+        </div>
+        <div class="listing-related-grid">
+
+          <% relatedListings.forEach((relatedListing) => { %>
+
+            <%- include(
+              '_card',
+              {
+                listing: relatedListing,
+
+                showFavoriteAction: true,
+
+                favoriteReturnTo: currentUrl
+              }
+            ) %>
+          <% }); %>
+        </div>
+      </section>
+    <% } %>
+  </div>
+</section>
+
+
+<script
+  src="/js/listing-detail.js"
+  defer
+></script>
+
+<%- include('../partials/footer') %>

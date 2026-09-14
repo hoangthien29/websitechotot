@@ -1,0 +1,338 @@
+<div class="market-filter-fields">
+
+  <!-- TỪ KHÓA -->
+  <div class="market-filter-group">
+
+    <label
+      class="market-filter-label"
+      for="<%= idPrefix %>-keyword"
+    >
+      Từ khóa
+    </label>
+
+    <div class="market-filter-search-field">
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        aria-hidden="true"
+      >
+        <circle cx="11" cy="11" r="7"></circle>
+        <path d="m20 20-4-4"></path>
+      </svg>
+
+      <input
+        class="form-control <%= filterErrors.keyword ? 'is-invalid' : '' %>"
+        id="<%= idPrefix %>-keyword"
+        name="keyword"
+        type="text"
+        maxlength="100"
+        value="<%= filters.keyword %>"
+        placeholder="Tên hoặc mô tả sản phẩm"
+      >
+
+    </div>
+
+    <% if (filterErrors.keyword) { %>
+      <div class="market-filter-error">
+        <%= filterErrors.keyword %>
+      </div>
+    <% } %>
+
+  </div>
+
+
+  <div class="market-filter-divider"></div>
+
+
+  <!-- DANH MỤC -->
+  <div class="market-filter-group">
+
+    <label
+      class="market-filter-label"
+      for="<%= idPrefix %>-category"
+    >
+      Danh mục
+    </label>
+
+    <select
+      class="form-select <%= filterErrors.category ? 'is-invalid' : '' %>"
+      id="<%= idPrefix %>-category"
+      name="category"
+    >
+
+      <option value="">
+        Tất cả danh mục
+      </option>
+
+      <% categories.forEach((category) => { %>
+
+        <option
+          value="<%= category.slug %>"
+          <%= filters.category === category.slug ? 'selected' : '' %>
+        >
+          <%= category.name %>
+        </option>
+
+      <% }); %>
+
+    </select>
+
+    <% if (filterErrors.category) { %>
+      <div class="market-filter-error">
+        <%= filterErrors.category %>
+      </div>
+    <% } %>
+
+  </div>
+
+
+  <div class="market-filter-divider"></div>
+
+
+  <!-- TÌNH TRẠNG -->
+  <fieldset class="market-filter-group">
+
+    <legend class="market-filter-label">
+      Tình trạng
+    </legend>
+
+    <div class="market-filter-radio-list">
+
+      <label class="market-filter-radio">
+
+        <input
+          type="radio"
+          name="condition"
+          value=""
+          <%= !filters.condition ? 'checked' : '' %>
+        >
+
+        <span>Tất cả</span>
+
+      </label>
+
+
+      <label class="market-filter-radio">
+
+        <input
+          type="radio"
+          name="condition"
+          value="new"
+          <%= filters.condition === 'new' ? 'checked' : '' %>
+        >
+
+        <span>Mới</span>
+
+      </label>
+
+
+      <label class="market-filter-radio">
+
+        <input
+          type="radio"
+          name="condition"
+          value="used"
+          <%= filters.condition === 'used' ? 'checked' : '' %>
+        >
+
+        <span>Đã sử dụng</span>
+
+      </label>
+
+    </div>
+
+  </fieldset>
+
+
+  <div class="market-filter-divider"></div>
+
+
+  <!-- KHOẢNG GIÁ -->
+  <div class="market-filter-group">
+
+    <span class="market-filter-label">
+      Khoảng giá
+    </span>
+
+    <div class="market-price-fields">
+
+      <input
+        class="form-control"
+        id="<%= idPrefix %>-minPrice"
+        name="minPrice"
+        type="number"
+        min="0"
+        max="100000000000"
+        step="1"
+        value="<%= filters.minPrice === null ? '' : filters.minPrice %>"
+        placeholder="Từ"
+      >
+
+      <span class="market-price-separator">
+        –
+      </span>
+
+      <input
+        class="form-control"
+        id="<%= idPrefix %>-maxPrice"
+        name="maxPrice"
+        type="number"
+        min="0"
+        max="100000000000"
+        step="1"
+        value="<%= filters.maxPrice === null ? '' : filters.maxPrice %>"
+        placeholder="Đến"
+      >
+
+    </div>
+
+    <% if (filterErrors.minPrice || filterErrors.maxPrice) { %>
+
+      <div class="market-filter-error">
+        <%= filterErrors.minPrice || filterErrors.maxPrice %>
+      </div>
+
+    <% } %>
+
+  </div>
+
+
+  <div class="market-filter-divider"></div>
+
+
+  <!-- ĐỊA ĐIỂM -->
+  <div class="market-filter-group">
+
+    <label
+      class="market-filter-label"
+      for="<%= idPrefix %>-location"
+    >
+      Địa điểm
+    </label>
+
+    <div class="market-filter-location-field">
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        aria-hidden="true"
+      >
+
+        <path
+          d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"
+        ></path>
+
+        <circle
+          cx="12"
+          cy="10"
+          r="2.5"
+        ></circle>
+
+      </svg>
+
+      <input
+        class="form-control"
+        id="<%= idPrefix %>-location"
+        name="location"
+        type="text"
+        maxlength="150"
+        value="<%= filters.location %>"
+        placeholder="Tỉnh, thành phố hoặc khu vực"
+      >
+
+    </div>
+
+  </div>
+
+
+  <div class="market-filter-divider"></div>
+
+
+  <!-- TRẠNG THÁI -->
+  <fieldset class="market-filter-group">
+
+    <legend class="market-filter-label">
+      Trạng thái bài đăng
+    </legend>
+
+    <div class="market-filter-radio-list">
+
+      <label class="market-filter-radio">
+
+        <input
+          type="radio"
+          name="status"
+          value="all"
+          <%= filters.status === 'all' ? 'checked' : '' %>
+        >
+
+        <span>Tất cả bài đăng</span>
+
+      </label>
+
+
+      <label class="market-filter-radio">
+
+        <input
+          type="radio"
+          name="status"
+          value="active"
+          <%= filters.status === 'active' ? 'checked' : '' %>
+        >
+
+        <span>Đang bán</span>
+
+      </label>
+
+
+      <label class="market-filter-radio">
+
+        <input
+          type="radio"
+          name="status"
+          value="sold"
+          <%= filters.status === 'sold' ? 'checked' : '' %>
+        >
+
+        <span>Đã bán</span>
+
+      </label>
+
+    </div>
+
+  </fieldset>
+
+
+  <!-- GIỮ SORT -->
+  <input
+    type="hidden"
+    name="sort"
+    value="<%= filters.sort %>"
+  >
+
+
+  <!-- ACTION -->
+  <div class="market-filter-actions">
+
+    <button
+      class="btn btn-primary market-filter-apply"
+      type="submit"
+    >
+      Áp dụng bộ lọc
+    </button>
+
+    <a
+      class="market-filter-reset"
+      href="/listings"
+    >
+      Xóa bộ lọc
+    </a>
+
+  </div>
+
+</div>

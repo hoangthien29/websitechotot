@@ -1,0 +1,128 @@
+<%- include('../../partials/header') %>
+
+<section class="admin-page" aria-labelledby="admin-user-title">
+  <div class="container admin-shell">
+    <%- include('../_navigation', { currentSection: 'users' }) %>
+
+    <nav class="admin-breadcrumb" aria-label="Đường dẫn trang">
+      <a href="/admin/users">Người dùng</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Chi tiết</span>
+    </nav>
+
+    <% if (successMessage) { %>
+      <div class="alert alert-success" role="status"><%= successMessage %></div>
+    <% } %>
+    <% if (errors.general) { %>
+      <div class="alert alert-danger" role="alert"><%= errors.general %></div>
+    <% } %>
+
+    <header class="admin-detail-heading">
+      <img src="<%= adminUser.avatarUrl %>" alt="Ảnh đại diện của <%= adminUser.name %>" width="88" height="88">
+      <div>
+        <span class="badge admin-status admin-status--<%= adminUser.status %>"><%= adminUser.statusLabel %></span>
+        <h1 id="admin-user-title"><%= adminUser.name %></h1>
+        <p><%= adminUser.email %></p>
+      </div>
+    </header>
+
+    <dl class="admin-ledger__grid admin-ledger__grid--detail">
+      <div><dt>Tổng bài đăng</dt><dd><%= stats.totalListings %></dd></div>
+      <div><dt>Đang bán</dt><dd><%= stats.activeListings %></dd></div>
+      <div><dt>Đã bán</dt><dd><%= stats.soldListings %></dd></div>
+      <div><dt>Đã ẩn</dt><dd><%= stats.hiddenListings %></dd></div>
+      <div><dt>Favorite</dt><dd><%= stats.favoriteCount %></dd></div>
+      <div><dt>Conversation</dt><dd><%= stats.conversationCount %></dd></div>
+      <div><dt>Message đã gửi</dt><dd><%= stats.sentMessageCount %></dd></div>
+    </dl>
+
+    <div class="admin-detail-grid">
+      <section class="admin-panel" aria-labelledby="admin-user-account">
+        <div class="admin-panel__heading">
+          <h2 id="admin-user-account">Thông tin tài khoản</h2>
+        </div>
+        <dl class="admin-spec-list">
+          <div><dt>Vai trò</dt><dd><%= adminUser.roleLabel %></dd></div>
+          <div><dt>Số điện thoại</dt><dd><%= adminUser.phone || '—' %></dd></div>
+          <div><dt>Địa chỉ</dt><dd><%= adminUser.address || '—' %></dd></div>
+          <div><dt>Ngày tạo</dt><dd><%= adminUser.formattedCreatedAt %></dd></div>
+          <div><dt>Cập nhật</dt><dd><%= adminUser.formattedUpdatedAt %></dd></div>
+          <% if (adminUser.formattedApprovedAt) { %>
+            <div>
+              <dt>Được duyệt</dt>
+              <dd>
+                <%= adminUser.formattedApprovedAt %>
+                <% if (adminUser.accountModeration.approvedBy) { %>
+                  · <%= adminUser.accountModeration.approvedBy.name %>
+                <% } %>
+              </dd>
+            </div>
+          <% } %>
+          <% if (adminUser.status === 'blocked') { %>
+            <div><dt>Khóa lúc</dt><dd><%= adminUser.formattedBlockedAt || '—' %></dd></div>
+            <div><dt>Lý do khóa</dt><dd><%= adminUser.accountModeration.blockedReason || '—' %></dd></div>
+          <% } %>
+        </dl>
+      </section>
+
+      <section class="admin-panel" aria-labelledby="admin-user-action">
+        <div class="admin-panel__heading">
+          <h2 id="admin-user-action">Thao tác quản trị</h2>
+        </div>
+        <% if (adminUser.role === 'admin') { %>
+          <p class="admin-empty-copy">
+            Tài khoản quản trị không thể đổi trạng thái trong phiên bản chưa có Super Admin.
+          </p>
+        <% } else if (adminUser.status === 'pending') { %>
+          <form method="POST" action="/admin/users/<%= adminUser._id %>/approve?_method=PATCH">
+            <%- include('../../partials/csrf') %>
+            <button class="btn btn-primary" type="submit">Duyệt tài khoản</button>
+          </form>
+        <% } else if (adminUser.status === 'active') { %>
+          <form class="admin-action-form" method="POST" action="/admin/users/<%= adminUser._id %>/block?_method=PATCH">
+            <%- include('../../partials/csrf') %>
+            <label for="blockReason">Lý do khóa</label>
+            <textarea
+              class="form-control<%= errors.reason ? ' is-invalid' : '' %>"
+              id="blockReason"
+              name="reason"
+              minlength="10"
+              maxlength="500"
+              aria-describedby="blockReasonError blockReasonHelp"
+              required
+            ><%= oldInput.reason %></textarea>
+            <div class="invalid-feedback field-feedback-slot" id="blockReasonError"><%= errors.reason || '' %></div>
+            <p class="form-text" id="blockReasonHelp">Nhập từ 10 đến 500 ký tự. Dữ liệu liên quan vẫn được giữ nguyên.</p>
+            <button class="btn btn-outline-danger" type="submit">Khóa tài khoản</button>
+          </form>
+        <% } else if (adminUser.status === 'blocked') { %>
+          <form method="POST" action="/admin/users/<%= adminUser._id %>/unblock?_method=PATCH">
+            <%- include('../../partials/csrf') %>
+            <button class="btn btn-outline-success" type="submit">Mở khóa tài khoản</button>
+          </form>
+        <% } %>
+      </section>
+    </div>
+
+    <section class="admin-panel" aria-labelledby="admin-user-recent-listings">
+      <div class="admin-panel__heading">
+        <h2 id="admin-user-recent-listings">Bài đăng gần đây</h2>
+        <a href="/admin/listings?seller=<%= encodeURIComponent(adminUser.email) %>">Lọc theo người bán</a>
+      </div>
+      <% if (recentListings.length > 0) { %>
+        <ul class="admin-record-list">
+          <% recentListings.forEach((listing) => { %>
+            <li>
+              <a href="/admin/listings/<%= listing._id %>"><%= listing.title %></a>
+              <span><%= listing.statusLabel %> · <%= listing.formattedPrice %></span>
+            </li>
+          <% }); %>
+        </ul>
+      <% } else { %>
+        <p class="admin-empty-copy">Tài khoản chưa có bài đăng.</p>
+      <% } %>
+    </section>
+  </div>
+</section>
+
+<%- include('../../partials/footer') %>

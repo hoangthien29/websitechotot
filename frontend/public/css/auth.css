@@ -1,0 +1,1023 @@
+/* ==========================================================
+   NTT MARKETPLACE AUTH
+   Stitch layout + Glassmorphism
+   ========================================================== */
+
+.auth-market-page {
+  position: relative;
+
+  min-height:
+    calc(100dvh - 7rem);
+
+  padding:
+    1.5rem 0
+    2.5rem;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 8% 10%,
+      rgba(64, 84, 193, 0.16),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 95% 85%,
+      rgba(222, 38, 222, 0.11),
+      transparent 30%
+    ),
+    linear-gradient(
+      145deg,
+      #f6f7fc 0%,
+      #edf0fa 45%,
+      #f8f3fb 100%
+    );
+}
+
+
+/* ORB NỀN */
+
+.auth-market-page::before,
+.auth-market-page::after {
+  position: absolute;
+
+  width: 22rem;
+  height: 22rem;
+
+  content: "";
+
+  pointer-events: none;
+
+  border-radius: 50%;
+
+  filter: blur(60px);
+
+  opacity: 0.28;
+}
+
+
+.auth-market-page::before {
+  top: -9rem;
+  left: -8rem;
+
+  background: #4054c1;
+}
+
+
+.auth-market-page::after {
+  right: -8rem;
+  bottom: -10rem;
+
+  background: #de26de;
+}
+
+
+/* ==========================================================
+   CONTAINER
+   ========================================================== */
+
+.auth-market-container {
+  position: relative;
+  z-index: 2;
+}
+
+
+.auth-market-layout {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.08fr)
+    minmax(27rem, 0.92fr);
+
+  width: 100%;
+
+  min-height: 42rem;
+
+  overflow: hidden;
+
+  background:
+    rgba(255, 255, 255, 0.24);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.72);
+
+  border-radius: 2rem;
+
+  box-shadow:
+    0 24px 70px
+    rgba(37, 46, 90, 0.13);
+
+  backdrop-filter:
+    blur(18px);
+
+  -webkit-backdrop-filter:
+    blur(18px);
+}
+
+
+/* ==========================================================
+   LEFT VISUAL
+   ========================================================== */
+
+.auth-market-visual {
+  position: relative;
+
+  display: flex;
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 2rem;
+
+  background:
+    linear-gradient(
+      145deg,
+      #394eb6 0%,
+      #574ec5 45%,
+      #744ad4 72%,
+      #b53ecf 100%
+    );
+}
+
+
+/* MESH NHẸ */
+
+.auth-market-visual::before {
+  position: absolute;
+
+  inset: 0;
+
+  content: "";
+
+  background:
+    radial-gradient(
+      circle at 25% 25%,
+      rgba(255, 255, 255, 0.20),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 75% 70%,
+      rgba(222, 38, 222, 0.24),
+      transparent 32%
+    );
+
+  pointer-events: none;
+}
+
+
+.auth-market-visual::after {
+  position: absolute;
+
+  inset: 0;
+
+  content: "";
+
+  opacity: 0.18;
+
+  background-image:
+    radial-gradient(
+      rgba(255, 255, 255, 0.8) 1px,
+      transparent 1px
+    );
+
+  background-size:
+    25px 25px;
+
+  pointer-events: none;
+}
+
+
+/* ORBS */
+
+.auth-market-orb {
+  position: absolute;
+
+  border-radius: 50%;
+
+  filter: blur(4px);
+
+  pointer-events: none;
+
+  animation:
+    authFloatOrb 10s
+    ease-in-out infinite;
+}
+
+
+.auth-market-orb--one {
+  top: 10%;
+
+  left: 8%;
+
+  width: 11rem;
+  height: 11rem;
+
+  background:
+    rgba(255, 255, 255, 0.12);
+}
+
+
+.auth-market-orb--two {
+  right: 8%;
+
+  bottom: 8%;
+
+  width: 15rem;
+  height: 15rem;
+
+  background:
+    rgba(222, 38, 222, 0.14);
+
+  animation-delay: -4s;
+}
+
+
+/* ẢNH */
+
+.auth-market-visual__image {
+  position: relative;
+
+  z-index: 3;
+
+  display: block;
+
+  width: min(
+    90%,
+    38rem
+  );
+
+  max-height: 36rem;
+
+  object-fit: contain;
+
+  filter:
+    drop-shadow(
+      0 22px 30px
+      rgba(19, 23, 63, 0.28)
+    );
+
+  animation:
+    authFloatImage 7s
+    ease-in-out infinite;
+}
+
+
+/* ==========================================================
+   FORM AREA
+   ========================================================== */
+
+.auth-market-form-area {
+  display: flex;
+
+  min-width: 0;
+
+  padding:
+    clamp(1.25rem, 3vw, 3rem);
+
+  align-items: center;
+  justify-content: center;
+
+  background:
+    rgba(255, 255, 255, 0.16);
+}
+
+
+/* GLASS CARD */
+
+.auth-market-card {
+  width: 100%;
+
+  max-width: 29rem;
+
+  padding:
+    clamp(
+      1.4rem,
+      3vw,
+      2.25rem
+    );
+
+  background:
+    rgba(255, 255, 255, 0.48);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.76);
+
+  border-radius: 1.7rem;
+
+  box-shadow:
+    0 18px 45px
+    rgba(37, 46, 90, 0.10),
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.75);
+
+  backdrop-filter:
+    blur(24px)
+    saturate(1.08);
+
+  -webkit-backdrop-filter:
+    blur(24px)
+    saturate(1.08);
+
+  animation:
+    authCardIn 0.5s
+    ease-out both;
+}
+
+
+/* ==========================================================
+   BRAND
+   ========================================================== */
+
+.auth-market-brand {
+  display: inline-flex;
+
+  margin-bottom: 1.6rem;
+
+  align-items: center;
+
+  gap: 0.65rem;
+
+  color: #173f4e;
+
+  font-size: 1.05rem;
+
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+
+.auth-market-brand:hover {
+  color: #394eb6;
+}
+
+
+.auth-market-brand img {
+  width: 2.4rem;
+  height: 2.4rem;
+
+  object-fit: contain;
+}
+
+
+/* ==========================================================
+   HEADER
+   ========================================================== */
+
+.auth-market-header {
+  margin-bottom: 1.5rem;
+}
+
+
+.auth-market-eyebrow {
+  display: block;
+
+  margin-bottom: 0.35rem;
+
+  color: #5265c9;
+
+  font-size: 0.72rem;
+
+  font-weight: 700;
+
+  letter-spacing: 0.06em;
+
+  text-transform: uppercase;
+}
+
+
+.auth-market-header h1 {
+  margin:
+    0 0
+    0.45rem;
+
+  color: #142f3a;
+
+  font-size:
+    clamp(
+      1.8rem,
+      4vw,
+      2.35rem
+    );
+
+  font-weight: 700;
+
+  letter-spacing: -0.03em;
+}
+
+
+.auth-market-header p {
+  margin: 0;
+
+  color: #6f7d84;
+
+  font-size: 0.9rem;
+
+  line-height: 1.6;
+}
+
+
+/* ==========================================================
+   FORM
+   ========================================================== */
+
+.auth-market-form {
+  display: grid;
+
+  gap: 1rem;
+}
+
+
+.auth-market-field {
+  display: grid;
+
+  gap: 0.4rem;
+}
+
+
+.auth-market-field > label {
+  color: #243f4a;
+
+  font-size: 0.82rem;
+
+  font-weight: 700;
+}
+
+
+/* CONTROL GLASS */
+
+.auth-market-control {
+  display: flex;
+
+  width: 100%;
+
+  min-height: 3.25rem;
+
+  align-items: center;
+
+  background:
+    rgba(255, 255, 255, 0.38);
+
+  border:
+    1.5px solid
+    rgba(105, 115, 150, 0.26);
+
+  border-radius: 0.95rem;
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.65);
+
+  backdrop-filter:
+    blur(11px);
+
+  -webkit-backdrop-filter:
+    blur(11px);
+
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+
+.auth-market-control:focus-within {
+  background:
+    rgba(255, 255, 255, 0.60);
+
+  border-color:
+    rgba(64, 84, 193, 0.82);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(64, 84, 193, 0.11),
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.8);
+}
+
+
+.auth-market-control.is-invalid {
+  border-color:
+    rgba(194, 57, 77, 0.76);
+
+  background:
+    rgba(255, 239, 241, 0.62);
+}
+
+
+/* ICON */
+
+.auth-market-control__icon {
+  display: grid;
+
+  width: 3rem;
+
+  flex: 0 0 3rem;
+
+  place-items: center;
+
+  color: #7f879e;
+}
+
+
+.auth-market-control:focus-within
+.auth-market-control__icon {
+  color: #4054c1;
+}
+
+
+.auth-market-control__icon svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+
+/* INPUT */
+
+.auth-market-control input {
+  width: 100%;
+
+  min-width: 0;
+
+  min-height: 3.1rem;
+
+  padding:
+    0.65rem
+    0.7rem
+    0.65rem
+    0;
+
+  color: #1c313a;
+
+  background: transparent;
+
+  border: 0;
+
+  outline: 0;
+
+  font-size: 0.88rem;
+}
+
+
+.auth-market-control input::placeholder {
+  color: #9aa2aa;
+}
+
+
+/* PASSWORD */
+
+.auth-market-control--password input {
+  padding-right: 0.2rem;
+}
+
+
+.auth-password-toggle {
+  display: grid;
+
+  width: 2.9rem;
+  height: 3rem;
+
+  flex: 0 0 2.9rem;
+
+  padding: 0;
+
+  place-items: center;
+
+  color: #838c96;
+
+  background: transparent;
+
+  border: 0;
+
+  border-radius: 0.75rem;
+
+  cursor: pointer;
+}
+
+
+.auth-password-toggle:hover,
+.auth-password-toggle:focus-visible {
+  color: #4054c1;
+
+  background:
+    rgba(64, 84, 193, 0.07);
+}
+
+
+.auth-password-toggle svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+
+/* ERROR */
+
+.auth-market-error {
+  min-height: 1rem;
+
+  padding-left: 0.2rem;
+
+  color: #bc3d4d;
+
+  font-size: 0.72rem;
+
+  font-weight: 600;
+}
+
+
+/* ==========================================================
+   SUBMIT
+   ========================================================== */
+
+.auth-market-submit {
+  position: relative;
+
+  display: inline-flex;
+
+  width: 100%;
+
+  min-height: 3.25rem;
+
+  margin-top: 0.25rem;
+
+  padding:
+    0.7rem
+    1rem;
+
+  overflow: hidden;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.55rem;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(135deg, #4054c18f 0%, #de26de94 50%, #744ad4 100%);
+
+  border: 0;
+
+  border-radius: 0.95rem;
+
+  box-shadow:
+    0 9px 22px
+    rgba(57, 78, 182, 0.25);
+
+  font-size: 0.9rem;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+
+.auth-market-submit::before {
+  position: absolute;
+
+  top: 0;
+
+  left: -130%;
+
+  width: 70%;
+  height: 100%;
+
+  content: "";
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.20),
+      transparent
+    );
+
+  transform: skewX(-20deg);
+
+  transition: left 0.5s ease;
+}
+
+
+.auth-market-submit:hover {
+  color: #ffffff;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 13px 28px
+    rgba(57, 78, 182, 0.30);
+}
+
+
+.auth-market-submit:hover::before {
+  left: 150%;
+}
+
+
+.auth-market-submit svg {
+  position: relative;
+
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+
+.auth-market-submit span {
+  position: relative;
+}
+
+
+/* ==========================================================
+   SWITCH
+   ========================================================== */
+
+.auth-market-switch {
+  display: flex;
+
+  margin-top: 1.5rem;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.3rem;
+
+  color: #77858b;
+
+  font-size: 0.82rem;
+}
+
+
+.auth-market-switch a {
+  color: #4054c1;
+
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+
+.auth-market-switch a:hover {
+  color: #744ad4;
+}
+
+
+.auth-market-back {
+  display: block;
+
+  width: fit-content;
+
+  margin:
+    0.85rem auto
+    0;
+
+  color: #87949a;
+
+  font-size: 0.76rem;
+
+  text-decoration: none;
+}
+
+
+.auth-market-back:hover {
+  color: #4054c1;
+}
+
+
+/* ALERT */
+
+.auth-market-card .alert {
+  margin-bottom: 1rem;
+
+  border-radius: 0.85rem;
+
+  font-size: 0.78rem;
+}
+
+
+/* ==========================================================
+   ANIMATION
+   ========================================================== */
+
+@keyframes authCardIn {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+@keyframes authFloatImage {
+
+  0%,
+  100% {
+    transform:
+      translateY(0);
+  }
+
+  50% {
+    transform:
+      translateY(-12px);
+  }
+
+}
+
+
+@keyframes authFloatOrb {
+
+  0%,
+  100% {
+    transform:
+      translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform:
+      translate3d(
+        12px,
+        -12px,
+        0
+      );
+  }
+
+}
+
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width: 61.999rem) {
+
+  .auth-market-layout {
+    grid-template-columns:
+      minmax(0, 0.9fr)
+      minmax(24rem, 1.1fr);
+  }
+
+
+  .auth-market-visual {
+    padding: 1.2rem;
+  }
+
+}
+
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 47.999rem) {
+
+  .auth-market-page {
+    padding:
+      0.8rem 0
+      1.5rem;
+  }
+
+
+  .auth-market-layout {
+    display: flex;
+
+    min-height: 0;
+
+    flex-direction: column;
+
+    border-radius: 1.4rem;
+  }
+
+
+  .auth-market-visual {
+    min-height: 12rem;
+
+    padding:
+      0.8rem 1rem;
+
+    border-radius:
+      1.4rem
+      1.4rem
+      0
+      0;
+  }
+
+
+  .auth-market-visual__image {
+    width: min(
+      80%,
+      20rem
+    );
+
+    max-height: 11rem;
+  }
+
+
+  .auth-market-form-area {
+    padding:
+      0.8rem;
+  }
+
+
+  .auth-market-card {
+    max-width: none;
+
+    padding:
+      1.25rem;
+
+    border-radius: 1.25rem;
+
+    box-shadow:
+      0 12px 30px
+      rgba(37, 46, 90, 0.09);
+  }
+
+
+  .auth-market-brand {
+    margin-bottom: 1.15rem;
+  }
+
+
+  .auth-market-header {
+    margin-bottom: 1.2rem;
+  }
+
+
+  .auth-market-header h1 {
+    font-size: 1.7rem;
+  }
+
+}
+
+
+/* ==========================================================
+   MOBILE NHỎ
+   ========================================================== */
+
+@media (max-width: 25rem) {
+
+  .auth-market-card {
+    padding:
+      1.05rem;
+  }
+
+
+  .auth-market-visual {
+    min-height: 10rem;
+  }
+
+
+  .auth-market-visual__image {
+    max-height: 9rem;
+  }
+
+
+  .auth-market-switch {
+    align-items: center;
+
+    flex-direction: column;
+  }
+
+}
+
+
+/* ==========================================================
+   REDUCED MOTION
+   ========================================================== */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+
+  .auth-market-card,
+  .auth-market-visual__image,
+  .auth-market-orb {
+    animation: none;
+  }
+
+
+  .auth-market-submit,
+  .auth-market-control {
+    transition: none;
+  }
+
+}

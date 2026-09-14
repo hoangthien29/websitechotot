@@ -1,0 +1,110 @@
+<%- include('../../partials/header') %>
+
+<section class="admin-page" aria-labelledby="admin-users-title">
+  <div class="container admin-shell">
+    <%- include('../_navigation', { currentSection: 'users' }) %>
+
+    <header class="admin-page-heading">
+      <div>
+        <h1 id="admin-users-title">Quản lý người dùng</h1>
+        <p><%= totalItems %> tài khoản phù hợp với bộ lọc hiện tại.</p>
+      </div>
+      <a class="btn btn-outline-secondary" href="/admin/users">Xóa bộ lọc</a>
+    </header>
+
+    <% if (errors.general) { %>
+      <div class="alert alert-danger" role="alert"><%= errors.general %></div>
+    <% } %>
+
+    <form class="admin-filter" action="/admin/users" method="GET">
+      <div class="admin-filter__field admin-filter__field--wide">
+        <label for="adminUserKeyword">Tên hoặc email</label>
+        <input
+          class="form-control<%= errors.keyword ? ' is-invalid' : '' %>"
+          id="adminUserKeyword"
+          name="keyword"
+          type="search"
+          maxlength="100"
+          value="<%= filters.keyword %>"
+          aria-describedby="adminUserKeywordError"
+        >
+        <div class="invalid-feedback field-feedback-slot" id="adminUserKeywordError"><%= errors.keyword || '' %></div>
+      </div>
+      <div class="admin-filter__field">
+        <label for="adminUserStatus">Trạng thái</label>
+        <select class="form-select" id="adminUserStatus" name="status">
+          <option value="all"<%= filters.status === 'all' ? ' selected' : '' %>>Tất cả</option>
+          <option value="active"<%= filters.status === 'active' ? ' selected' : '' %>>Đang hoạt động</option>
+          <option value="pending"<%= filters.status === 'pending' ? ' selected' : '' %>>Chờ duyệt</option>
+          <option value="blocked"<%= filters.status === 'blocked' ? ' selected' : '' %>>Đã khóa</option>
+        </select>
+      </div>
+      <div class="admin-filter__field">
+        <label for="adminUserRole">Vai trò</label>
+        <select class="form-select" id="adminUserRole" name="role">
+          <option value="all"<%= filters.role === 'all' ? ' selected' : '' %>>Tất cả</option>
+          <option value="user"<%= filters.role === 'user' ? ' selected' : '' %>>Người dùng</option>
+          <option value="admin"<%= filters.role === 'admin' ? ' selected' : '' %>>Quản trị viên</option>
+        </select>
+      </div>
+      <div class="admin-filter__field">
+        <label for="adminUserSort">Sắp xếp</label>
+        <select class="form-select" id="adminUserSort" name="sort">
+          <option value="newest"<%= filters.sort === 'newest' ? ' selected' : '' %>>Mới nhất</option>
+          <option value="oldest"<%= filters.sort === 'oldest' ? ' selected' : '' %>>Cũ nhất</option>
+          <option value="name-asc"<%= filters.sort === 'name-asc' ? ' selected' : '' %>>Tên A–Z</option>
+          <option value="name-desc"<%= filters.sort === 'name-desc' ? ' selected' : '' %>>Tên Z–A</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" type="submit">Áp dụng</button>
+    </form>
+
+    <% if (users.length > 0) { %>
+      <div class="admin-data-table" role="region" aria-label="Danh sách người dùng" tabindex="0">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Người dùng</th>
+              <th scope="col">Vai trò</th>
+              <th scope="col">Trạng thái</th>
+              <th scope="col">Ngày tạo</th>
+              <th scope="col">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.forEach((user) => { %>
+              <tr>
+                <td data-label="Người dùng">
+                  <a class="admin-person" href="/admin/users/<%= user._id %>">
+                    <img src="<%= user.avatarUrl %>" alt="" width="44" height="44">
+                    <span>
+                      <strong><%= user.name %></strong>
+                      <small><%= user.email %></small>
+                    </span>
+                  </a>
+                </td>
+                <td data-label="Vai trò"><%= user.roleLabel %></td>
+                <td data-label="Trạng thái">
+                  <span class="badge admin-status admin-status--<%= user.status %>"><%= user.statusLabel %></span>
+                </td>
+                <td data-label="Ngày tạo"><%= user.formattedCreatedAt %></td>
+                <td data-label="Thao tác">
+                  <a class="btn btn-sm btn-outline-primary" href="/admin/users/<%= user._id %>">Xem chi tiết</a>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+      <%- include('../_pagination', { pagination }) %>
+    <% } else { %>
+      <div class="admin-empty-state" role="status">
+        <h2>Không có tài khoản phù hợp.</h2>
+        <p>Điều chỉnh từ khóa hoặc bộ lọc để xem kết quả khác.</p>
+        <a class="btn btn-outline-primary" href="/admin/users">Xem tất cả người dùng</a>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('../../partials/footer') %>

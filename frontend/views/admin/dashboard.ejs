@@ -1,0 +1,151 @@
+<%- include('../partials/header') %>
+
+<section class="admin-page" aria-labelledby="admin-dashboard-title">
+  <div class="container admin-shell">
+    <%- include('_navigation', { currentSection: 'dashboard' }) %>
+
+    <header class="admin-stat-hero">
+      <div class="admin-stat-hero__figure">
+        <span
+          data-admin-count="<%= stats.users.total %>"
+          aria-label="<%= stats.users.total %> tài khoản"
+        ><%= stats.users.total %></span>
+      </div>
+      <div class="admin-stat-hero__copy">
+        <h1 id="admin-dashboard-title">Quản trị hệ thống</h1>
+        <p>
+          <%= stats.users.total %> tài khoản đang được quản lý cùng
+          <%= stats.listings.total %> bài đăng trên NTT Marketplace.
+        </p>
+        <a class="btn btn-outline-primary" href="/admin/users">
+          Mở danh sách người dùng
+        </a>
+      </div>
+    </header>
+
+    <section class="admin-stat-section" aria-labelledby="admin-system-stats">
+      <div class="admin-section-heading">
+        <h2 id="admin-system-stats">Số liệu vận hành</h2>
+        <p>Dữ liệu được tổng hợp trực tiếp từ MongoDB.</p>
+      </div>
+
+      <div class="admin-stat-grid">
+        <a class="admin-stat-card admin-stat-card--wide" href="/admin/users?status=pending">
+          <strong data-admin-count="<%= stats.users.pending %>"><%= stats.users.pending %></strong>
+          <span>Tài khoản chờ duyệt</span>
+        </a>
+        <a class="admin-stat-card" href="/admin/users?status=blocked">
+          <strong data-admin-count="<%= stats.users.blocked %>"><%= stats.users.blocked %></strong>
+          <span>Tài khoản bị khóa</span>
+        </a>
+        <a class="admin-stat-card" href="/admin/listings?status=active">
+          <strong data-admin-count="<%= stats.listings.active %>"><%= stats.listings.active %></strong>
+          <span>Bài đăng đang bán</span>
+        </a>
+        <a class="admin-stat-card admin-stat-card--wide" href="/admin/listings?moderation=admin-hidden">
+          <strong data-admin-count="<%= stats.listings.adminHidden %>"><%= stats.listings.adminHidden %></strong>
+          <span>Bài đăng bị Admin ẩn</span>
+        </a>
+        <a class="admin-stat-card" href="/admin/categories">
+          <strong data-admin-count="<%= stats.categories.total %>"><%= stats.categories.total %></strong>
+          <span>Danh mục</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="admin-ledger" aria-labelledby="admin-platform-ledger">
+      <div class="admin-section-heading">
+        <h2 id="admin-platform-ledger">Sổ cái nền tảng</h2>
+        <p>Chỉ hiển thị số lượng; không tải nội dung tin nhắn.</p>
+      </div>
+      <dl class="admin-ledger__grid">
+        <div>
+          <dt>Người dùng active / admin</dt>
+          <dd><%= stats.users.active %> / <%= stats.users.admin %></dd>
+        </div>
+        <div>
+          <dt>Listing sold / owner-hidden</dt>
+          <dd><%= stats.listings.sold %> / <%= stats.listings.ownerHidden %></dd>
+        </div>
+        <div>
+          <dt>Category active / inactive</dt>
+          <dd><%= stats.categories.active %> / <%= stats.categories.inactive %></dd>
+        </div>
+        <div>
+          <dt>Favorite</dt>
+          <dd><%= stats.favorites.total %></dd>
+        </div>
+        <div>
+          <dt>Conversation</dt>
+          <dd><%= stats.conversations.total %></dd>
+        </div>
+        <div>
+          <dt>Message / chưa đọc</dt>
+          <dd><%= stats.messages.total %> / <%= stats.messages.unread %></dd>
+        </div>
+      </dl>
+    </section>
+
+    <div class="admin-recent-grid">
+      <section class="admin-panel" aria-labelledby="admin-recent-users">
+        <div class="admin-panel__heading">
+          <h2 id="admin-recent-users">Người dùng mới</h2>
+          <a href="/admin/users?sort=newest">Xem tất cả</a>
+        </div>
+        <% if (recentUsers.length > 0) { %>
+          <ul class="admin-record-list">
+            <% recentUsers.forEach((user) => { %>
+              <li>
+                <a href="/admin/users/<%= user._id %>"><%= user.name %></a>
+                <span><%= user.statusLabel %> · <%= user.formattedCreatedAt %></span>
+              </li>
+            <% }); %>
+          </ul>
+        <% } else { %>
+          <p class="admin-empty-copy">Chưa có tài khoản.</p>
+        <% } %>
+      </section>
+
+      <section class="admin-panel" aria-labelledby="admin-recent-listings">
+        <div class="admin-panel__heading">
+          <h2 id="admin-recent-listings">Bài đăng mới</h2>
+          <a href="/admin/listings?sort=newest">Xem tất cả</a>
+        </div>
+        <% if (recentListings.length > 0) { %>
+          <ul class="admin-record-list">
+            <% recentListings.forEach((listing) => { %>
+              <li>
+                <a href="/admin/listings/<%= listing._id %>"><%= listing.title %></a>
+                <span><%= listing.statusLabel %> · <%= listing.formattedCreatedAt %></span>
+              </li>
+            <% }); %>
+          </ul>
+        <% } else { %>
+          <p class="admin-empty-copy">Chưa có bài đăng.</p>
+        <% } %>
+      </section>
+
+      <section class="admin-panel admin-panel--full" aria-labelledby="admin-recent-hidden">
+        <div class="admin-panel__heading">
+          <h2 id="admin-recent-hidden">Kiểm duyệt gần đây</h2>
+          <a href="/admin/listings?moderation=admin-hidden">Xem bộ lọc</a>
+        </div>
+        <% if (recentAdminHiddenListings.length > 0) { %>
+          <ul class="admin-record-list">
+            <% recentAdminHiddenListings.forEach((listing) => { %>
+              <li>
+                <a href="/admin/listings/<%= listing._id %>"><%= listing.title %></a>
+                <span><%= listing.formattedModeratedAt || 'Chưa có thời điểm' %></span>
+              </li>
+            <% }); %>
+          </ul>
+        <% } else { %>
+          <p class="admin-empty-copy">Chưa có bài đăng bị quản trị viên ẩn.</p>
+        <% } %>
+      </section>
+    </div>
+  </div>
+</section>
+
+<script src="/js/admin.js" defer></script>
+<%- include('../partials/footer') %>

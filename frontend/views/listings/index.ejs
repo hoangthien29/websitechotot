@@ -1,0 +1,585 @@
+<%- include('../partials/header') %>
+
+
+<%
+  const selectedCategory = filters.category
+    ? categories.find(
+        (category) =>
+          category.slug === filters.category
+      )
+    : null;
+
+
+  let resultTitle = 'Tất cả sản phẩm';
+
+
+  if (
+    selectedCategory &&
+    filters.location
+  ) {
+
+    resultTitle =
+      `${selectedCategory.name} tại ${filters.location}`;
+
+  } else if (selectedCategory) {
+
+    resultTitle =
+      selectedCategory.name;
+
+  } else if (filters.location) {
+
+    resultTitle =
+      `Sản phẩm tại ${filters.location}`;
+
+  } else if (filters.keyword) {
+
+    resultTitle =
+      `Kết quả cho “${filters.keyword}”`;
+
+  }
+%>
+
+
+<section class="market-search-page">
+
+  <div class="container">
+
+
+    <!-- ======================================
+         VALIDATION
+         ====================================== -->
+    <% if (Object.keys(filterErrors).length > 0) { %>
+
+      <div
+        class="alert alert-danger market-search-alert"
+        role="alert"
+      >
+
+        <strong>
+          Vui lòng kiểm tra lại bộ lọc.
+        </strong>
+
+        <ul class="mb-0 mt-2">
+
+          <% [
+            ...new Set(
+              Object.values(filterErrors)
+            )
+          ].forEach((message) => { %>
+
+            <li>
+              <%= message %>
+            </li>
+
+          <% }); %>
+
+        </ul>
+
+      </div>
+
+    <% } %>
+
+
+
+    <div class="market-search-layout">
+
+
+      <!-- ======================================
+           SIDEBAR DESKTOP
+           ====================================== -->
+      <aside
+        class="market-filter-sidebar d-none d-lg-block"
+        aria-label="Bộ lọc tìm kiếm"
+      >
+
+        <form
+          class="market-filter-panel"
+          method="GET"
+          action="/listings"
+          role="search"
+        >
+
+          <div class="market-filter-title-row">
+
+            <h2>
+              Bộ lọc tìm kiếm
+            </h2>
+
+            <a href="/listings">
+              Xóa lọc
+            </a>
+
+          </div>
+
+
+          <%- include(
+            '_filters',
+            {
+              idPrefix: 'desktop-filter',
+              categories,
+              filters,
+              filterErrors
+            }
+          ) %>
+
+        </form>
+
+      </aside>
+
+
+
+      <!-- ======================================
+           RESULTS
+           ====================================== -->
+      <div class="market-search-results">
+
+
+        <!-- BREADCRUMB -->
+        <nav
+          class="market-search-breadcrumb"
+          aria-label="Breadcrumb"
+        >
+
+          <a href="/">
+            Trang chủ
+          </a>
+
+          <span aria-hidden="true">
+            /
+          </span>
+
+
+          <% if (selectedCategory) { %>
+
+            <a
+              href="/categories/<%= selectedCategory.slug %>"
+            >
+              <%= selectedCategory.name %>
+            </a>
+
+
+            <% if (filters.location) { %>
+
+              <span aria-hidden="true">
+                /
+              </span>
+
+              <span>
+                <%= filters.location %>
+              </span>
+
+            <% } %>
+
+          <% } else { %>
+
+            <span>
+              Sản phẩm
+            </span>
+
+          <% } %>
+
+        </nav>
+
+
+
+        <!-- ======================================
+             RESULT HEADER
+             ====================================== -->
+        <div class="market-results-header">
+
+          <div class="market-results-heading">
+
+            <h1>
+              <%= resultTitle %>
+            </h1>
+
+
+            <% if (
+              Object.keys(filterErrors).length === 0
+            ) { %>
+
+              <p data-total-items="<%= totalItems %>">
+
+                Tìm thấy
+
+                <strong>
+                  <%= totalItems %>
+                </strong>
+
+                sản phẩm
+
+              </p>
+
+            <% } else { %>
+
+              <p>
+                Điều chỉnh bộ lọc để tiếp tục tìm kiếm.
+              </p>
+
+            <% } %>
+
+          </div>
+
+
+
+          <!-- ======================================
+               TOOLS
+               ====================================== -->
+          <div class="market-results-tools">
+
+
+            <!-- MOBILE FILTER -->
+            <button
+              class="
+                btn
+                market-mobile-filter-button
+                d-lg-none
+              "
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#mobileListingFilters"
+              aria-controls="mobileListingFilters"
+            >
+
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+
+                <path d="M4 6h16"></path>
+                <path d="M7 12h10"></path>
+                <path d="M10 18h4"></path>
+
+              </svg>
+
+              Bộ lọc
+
+            </button>
+
+
+
+            <!-- SORT -->
+            <form
+              class="market-sort-form"
+              method="GET"
+              action="/listings"
+            >
+
+              <% if (filters.keyword) { %>
+
+                <input
+                  type="hidden"
+                  name="keyword"
+                  value="<%= filters.keyword %>"
+                >
+
+              <% } %>
+
+
+              <% if (filters.category) { %>
+
+                <input
+                  type="hidden"
+                  name="category"
+                  value="<%= filters.category %>"
+                >
+
+              <% } %>
+
+
+              <% if (filters.condition) { %>
+
+                <input
+                  type="hidden"
+                  name="condition"
+                  value="<%= filters.condition %>"
+                >
+
+              <% } %>
+
+
+              <% if (filters.minPrice !== null) { %>
+
+                <input
+                  type="hidden"
+                  name="minPrice"
+                  value="<%= filters.minPrice %>"
+                >
+
+              <% } %>
+
+
+              <% if (filters.maxPrice !== null) { %>
+
+                <input
+                  type="hidden"
+                  name="maxPrice"
+                  value="<%= filters.maxPrice %>"
+                >
+
+              <% } %>
+
+
+              <% if (filters.location) { %>
+
+                <input
+                  type="hidden"
+                  name="location"
+                  value="<%= filters.location %>"
+                >
+
+              <% } %>
+
+
+              <input
+                type="hidden"
+                name="status"
+                value="<%= filters.status %>"
+              >
+
+
+              <label for="marketSort">
+                Sắp xếp:
+              </label>
+
+
+              <select
+                class="form-select"
+                id="marketSort"
+                name="sort"
+              >
+
+                <option
+                  value="newest"
+                  <%= filters.sort === 'newest'
+                    ? 'selected'
+                    : ''
+                  %>
+                >
+                  Mới nhất
+                </option>
+
+
+                <option
+                  value="oldest"
+                  <%= filters.sort === 'oldest'
+                    ? 'selected'
+                    : ''
+                  %>
+                >
+                  Cũ nhất
+                </option>
+
+
+                <option
+                  value="price-asc"
+                  <%= filters.sort === 'price-asc'
+                    ? 'selected'
+                    : ''
+                  %>
+                >
+                  Giá thấp đến cao
+                </option>
+
+
+                <option
+                  value="price-desc"
+                  <%= filters.sort === 'price-desc'
+                    ? 'selected'
+                    : ''
+                  %>
+                >
+                  Giá cao đến thấp
+                </option>
+
+              </select>
+
+
+              <button
+                class="btn market-sort-submit"
+                type="submit"
+              >
+                Áp dụng
+              </button>
+
+            </form>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ======================================
+             PRODUCT GRID
+             ====================================== -->
+        <% if (listings.length > 0) { %>
+
+          <div class="market-results-grid">
+
+            <% listings.forEach((listing) => { %>
+
+              <%- include(
+                '_card',
+                {
+                  listing,
+                  showFavoriteAction: true,
+                  favoriteReturnTo: currentUrl
+                }
+              ) %>
+
+            <% }); %>
+
+          </div>
+
+
+          <%- include(
+            '_pagination',
+            { pagination }
+          ) %>
+
+
+        <% } else if (
+          Object.keys(filterErrors).length === 0
+        ) { %>
+
+
+          <!-- EMPTY -->
+          <div
+            class="market-search-empty"
+            role="status"
+          >
+
+            <div
+              class="market-search-empty__icon"
+              aria-hidden="true"
+            >
+
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+              >
+
+                <circle
+                  cx="11"
+                  cy="11"
+                  r="7"
+                ></circle>
+
+                <path
+                  d="m20 20-4-4"
+                ></path>
+
+              </svg>
+
+            </div>
+
+
+            <h2>
+              Không tìm thấy sản phẩm phù hợp
+            </h2>
+
+            <p>
+              Hãy thử thay đổi từ khóa,
+              khoảng giá, địa điểm hoặc
+              xóa bộ lọc hiện tại.
+            </p>
+
+
+            <a
+              class="btn btn-primary"
+              href="/listings"
+            >
+              Xem tất cả sản phẩm
+            </a>
+
+          </div>
+
+        <% } %>
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     MOBILE FILTER
+     ========================================== -->
+
+<div
+  class="
+    offcanvas
+    offcanvas-start
+    market-filter-offcanvas
+  "
+  tabindex="-1"
+  id="mobileListingFilters"
+  aria-labelledby="mobileListingFiltersLabel"
+>
+
+  <div class="offcanvas-header">
+
+    <div>
+
+      <span class="market-filter-offcanvas__eyebrow">
+        NTT Marketplace
+      </span>
+
+      <h2
+        class="offcanvas-title"
+        id="mobileListingFiltersLabel"
+      >
+        Bộ lọc tìm kiếm
+      </h2>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Đóng"
+    ></button>
+
+  </div>
+
+
+  <div class="offcanvas-body">
+
+    <form
+      method="GET"
+      action="/listings"
+      role="search"
+    >
+
+      <%- include(
+        '_filters',
+        {
+          idPrefix: 'mobile-filter',
+          categories,
+          filters,
+          filterErrors
+        }
+      ) %>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,833 @@
+/* ==========================================================
+   GIAI ĐOẠN 7
+   TIN ĐÃ LƯU / YÊU THÍCH
+   ========================================================== */
+
+.favorites-page {
+  min-height: 100vh;
+  padding: 2rem 0 3.5rem;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(238, 248, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0) 15rem
+    ),
+    #f5f7f8;
+}
+
+
+/* ==========================================================
+   HEADER
+   ========================================================== */
+
+.favorites-header {
+  display: flex;
+  margin-bottom: 1.25rem;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 1rem;
+}
+
+
+.favorites-heading {
+  min-width: 0;
+}
+
+
+.favorites-kicker {
+  display: inline-block;
+
+  margin-bottom: 0.3rem;
+
+  color: #39758e;
+
+  font-size: 0.78rem;
+  font-weight: 700;
+
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+
+.favorites-heading h1 {
+  margin: 0;
+
+  color: #003344;
+
+  font-size: clamp(
+    1.75rem,
+    3vw,
+    2.25rem
+  );
+
+  font-weight: 700;
+}
+
+
+.favorites-heading p {
+  max-width: 40rem;
+
+  margin:
+    0.4rem
+    0
+    0;
+
+  color: #667d86;
+
+  font-size: 0.92rem;
+}
+
+
+/* ==========================================================
+   KHÁM PHÁ
+   ========================================================== */
+
+.favorites-explore-button {
+  display: inline-flex;
+
+  min-height: 2.85rem;
+
+  padding:
+    0.6rem
+    1rem;
+
+  flex: 0 0 auto;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.45rem;
+
+  color: #003344;
+
+  background:
+    rgba(255, 255, 255, 0.5);
+
+  border:
+    1px solid
+    rgba(128, 180, 206, 0.42);
+
+  border-radius: 9999px;
+
+  box-shadow:
+    0 5px 16px
+    rgba(0, 51, 68, 0.08);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  font-size: 0.85rem;
+  font-weight: 700;
+
+  text-decoration: none;
+
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.favorites-explore-button svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+
+.favorites-explore-button:hover {
+  color: #003344;
+
+  background:
+    rgba(238, 248, 255, 0.78);
+
+  border-color:
+    rgba(57, 117, 142, 0.5);
+
+  box-shadow:
+    0 8px 20px
+    rgba(0, 51, 68, 0.12);
+
+  transform:
+    translateY(-1px);
+}
+
+
+
+/* ==========================================================
+   SUMMARY
+   ========================================================== */
+
+.favorites-summary-bar {
+  display: inline-flex;
+
+  width: fit-content;
+  min-height: 0;
+
+  margin-bottom: 1rem;
+
+  padding: 0.45rem 0.75rem;
+
+  align-items: center;
+  justify-content: flex-start;
+
+  gap: 0.55rem;
+
+  background: rgba(255, 255, 255, 0.58);
+
+  border: 1px solid rgba(128, 180, 206, 0.3);
+
+  border-radius: 0.85rem;
+
+  box-shadow:
+    0 4px 12px rgba(0, 51, 68, 0.06);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+
+.favorites-summary-main {
+  display: flex;
+
+  align-items: center;
+
+  gap: 0.65rem;
+}
+
+
+.favorites-summary-icon {
+  display: grid;
+
+  width: 2.25rem;
+  height: 2.25rem;
+
+  flex: 0 0 2.45rem;
+
+  place-items: center;
+
+  color: #e7081e;
+
+  background:
+    rgba(201, 23, 41, 0.629);
+
+  border:
+    1px solid
+    rgba(192, 62, 74, 0.16);
+
+  border-radius: 0.75rem;
+}
+
+
+.favorites-summary-icon svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+
+.favorites-summary-main div {
+  display: flex;
+
+  align-items: baseline;
+
+  gap: 0.3rem;
+
+  color: #647b84;
+
+  font-size: 0.82rem;
+}
+
+
+.favorites-summary-main strong {
+  color: #003344;
+
+  font-size: 1.1rem;
+}
+
+
+.favorites-page-number {
+  color: #71858d;
+
+  font-size: 0.78rem;
+}
+
+
+.favorites-page-number strong {
+  color: #003344;
+}
+
+
+
+/* ==========================================================
+   GRID
+   ========================================================== */
+
+.favorites-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
+  gap: 1rem;
+}
+
+
+.favorites-grid__item {
+  min-width: 0;
+}
+
+
+/* Card dùng lại _card.ejs hiện tại */
+
+.favorites-page .product-card {
+  height: 100%;
+
+  overflow: hidden;
+
+  background:
+    rgba(255, 255, 255, 0.88);
+
+  border:
+    1px solid
+    rgba(128, 180, 206, 0.28);
+
+  border-radius: 1.15rem;
+
+  box-shadow:
+    0 5px 18px
+    rgba(0, 51, 68, 0.07);
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.favorites-page .product-card .card-body {
+  padding: 0.9rem;
+}
+
+
+.favorites-page .listing-card-media {
+  overflow: hidden;
+
+  background: #eef4f6;
+
+  border-radius:
+    1.15rem
+    1.15rem
+    0
+    0;
+}
+
+
+.favorites-page .listing-card-image {
+  transition:
+    transform 0.25s ease;
+}
+
+
+
+/* ==========================================================
+   TRÁI TIM
+   ========================================================== */
+
+.favorites-page .listing-card-favorite {
+  top: 0.65rem;
+  left: auto;
+  right: 0.65rem;
+}
+
+
+.favorites-page .favorite-button--compact {
+  width: 2.4rem;
+  min-width: 2.4rem;
+
+  height: 2.4rem;
+  min-height: 2.4rem;
+
+  color: #bd3e49;
+
+  background:
+    rgba(255, 255, 255, 0.72);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.75);
+
+  box-shadow:
+    0 4px 14px
+    rgba(0, 0, 0, 0.12);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+
+.favorites-page
+.favorite-button--compact.is-favorited {
+  color: #ffffff;
+
+  background:
+    rgba(190, 57, 69, 0.88);
+
+  border-color:
+    rgba(190, 57, 69, 0.5);
+}
+
+
+.favorites-page
+.favorite-button--compact
+.favorite-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+
+
+/* ==========================================================
+   STATUS
+   ========================================================== */
+
+.favorites-page
+.status-badge--sold {
+  color: #a03740;
+
+  background:
+    rgba(255, 235, 237, 0.9);
+
+  border-color:
+    rgba(178, 61, 69, 0.22);
+}
+
+
+.favorites-page
+.condition-badge {
+  background:
+    rgba(238, 248, 255, 0.9);
+}
+
+
+
+/* ==========================================================
+   TITLE / PRICE
+   ========================================================== */
+
+.favorites-page
+.listing-card-title {
+  margin-top: 0.45rem;
+
+  color: #123d4d;
+
+  font-size: 1rem;
+
+  line-height: 1.4;
+}
+
+
+.favorites-page
+.product-price {
+  color: #c03942;
+
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+
+.favorites-page
+.listing-card-meta {
+  color: #71858d;
+
+  font-size: 0.76rem;
+}
+
+
+.favorites-page
+.listing-card-meta p {
+  margin-bottom: 0.3rem;
+}
+
+
+
+/* ==========================================================
+   XEM CHI TIẾT
+   ========================================================== */
+
+.favorites-page
+.product-card
+.btn-outline-primary {
+  color: #225f78;
+
+  background:
+    rgba(238, 248, 255, 0.56);
+
+  border:
+    1px solid
+    rgba(57, 117, 142, 0.28);
+
+  border-radius: 0.75rem;
+
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+
+.favorites-page
+.product-card
+.btn-outline-primary:hover {
+  color: #ffffff;
+
+  background:
+    rgba(34, 95, 120, 0.9);
+
+  border-color:
+    rgba(34, 95, 120, 0.9);
+
+  box-shadow:
+    0 5px 14px
+    rgba(0, 51, 68, 0.12);
+}
+
+
+
+/* ==========================================================
+   EMPTY STATE
+   ========================================================== */
+
+.favorites-page
+.favorite-empty-state {
+  display: flex;
+
+  max-width: none;
+  min-height: 23rem;
+
+  margin: 0;
+
+  padding: 2rem;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background:
+    rgba(255, 255, 255, 0.62);
+
+  border:
+    1px solid
+    rgba(128, 180, 206, 0.3);
+
+  border-radius: 1.25rem;
+
+  box-shadow:
+    0 6px 20px
+    rgba(0, 51, 68, 0.06);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+
+.favorites-page
+.favorite-empty-icon {
+  display: grid;
+
+  width: 4.5rem;
+  height: 4.5rem;
+
+  margin-bottom: 1rem;
+
+  place-items: center;
+
+  color: #bd3e49;
+
+  background:
+    rgba(255, 235, 237, 0.68);
+
+  border:
+    1px solid
+    rgba(189, 62, 73, 0.15);
+
+  border-radius: 1.25rem;
+
+  box-shadow:
+    0 5px 16px
+    rgba(189, 62, 73, 0.08);
+}
+
+
+.favorites-page
+.favorite-empty-icon
+.favorite-icon {
+  width: 1.9rem;
+  height: 1.9rem;
+}
+
+
+.favorite-empty-kicker {
+  margin-bottom: 0.35rem;
+
+  color: #39758e;
+
+  font-size: 0.72rem;
+  font-weight: 700;
+
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+
+.favorites-page
+.favorite-empty-state h2 {
+  margin:
+    0
+    0
+    0.45rem;
+
+  color: #003344;
+
+  font-size: 1.25rem;
+}
+
+
+.favorites-page
+.favorite-empty-state p {
+  max-width: 30rem;
+
+  margin:
+    0
+    0
+    1.15rem;
+
+  color: #6d8189;
+
+  font-size: 0.86rem;
+}
+
+
+.favorite-empty-button {
+  display: inline-flex;
+
+  min-height: 2.7rem;
+
+  padding:
+    0.55rem
+    1rem;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff;
+
+  background:
+    rgba(236, 47, 47, 0.79);
+
+  border:
+    1px solid
+    rgba(219, 42, 42, 0.681);
+
+  border-radius: 9999px;
+
+  box-shadow:
+    0 5px 16px
+    rgba(0, 51, 68, 0.12);
+
+  font-size: 0.82rem;
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+
+.favorite-empty-button:hover {
+  color: #ffffff;
+
+  background:
+    rgba(195, 9, 9, 0.78);
+
+  box-shadow:
+    0 7px 18px
+    rgba(183, 10, 10, 0.17);
+}
+
+
+
+/* ==========================================================
+   PAGINATION
+   ========================================================== */
+
+.favorites-pagination
+.pagination {
+  margin-bottom: 0;
+}
+
+
+.favorites-pagination
+.page-link {
+  background:
+    rgba(255, 255, 255, 0.62);
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+
+
+/* ==========================================================
+   HOVER
+   ========================================================== */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .favorites-page
+  .product-card:hover {
+    border-color:
+      rgba(57, 117, 142, 0.38);
+
+    box-shadow:
+      0 9px 25px
+      rgba(0, 51, 68, 0.12);
+
+    transform:
+      translateY(-3px);
+  }
+
+
+  .favorites-page
+  .product-card:hover
+  .listing-card-image {
+    transform:
+      scale(1.025);
+  }
+
+
+  .favorites-page
+  .favorite-button--compact:hover {
+    color: #ffffff;
+
+    background:
+      rgba(190, 57, 69, 0.88);
+
+    border-color:
+      rgba(190, 57, 69, 0.42);
+
+    box-shadow:
+      0 6px 16px
+      rgba(190, 57, 69, 0.18);
+  }
+
+}
+
+
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width: 61.999rem) {
+
+  .favorites-grid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 47.999rem) {
+
+  .favorites-page {
+    padding:
+      1.25rem
+      0
+      2.5rem;
+  }
+
+
+  .favorites-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+
+  .favorites-explore-button {
+    width: 100%;
+  }
+
+
+  .favorites-summary-bar {
+    min-height: 3.75rem;
+
+    padding:
+      0.65rem
+      0.8rem;
+  }
+
+
+  .favorites-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    gap: 0.75rem;
+  }
+
+
+  .favorites-page
+  .product-card
+  .card-body {
+    padding: 0.7rem;
+  }
+
+
+  .favorites-page
+  .listing-card-title {
+    font-size: 0.9rem;
+  }
+
+
+  .favorites-page
+  .product-price {
+    font-size: 0.95rem;
+  }
+
+
+  .favorites-page
+  .listing-card-meta {
+    font-size: 0.7rem;
+  }
+
+}
+
+
+
+/* ==========================================================
+   MOBILE NHỎ
+   ========================================================== */
+
+@media (max-width: 25rem) {
+
+  .favorites-grid {
+    grid-template-columns: 1fr;
+  }
+
+}

@@ -1,0 +1,310 @@
+/* ==================================================
+   NTT MARKETPLACE
+   STITCH DESIGN TOKENS — PHASE 1
+
+   Font chính: Raleway
+   Font tiêu đề: Playfair Display
+   ================================================== */
+
+:root {
+
+  /* ==============================
+     COLORS
+     ============================== */
+
+  --color-paper: #ffffff;
+
+  --color-paper-2: #eef8ff;
+
+  --color-paper-3: #e1f4ff;
+
+  --color-ink: #003344;
+
+  --color-ink-2: #2b6279;
+
+  --color-muted: #606770;
+
+  --color-neutral: #497d95;
+
+  --color-rule: #80b4ce;
+
+  --color-rule-2: #e1e3e6;
+
+
+  /* NTT GOLD */
+
+  --color-accent: #ffe884;
+
+  --color-accent-hover: #6a5b00;
+
+  --color-accent-soft: #fff7cf;
+
+  --color-accent-ink: #003344;
+
+
+  /* FOCUS */
+
+  --color-focus: #0962e7;
+
+
+  /* ==============================
+     SEMANTIC
+     ============================== */
+
+  --color-success: #198754;
+
+  --color-success-surface: #eaf7ef;
+
+
+  --color-danger: #c93838;
+
+  --color-danger-surface: #fff0f0;
+
+
+  --color-warning: #b57600;
+
+  --color-warning-surface: #fff7df;
+
+
+  --color-info: #0962e7;
+
+  --color-info-surface: #edf3ff;
+
+
+  --color-sold: var(--color-danger);
+
+  --color-sold-surface:
+    var(--color-danger-surface);
+
+
+  --color-hidden:
+    var(--color-neutral);
+
+  --color-hidden-surface:
+    #edf4f7;
+
+
+  /* ==============================
+     ALIASES
+     ============================== */
+
+  --color-primary:
+    var(--color-accent);
+
+  --color-primary-hover:
+    var(--color-accent-hover);
+
+  --color-primary-soft:
+    var(--color-accent-soft);
+
+  --color-on-primary:
+    var(--color-accent-ink);
+
+
+  --color-background:
+    #f5f5f5;
+
+  --color-surface:
+    var(--color-paper);
+
+  --color-surface-subtle:
+    var(--color-paper-3);
+
+  --color-text:
+    var(--color-ink);
+
+  --color-text-muted:
+    var(--color-muted);
+
+  --color-border:
+    var(--color-rule-2);
+
+
+  /* ==============================
+     TYPOGRAPHY
+     ============================== */
+
+--font-display: "Times New Roman", Times, serif;
+--font-body: "Times New Roman", Times, serif;
+
+  --font-outlier:
+    "Raleway Variable",
+    Raleway,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+
+  --font-weight-regular: 400;
+
+  --font-weight-semibold: 600;
+
+  --font-weight-bold: 700;
+
+
+  --tracking-display: -0.015em;
+
+  --tracking-label: 0.035em;
+
+
+  --line-height-tight: 1.25;
+
+  --line-height-body: 1.6;
+
+
+  /* ==============================
+     SPACING
+     ============================== */
+
+  --space-3xs: 0.125rem;
+
+  --space-2xs: 0.25rem;
+
+  --space-xs: 0.5rem;
+
+  --space-sm: 0.75rem;
+
+  --space-md: 1rem;
+
+  --space-lg: 1.5rem;
+
+  --space-xl: 2rem;
+
+  --space-2xl: 3rem;
+
+  --space-3xl: 5rem;
+
+  --space-4xl: 7rem;
+
+
+  /* ==============================
+     FONT SIZE
+     ============================== */
+
+  --text-xs: 0.75rem;
+
+  --text-sm: 0.8125rem;
+
+  --text-base: 0.9375rem;
+
+  --text-md: 1.125rem;
+
+  --text-lg: 1.25rem;
+
+  --text-xl: 1.75rem;
+
+  --text-2xl: 2.25rem;
+
+  --text-display:
+    clamp(2rem, 5vw, 3.5rem);
+
+
+  /* ==============================
+     MOTION
+     ============================== */
+
+  --ease-out:
+    cubic-bezier(0.16, 1, 0.3, 1);
+
+  --ease-in:
+    cubic-bezier(0.7, 0, 0.84, 0);
+
+  --ease-in-out:
+    cubic-bezier(0.65, 0, 0.35, 1);
+
+
+  --dur-micro: 120ms;
+
+  --dur-short: 200ms;
+
+  --dur-long: 320ms;
+
+  --dur-stagger: 50ms;
+
+
+  /* ==============================
+     STITCH RADIUS
+     ============================== */
+
+  --radius-control: 1rem;
+
+  --radius-frame: 1rem;
+
+  --radius-panel: 1.5rem;
+
+  --radius-small: 0.5rem;
+
+  --radius-medium: 1rem;
+
+  --radius-large: 1.5rem;
+
+  --radius-card: 1rem;
+
+  --radius-input: 1rem;
+
+  --radius-pill: 9999px;
+
+
+  /* ==============================
+     BORDER
+     ============================== */
+
+  --rule-thin: 1px;
+
+  --rule-fine: 2px;
+
+
+  /* ==============================
+     SHADOW
+     ============================== */
+
+  --shadow-small:
+    0 1px 3px
+    rgba(0, 51, 68, 0.08);
+
+  --shadow-card:
+    0 4px 14px
+    rgba(0, 51, 68, 0.09);
+
+  --shadow-prominent:
+    0 14px 34px
+    rgba(0, 51, 68, 0.14);
+
+  --shadow-focus:
+    0 0 0 0.1875rem
+    rgba(9, 98, 231, 0.18);
+
+
+  /* ==============================
+     LAYOUT
+     ============================== */
+
+  --container-max: 75rem;
+
+  --header-height: 4rem;
+
+  --form-max: 48rem;
+
+  --listing-image-ratio: 4 / 3;
+
+  --control-height: 2.75rem;
+
+
+  /* ==============================
+     Z-INDEX
+     ============================== */
+
+  --z-base: 1;
+
+  --z-raised: 10;
+
+  --z-dropdown: 100;
+
+  --z-sticky: 200;
+
+  --z-modal: 400;
+
+  --z-toast: 500;
+
+  --z-tooltip: 600;
+}

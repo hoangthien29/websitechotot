@@ -1,0 +1,56 @@
+<%
+  const favoriteCompact = typeof compact !== 'undefined' && compact;
+  const favoriteReturnPath =
+    typeof returnTo === 'string' && returnTo ? returnTo : '/';
+  const favoriteSellerId = listing.seller?._id || listing.seller;
+  const favoriteIsOwner = Boolean(
+    currentUser &&
+    favoriteSellerId &&
+    favoriteSellerId.toString() === currentUser._id.toString()
+  );
+  const favoriteIsSaved =
+    typeof isFavorited === 'boolean'
+      ? isFavorited
+      : Boolean(listing.isFavorited);
+%>
+
+<% if (favoriteIsOwner) { %>
+  <% if (!favoriteCompact) { %>
+    <span class="favorite-owner-note">Tin của bạn</span>
+  <% } %>
+<% } else if (!currentUser) { %>
+  <a
+    class="favorite-login-link <%= favoriteCompact ? 'favorite-login-link--compact' : 'btn btn-outline-secondary' %>"
+    href="/login"
+    aria-label="Đăng nhập để lưu tin"
+    title="<%= favoriteCompact ? 'Đăng nhập để lưu tin' : '' %>"
+  >
+    <svg class="favorite-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"></path>
+    </svg>
+    <span class="<%= favoriteCompact ? 'visually-hidden' : '' %>">Đăng nhập để lưu tin</span>
+  </a>
+<% } else { %>
+  <form
+    class="favorite-form"
+    method="POST"
+    action="/listings/<%= listing._id %>/favorite<%= favoriteIsSaved ? '?_method=DELETE' : '' %>"
+  >
+    <%- include('../partials/csrf') %>
+    <input type="hidden" name="returnTo" value="<%= favoriteReturnPath %>">
+    <button
+      class="favorite-button <%= favoriteCompact ? 'favorite-button--compact' : 'favorite-button--detail' %> <%= favoriteIsSaved ? 'is-favorited' : '' %>"
+      type="submit"
+      aria-label="<%= favoriteIsSaved ? 'Bỏ lưu sản phẩm' : 'Lưu sản phẩm' %>"
+      aria-pressed="<%= favoriteIsSaved ? 'true' : 'false' %>"
+      title="<%= favoriteIsSaved ? 'Bỏ lưu sản phẩm' : 'Lưu sản phẩm' %>"
+    >
+      <svg class="favorite-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"></path>
+      </svg>
+      <% if (!favoriteCompact) { %>
+        <span><%= favoriteIsSaved ? 'Bỏ lưu' : 'Lưu tin' %></span>
+      <% } %>
+    </button>
+  </form>
+<% } %>

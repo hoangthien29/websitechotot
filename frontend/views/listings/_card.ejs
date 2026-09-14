@@ -1,0 +1,228 @@
+<article
+  class="
+    product-card
+    marketplace-product-card
+  "
+>
+
+  <!-- =====================================================
+       IMAGE
+       ===================================================== -->
+  <div
+    class="
+      listing-card-media
+      position-relative
+    "
+  >
+
+    <a
+      class="listing-card-media-link"
+      href="/listings/<%= listing._id %>"
+      aria-label="Xem chi tiết <%= listing.title %>"
+    >
+
+      <img
+        class="listing-card-image"
+        src="<%= listing.primaryImage %>"
+        alt="Ảnh sản phẩm <%= listing.title %>"
+        width="800"
+        height="600"
+        loading="lazy"
+      >
+
+    </a>
+
+
+
+    <!-- TÌNH TRẠNG SẢN PHẨM -->
+    <span class="listing-condition-overlay">
+
+      <%= listing.condition === 'new'
+        ? 'Mới'
+        : listing.conditionLabel
+      %>
+
+    </span>
+
+
+
+    <!-- TRẠNG THÁI ĐÃ BÁN / ĐÃ ẨN -->
+    <% if (
+      !listing.isHiddenByAdmin &&
+      (
+        listing.status === 'sold' ||
+        listing.status === 'hidden'
+      )
+    ) { %>
+
+      <span
+        class="
+          badge
+          status-badge
+          status-badge--<%= listing.status %>
+          listing-status-overlay
+        "
+      >
+        <%= listing.statusLabel %>
+      </span>
+
+    <% } %>
+
+
+
+    <!-- ADMIN ẨN -->
+    <% if (listing.isHiddenByAdmin) { %>
+
+      <span
+        class="
+          badge
+          status-badge
+          status-badge--warning
+          listing-status-overlay
+        "
+      >
+        Ẩn bởi quản trị viên
+      </span>
+
+    <% } %>
+
+
+
+    <!-- YÊU THÍCH -->
+    <% if (
+      typeof showFavoriteAction !== 'undefined' &&
+      showFavoriteAction
+    ) { %>
+
+      <div class="listing-card-favorite">
+
+        <%- include(
+          '../favorites/_favorite-button',
+          {
+            listing,
+            currentUser,
+            returnTo: favoriteReturnTo,
+            compact: true,
+            isFavorited: listing.isFavorited
+          }
+        ) %>
+
+      </div>
+
+    <% } %>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       CONTENT
+       ===================================================== -->
+  <div
+    class="
+      card-body
+      marketplace-product-card__body
+    "
+  >
+
+    <h2
+      class="
+        listing-card-title
+        marketplace-product-card__title
+      "
+    >
+
+      <a href="/listings/<%= listing._id %>">
+        <%= listing.title %>
+      </a>
+
+    </h2>
+
+
+    <p
+      class="
+        product-price
+        marketplace-product-card__price
+      "
+    >
+      <%= listing.formattedPrice %>
+    </p>
+
+
+
+    <!-- LOCATION + DATE -->
+    <div
+      class="
+        listing-card-meta
+        marketplace-product-card__meta
+      "
+    >
+
+      <span
+        class="marketplace-product-card__location"
+        title="<%= listing.location %>"
+      >
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+
+          <path
+            d="
+              M20 10
+              c0 5-8 11-8 11
+              S4 15 4 10
+              a8 8 0 1 1 16 0Z
+            "
+          ></path>
+
+          <circle
+            cx="12"
+            cy="10"
+            r="2.5"
+          ></circle>
+
+        </svg>
+
+
+        <span>
+          <%= listing.location %>
+        </span>
+
+      </span>
+
+
+      <span class="marketplace-product-card__date">
+        <%= listing.formattedCreatedAt %>
+      </span>
+
+    </div>
+
+
+
+    <!-- GIỮ NGUYÊN CHỨC NĂNG QUẢN LÝ TIN -->
+    <% if (
+      typeof showManageActions !== 'undefined' &&
+      showManageActions
+    ) { %>
+
+      <div class="listing-card-management">
+
+        <%- include(
+          '_actions',
+          { listing }
+        ) %>
+
+      </div>
+
+    <% } %>
+
+  </div>
+
+</article>

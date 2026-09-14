@@ -1,0 +1,398 @@
+<%- include('../partials/header', {
+  pageStyles: ['/css/messages.css']
+}) %>
+
+<section
+  class="messages-page messages-page--redesign"
+  aria-labelledby="messages-title"
+>
+
+  <div class="container messages-container">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="messages-redesign-header">
+
+      <div class="messages-redesign-heading">
+        <h1 id="messages-title">
+          Tin nhắn
+        </h1>
+      </div>
+
+      <a
+        class="messages-explore-button"
+        href="/listings"
+      >
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle
+            cx="11"
+            cy="11"
+            r="7"
+          ></circle>
+
+          <path d="m20 20-4-4"></path>
+        </svg>
+
+        <span>
+          Khám phá sản phẩm
+        </span>
+
+      </a>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         ERROR
+         ===================================================== -->
+
+    <% if (errors.page || errors.general) { %>
+
+      <div
+        class="alert alert-danger messages-alert"
+        role="alert"
+      >
+        <%= errors.page || errors.general %>
+      </div>
+
+
+    <% } else { %>
+
+
+      <!-- ===================================================
+           SUMMARY
+           =================================================== -->
+
+      <div class="messages-redesign-summary">
+
+        <div class="messages-summary-chip">
+
+          <span
+            class="messages-summary-chip__icon"
+            aria-hidden="true"
+          >
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="
+                  M21 15
+                  a4 4 0 0 1-4 4
+                  H8
+                  l-5 3
+                  V7
+                  a4 4 0 0 1 4-4
+                  h10
+                  a4 4 0 0 1 4 4Z
+                "
+              ></path>
+            </svg>
+
+          </span>
+
+
+          <div>
+            <strong
+              data-conversation-total="<%= totalItems %>"
+            >
+              <%= totalItems %>
+            </strong>
+
+            <span>
+              cuộc trò chuyện
+            </span>
+          </div>
+
+        </div>
+
+
+        <% if (pagination.totalPages > 1) { %>
+
+          <span class="messages-summary-page">
+            Trang
+            <strong><%= currentPage %></strong>
+            /
+            <%= pagination.totalPages %>
+          </span>
+
+        <% } %>
+
+      </div>
+
+
+
+      <% if (conversations.length > 0) { %>
+
+
+        <!-- =================================================
+             CONVERSATION LIST
+             ================================================= -->
+
+        <div class="conversation-redesign-list">
+
+          <% conversations.forEach((conversation) => { %>
+
+            <article
+              class="
+                conversation-redesign-card
+                <%= conversation.hasUnread
+                  ? 'has-unread'
+                  : ''
+                %>
+              "
+              data-conversation
+            >
+
+              <a
+                class="conversation-redesign-link"
+                href="<%= conversation.detailUrl %>"
+                aria-label="
+                  Mở trò chuyện với
+                  <%= conversation.otherParticipant.name %>
+                  về
+                  <%= conversation.listing.title %>
+                "
+              >
+
+
+                <!-- =========================================
+                     ẢNH SẢN PHẨM
+                     ========================================= -->
+
+                <div class="conversation-redesign-product">
+
+                  <img
+                    src="<%= conversation.listing.primaryImage %>"
+                    alt="Ảnh bài đăng <%= conversation.listing.title %>"
+                    width="180"
+                    height="135"
+                    loading="lazy"
+                  >
+
+
+                  <span
+                    class="
+                      conversation-product-status
+                      conversation-product-status--<%= conversation.listing.status %>
+                    "
+                  >
+                    <%= conversation.listing.statusLabel %>
+                  </span>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     NỘI DUNG
+                     ========================================= -->
+
+                <div class="conversation-redesign-content">
+
+
+                  <!-- USER -->
+
+                  <div class="conversation-redesign-top">
+
+                    <div class="conversation-redesign-user">
+
+                      <img
+                        class="conversation-redesign-avatar"
+                        src="<%= conversation.otherParticipant.avatarUrl %>"
+                        alt=""
+                        width="44"
+                        height="44"
+                        loading="lazy"
+                      >
+
+
+                      <div class="conversation-redesign-user__copy">
+
+                        <h2>
+                          <%= conversation.otherParticipant.name %>
+                        </h2>
+
+                        <p>
+                          <%= conversation.listing.title %>
+                        </p>
+
+                      </div>
+
+                    </div>
+
+
+                    <time class="conversation-redesign-time">
+                      <%= conversation.formattedLastMessageAt %>
+                    </time>
+
+                  </div>
+
+
+
+                  <!-- LAST MESSAGE -->
+
+                  <div class="conversation-redesign-bottom">
+
+                    <p class="conversation-redesign-preview">
+                      <%= conversation.lastMessagePreview %>
+                    </p>
+
+
+                    <% if (conversation.hasUnread) { %>
+
+                      <span
+                        class="conversation-redesign-unread"
+                        aria-label="<%= conversation.unreadCount %> tin chưa đọc"
+                      >
+                        <%= conversation.unreadCount > 99
+                          ? '99+'
+                          : conversation.unreadCount
+                        %>
+                      </span>
+
+                    <% } else { %>
+
+                      <span
+                        class="conversation-redesign-arrow"
+                        aria-hidden="true"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="m9 18 6-6-6-6"></path>
+                        </svg>
+                      </span>
+
+                    <% } %>
+
+                  </div>
+
+
+                </div>
+
+              </a>
+
+            </article>
+
+          <% }); %>
+
+        </div>
+
+
+        <div class="messages-redesign-pagination">
+
+          <%- include(
+            '../listings/_pagination',
+            {
+              pagination
+            }
+          ) %>
+
+        </div>
+
+
+      <% } else { %>
+
+
+        <!-- =================================================
+             EMPTY
+             ================================================= -->
+
+        <div
+          class="messages-redesign-empty"
+          role="status"
+        >
+
+          <div
+            class="messages-redesign-empty__icon"
+            aria-hidden="true"
+          >
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="
+                  M21 15
+                  a4 4 0 0 1-4 4
+                  H8
+                  l-5 3
+                  V7
+                  a4 4 0 0 1 4-4
+                  h10
+                  a4 4 0 0 1 4 4Z
+                "
+              ></path>
+
+              <path d="M8 9h8"></path>
+
+              <path d="M8 13h5"></path>
+            </svg>
+
+          </div>
+
+
+          <span class="messages-redesign-empty__kicker">
+            Chưa có tin nhắn
+          </span>
+
+
+          <h2>
+            Bạn chưa có cuộc trò chuyện nào
+          </h2>
+
+
+          <p>
+            Hãy mở một sản phẩm đang bán và nhắn cho
+            người bán để bắt đầu trao đổi.
+          </p>
+
+
+          <a
+            class="messages-empty-button"
+            href="/listings"
+          >
+            Khám phá sản phẩm
+          </a>
+
+        </div>
+
+      <% } %>
+
+
+    <% } %>
+
+  </div>
+
+</section>
+
+
+<%- include('../partials/footer') %>

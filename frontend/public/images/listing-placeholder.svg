@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title description">
+  <title id="title">Ảnh sản phẩm NTT Marketplace</title>
+  <desc id="description">Ảnh thay thế dành cho bài đăng chưa có ảnh sản phẩm.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#175cd3"/>
+      <stop offset="1" stop-color="#123e8c"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" rx="48" fill="url(#background)"/>
+  <g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="225" y="145" width="350" height="270" rx="28" stroke-width="24" opacity=".92"/>
+    <circle cx="330" cy="245" r="42" stroke-width="22" opacity=".92"/>
+    <path d="m255 385 115-105 75 70 55-50 45 42" stroke-width="24" opacity=".92"/>
+  </g>
+  <text x="400" y="500" fill="#ffffff" font-family="Arial, sans-serif" font-size="42" font-weight="700" text-anchor="middle">
+    NTT Marketplace
+  </text>
+</svg>

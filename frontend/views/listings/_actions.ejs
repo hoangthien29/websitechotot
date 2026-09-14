@@ -1,0 +1,305 @@
+<div class="my-listing-actions">
+
+
+  <!-- =====================================================
+       XEM TIN
+       ===================================================== -->
+
+  <a
+    class="
+      btn
+      my-listing-action
+      my-listing-action--view
+    "
+    href="/listings/<%= listing._id %>"
+  >
+
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      aria-hidden="true"
+    >
+
+      <path
+        d="
+          M2.5 12
+          s3.5-6 9.5-6
+          9.5 6 9.5 6
+          -3.5 6-9.5 6
+          -9.5-6-9.5-6Z
+        "
+      ></path>
+
+      <circle
+        cx="12"
+        cy="12"
+        r="2.5"
+      ></circle>
+
+    </svg>
+
+    <span>
+      Xem tin
+    </span>
+
+  </a>
+
+
+
+  <!-- =====================================================
+       ADMIN ẨN
+       ===================================================== -->
+
+  <% if (listing.isHiddenByAdmin) { %>
+
+    <div
+      class="my-listing-admin-note"
+      role="status"
+    >
+      Bài đăng đang bị quản trị viên ẩn
+      và không thể chỉnh sửa.
+    </div>
+
+
+  <% } else { %>
+
+
+
+    <!-- ===================================================
+         CHỈNH SỬA
+         =================================================== -->
+
+    <a
+      class="
+        btn
+        my-listing-action
+        my-listing-action--edit
+      "
+      href="/listings/<%= listing._id %>/edit"
+    >
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        aria-hidden="true"
+      >
+
+        <path
+          d="M12 20h9"
+        ></path>
+
+        <path
+          d="
+            M16.5 3.5
+            a2.1 2.1 0 0 1 3 3
+            L8 18
+            l-4 1
+            1-4Z
+          "
+        ></path>
+
+      </svg>
+
+      <span>
+        Chỉnh sửa
+      </span>
+
+    </a>
+
+
+
+    <!-- ===================================================
+         ACTIVE → ĐÃ BÁN
+         =================================================== -->
+
+    <% if (listing.status === 'active') { %>
+
+      <form
+        method="POST"
+        action="/listings/<%= listing._id %>/status?_method=PATCH"
+      >
+
+        <%- include('../partials/csrf') %>
+
+        <input
+          type="hidden"
+          name="status"
+          value="sold"
+        >
+
+
+        <button
+          class="
+            btn
+            my-listing-action
+            my-listing-action--sold
+          "
+          type="submit"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            aria-hidden="true"
+          >
+            <path
+              d="m5 12 4 4L19 6"
+            ></path>
+          </svg>
+
+          <span>
+            Đánh dấu đã bán
+          </span>
+
+        </button>
+
+      </form>
+
+
+    <% } else { %>
+
+
+      <!-- =================================================
+           SOLD / HIDDEN → ĐĂNG LẠI
+           ================================================= -->
+
+      <form
+        method="POST"
+        action="/listings/<%= listing._id %>/status?_method=PATCH"
+      >
+
+        <%- include('../partials/csrf') %>
+
+        <input
+          type="hidden"
+          name="status"
+          value="active"
+        >
+
+
+        <button
+          class="
+            btn
+            my-listing-action
+            my-listing-action--relist
+          "
+          type="submit"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            aria-hidden="true"
+          >
+
+            <path
+              d="M20 6v6h-6"
+            ></path>
+
+            <path
+              d="
+                M20 12
+                a8 8 0 1 0
+                -2.3 5.7
+              "
+            ></path>
+
+          </svg>
+
+          <span>
+            Đăng bán lại
+          </span>
+
+        </button>
+
+      </form>
+
+    <% } %>
+
+
+
+    <!-- ===================================================
+         ẨN
+         =================================================== -->
+
+    <% if (listing.status !== 'hidden') { %>
+
+      <form
+        method="POST"
+        action="/listings/<%= listing._id %>?_method=DELETE"
+      >
+
+        <%- include('../partials/csrf') %>
+
+
+        <button
+          class="
+            btn
+            my-listing-action
+            my-listing-action--hide
+          "
+          type="submit"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            aria-hidden="true"
+          >
+
+            <path
+              d="M3 3l18 18"
+            ></path>
+
+            <path
+              d="
+                M10.6 10.7
+                a2 2 0 0 0
+                2.7 2.7
+              "
+            ></path>
+
+            <path
+              d="
+                M9.9 4.2
+                A10.7 10.7 0 0 1 12 4
+                c6 0 9.5 8 9.5 8
+                a17.8 17.8 0 0 1-2.1 3.2
+              "
+            ></path>
+
+            <path
+              d="
+                M6.6 6.6
+                A17.7 17.7 0 0 0 2.5 12
+                S6 20 12 20
+                a10.7 10.7 0 0 0 5.4-1.4
+              "
+            ></path>
+
+          </svg>
+
+          <span>
+            Ẩn bài đăng
+          </span>
+
+        </button>
+
+      </form>
+
+    <% } %>
+
+
+  <% } %>
+
+</div>

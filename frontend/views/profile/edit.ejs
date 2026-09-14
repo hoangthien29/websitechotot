@@ -1,0 +1,615 @@
+<%- include('../partials/header', {
+  pageStyles: ['/css/profile.css']
+}) %>
+
+<section
+  class="profile-edit-page"
+  aria-labelledby="profile-edit-title"
+>
+
+  <div class="container">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="profile-edit-header">
+
+      <div>
+
+        <span class="profile-edit-kicker">
+          Tài khoản của tôi
+        </span>
+
+        <h1 id="profile-edit-title">
+          Chỉnh sửa hồ sơ
+        </h1>
+
+      </div>
+
+
+      <a
+        class="profile-edit-back"
+        href="/profile"
+      >
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m15 18-6-6 6-6"></path>
+        </svg>
+
+        <span>
+          Quay lại hồ sơ
+        </span>
+
+      </a>
+
+    </header>
+
+
+    <% if (errors.general) { %>
+
+      <div
+        class="alert alert-danger profile-edit-alert"
+        role="alert"
+      >
+        <%= errors.general %>
+      </div>
+
+    <% } %>
+
+
+    <% if (retryAvatar) { %>
+
+      <div
+        class="alert alert-warning profile-edit-alert"
+        role="alert"
+      >
+        Ảnh đã chọn không được giữ lại sau khi gửi thất bại.
+        Vui lòng chọn lại ảnh.
+      </div>
+
+    <% } %>
+
+
+    <!-- =====================================================
+         FORM
+         ===================================================== -->
+
+    <form
+      class="profile-edit-form"
+      method="POST"
+      action="/profile?_method=PUT"
+      enctype="multipart/form-data"
+      data-profile-edit-form
+    >
+
+      <%- include('../partials/csrf') %>
+
+
+      <!-- ===================================================
+           AVATAR
+           =================================================== -->
+
+      <aside class="profile-edit-avatar-card">
+
+        <span class="profile-edit-section-label">
+          Ảnh đại diện
+        </span>
+
+
+        <div class="profile-edit-avatar-wrap">
+
+          <img
+            class="profile-edit-avatar-preview"
+            src="<%= profileUser.avatarUrl %>"
+            alt="Ảnh đại diện hiện tại của <%= profileUser.name %>"
+            width="160"
+            height="160"
+            data-profile-avatar-preview
+          >
+
+
+          <span
+            class="profile-edit-avatar-badge"
+            aria-hidden="true"
+          >
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="
+                  M14.5 4
+                  16 2.5
+                  a2 2 0 0 1 3 0
+                  L21.5 5
+                  a2 2 0 0 1 0 3
+                  L20 9.5
+                "
+              ></path>
+
+              <path d="M18 6 9 15"></path>
+
+              <path
+                d="
+                  M8 7H5
+                  a2 2 0 0 0-2 2v10
+                  a2 2 0 0 0 2 2h10
+                  a2 2 0 0 0 2-2v-3
+                "
+              ></path>
+            </svg>
+
+          </span>
+
+        </div>
+
+
+        <input
+          class="profile-edit-avatar-input"
+          id="avatar"
+          name="avatar"
+          type="file"
+          accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+          aria-invalid="<%= errors.avatar ? 'true' : 'false' %>"
+          aria-describedby="avatarError avatarHelp"
+          data-profile-avatar-input
+        >
+
+
+        <label
+          class="profile-edit-avatar-button"
+          for="avatar"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M12 5v14"></path>
+            <path d="M5 12h14"></path>
+          </svg>
+
+          <span>
+            Chọn ảnh mới
+          </span>
+
+        </label>
+        <div
+          class="profile-edit-avatar-error <%= errors.avatar ? 'is-visible' : '' %>"
+          id="avatarError"
+        >
+          <%= errors.avatar || '' %>
+        </div>
+
+
+        <% if (profileUser.hasManagedAvatar) { %>
+
+          <label class="profile-remove-avatar">
+
+            <input
+              id="removeAvatar"
+              name="removeAvatar"
+              type="checkbox"
+              value="1"
+              data-remove-avatar
+            >
+
+            <span class="profile-remove-avatar__check">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m5 12 4 4L19 6"></path>
+              </svg>
+            </span>
+
+            <span>
+              Xóa ảnh đại diện hiện tại
+            </span>
+
+          </label>
+
+        <% } %>
+
+
+        <div class="profile-edit-avatar-note">
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            aria-hidden="true"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+            ></circle>
+
+            <path d="M12 11v5"></path>
+            <path d="M12 8h.01"></path>
+          </svg>
+
+        </div>
+
+      </aside>
+
+
+      <!-- ===================================================
+           THÔNG TIN
+           =================================================== -->
+
+      <section class="profile-edit-fields">
+
+        <header class="profile-edit-fields-header">
+
+          <span class="profile-edit-section-label">
+            Thông tin cá nhân
+          </span>
+        </header>
+
+
+        <div class="profile-edit-field-grid">
+
+
+          <!-- HỌ TÊN -->
+
+          <div class="profile-edit-field profile-edit-field--full">
+
+            <label for="name">
+              Họ và tên
+
+              <span>
+                *
+              </span>
+            </label>
+
+
+            <div class="profile-edit-control">
+
+              <span
+                class="profile-edit-control__icon"
+                aria-hidden="true"
+              >
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <circle
+                    cx="12"
+                    cy="8"
+                    r="4"
+                  ></circle>
+
+                  <path
+                    d="
+                      M4 21
+                      a8 8 0 0 1 16 0
+                    "
+                  ></path>
+                </svg>
+
+              </span>
+
+
+              <input
+                class="<%= errors.name ? 'is-invalid' : '' %>"
+                id="name"
+                name="name"
+                type="text"
+                minlength="2"
+                maxlength="100"
+                autocomplete="name"
+                value="<%= oldInput.name %>"
+                required
+                aria-invalid="<%= errors.name ? 'true' : 'false' %>"
+                aria-describedby="profileNameError"
+                placeholder="Nhập họ và tên"
+              >
+
+            </div>
+
+
+            <div
+              class="profile-edit-field-error"
+              id="profileNameError"
+            >
+              <%= errors.name || '' %>
+            </div>
+
+          </div>
+
+
+          <!-- EMAIL -->
+
+          <div class="profile-edit-field">
+
+            <label for="profileEmail">
+              Email
+            </label>
+
+
+            <div
+              class="
+                profile-edit-control
+                profile-edit-control--disabled
+              "
+            >
+
+              <span
+                class="profile-edit-control__icon"
+                aria-hidden="true"
+              >
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <rect
+                    x="3"
+                    y="5"
+                    width="18"
+                    height="14"
+                    rx="2"
+                  ></rect>
+
+                  <path d="m3 7 9 6 9-6"></path>
+                </svg>
+
+              </span>
+
+
+              <input
+                id="profileEmail"
+                type="email"
+                value="<%= profileUser.email %>"
+                disabled
+              >
+
+              <span class="profile-edit-locked">
+                Khóa
+              </span>
+
+            </div>
+
+
+            <small>
+              Email không thể thay đổi.
+            </small>
+
+          </div>
+
+
+          <!-- PHONE -->
+
+          <div class="profile-edit-field">
+
+            <label for="phone">
+              Số điện thoại
+            </label>
+
+
+            <div class="profile-edit-control">
+
+              <span
+                class="profile-edit-control__icon"
+                aria-hidden="true"
+              >
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <path
+                    d="
+                      M22 16.92v3
+                      a2 2 0 0 1-2.18 2
+                      19.8 19.8 0 0 1-8.63-3.07
+                      19.5 19.5 0 0 1-6-6
+                      A19.8 19.8 0 0 1 2.12 4.18
+                      2 2 0 0 1 4.11 2h3
+                      a2 2 0 0 1 2 1.72
+                    "
+                  ></path>
+                </svg>
+
+              </span>
+
+
+              <input
+                class="<%= errors.phone ? 'is-invalid' : '' %>"
+                id="phone"
+                name="phone"
+                type="tel"
+                maxlength="20"
+                autocomplete="tel"
+                value="<%= oldInput.phone %>"
+                aria-invalid="<%= errors.phone ? 'true' : 'false' %>"
+                aria-describedby="profilePhoneError"
+                placeholder="Ví dụ: 0901234567"
+              >
+
+            </div>
+
+
+            <div
+              class="profile-edit-field-error"
+              id="profilePhoneError"
+            >
+              <%= errors.phone || '' %>
+            </div>
+
+          </div>
+
+
+          <!-- ADDRESS -->
+
+          <div class="profile-edit-field profile-edit-field--full">
+
+            <label for="address">
+              Địa chỉ
+            </label>
+
+
+            <div
+              class="
+                profile-edit-control
+                profile-edit-control--textarea
+              "
+            >
+
+              <span
+                class="profile-edit-control__icon"
+                aria-hidden="true"
+              >
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <path
+                    d="
+                      M20 10
+                      c0 5-8 11-8 11
+                      S4 15 4 10
+                      a8 8 0 1 1 16 0Z
+                    "
+                  ></path>
+
+                  <circle
+                    cx="12"
+                    cy="10"
+                    r="2.5"
+                  ></circle>
+                </svg>
+
+              </span>
+
+
+              <textarea
+                class="<%= errors.address ? 'is-invalid' : '' %>"
+                id="address"
+                name="address"
+                rows="4"
+                maxlength="200"
+                autocomplete="street-address"
+                aria-invalid="<%= errors.address ? 'true' : 'false' %>"
+                aria-describedby="profileAddressError"
+                placeholder="Nhập địa chỉ của bạn"
+              ><%= oldInput.address %></textarea>
+
+            </div>
+
+
+            <div class="profile-edit-field-bottom">
+
+              <div
+                class="profile-edit-field-error"
+                id="profileAddressError"
+              >
+                <%= errors.address || '' %>
+              </div>
+
+              <span
+                class="profile-edit-counter"
+                data-address-counter
+              >
+                0 / 200
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ACTION
+             ================================================= -->
+
+        <footer class="profile-edit-actions">
+
+          <a
+            class="profile-edit-cancel"
+            href="/profile"
+          >
+            Hủy
+          </a>
+
+
+          <button
+            class="profile-edit-save"
+            type="submit"
+          >
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M20 6 9 17l-5-5"></path>
+            </svg>
+
+            <span>
+              Lưu thay đổi
+            </span>
+
+          </button>
+
+        </footer>
+
+      </section>
+
+    </form>
+
+  </div>
+
+</section>
+
+
+<script
+  src="/js/profile-edit.js"
+  defer
+></script>
+
+
+<%- include('../partials/footer') %>

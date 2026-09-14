@@ -1,0 +1,1310 @@
+/* ==========================================================
+   GIAI ĐOẠN 6
+   BÀI ĐĂNG CỦA TÔI
+   ========================================================== */
+
+.my-listings-page {
+  min-height: 100vh;
+
+  padding:
+    2rem 0 3.5rem;
+
+  background:
+    #f5f7f8;
+}
+
+
+/* ==========================================================
+   HEADER
+   ========================================================== */
+
+.my-listings-header {
+  display: flex;
+
+  margin-bottom:
+    1.25rem;
+
+  align-items:
+    flex-end;
+
+  justify-content:
+    space-between;
+
+  gap:
+    1rem;
+}
+
+
+.my-listings-heading {
+  min-width: 0;
+}
+
+
+.my-listings-kicker {
+  display:
+    inline-block;
+
+  margin-bottom:
+    0.35rem;
+
+  color:
+    #806d00;
+
+  font-size:
+    0.78rem;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    0.04em;
+
+  text-transform:
+    uppercase;
+}
+
+
+.my-listings-heading h1 {
+  margin: 0;
+
+  color:
+    #003344;
+
+  font-size:
+    clamp(
+      1.75rem,
+      3vw,
+      2.25rem
+    );
+
+  font-weight:
+    700;
+}
+
+
+.my-listings-heading p {
+  margin:
+    0.4rem 0 0;
+
+  color:
+    #647881;
+
+  font-size:
+    0.92rem;
+}
+
+
+/* ĐĂNG TIN */
+
+.my-listings-create {
+  display:
+    inline-flex;
+
+  min-height:
+    2.9rem;
+
+  padding:
+    0.65rem 1rem;
+
+  align-items:
+    center;
+
+  gap:
+    0.45rem;
+
+  color:
+    #003344;
+
+  background:
+    #649cf0;
+
+  border:
+    1px solid #649cf0;
+
+  border-radius:
+    9999px;
+
+  font-weight:
+    700;
+}
+
+
+.my-listings-create:hover,
+.my-listings-create:focus-visible {
+  color:
+    #003344;
+
+  background:
+    #3e49d6;
+
+  border-color:
+    #3e49d6;
+}
+
+
+.my-listings-create svg {
+  width:
+    1rem;
+
+  height:
+    1rem;
+}
+
+
+.my-listings-alert {
+  margin-bottom:
+    1rem;
+}
+
+
+
+/* ==========================================================
+   TAB
+   ========================================================== */
+
+.my-listings-tabs {
+  display:
+    flex;
+
+  margin-bottom:
+    1rem;
+
+  padding:
+    0.35rem;
+
+  overflow-x:
+    auto;
+
+  gap:
+    0.35rem;
+
+  background:
+    #ffffff;
+
+  border:
+    1px solid #dce4e7;
+
+  border-radius:
+    1.15rem;
+
+  scrollbar-width:
+    none;
+}
+
+
+.my-listings-tabs::-webkit-scrollbar {
+  display:
+    none;
+}
+
+
+.my-listings-tab {
+  display:
+    inline-flex;
+
+  min-width:
+    8.5rem;
+
+  min-height:
+    2.8rem;
+
+  padding:
+    0.55rem
+    0.8rem;
+
+  flex:
+    1 0 auto;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  gap:
+    0.5rem;
+
+  color:
+    #526a74;
+
+  background:
+    transparent;
+
+  border:
+    0;
+
+  border-radius:
+    0.85rem;
+
+  font-size:
+    0.9rem;
+
+  font-weight:
+    700;
+
+  cursor:
+    pointer;
+}
+
+
+.my-listings-tab strong {
+  display:
+    inline-grid;
+
+  min-width:
+    1.55rem;
+
+  height:
+    1.55rem;
+
+  padding-inline:
+    0.35rem;
+
+  place-items:
+    center;
+
+  color:
+    #4b626b;
+
+  background:
+    #edf3f5;
+
+  border-radius:
+    9999px;
+
+  font-size:
+    0.75rem;
+}
+
+
+/* TAB ĐANG CHỌN */
+
+.my-listings-tab.is-active {
+  color: #003344;
+
+  background: rgba(255, 255, 255, 0.55);
+
+  border: 1px solid rgba(128, 180, 206, 0.35);
+
+  box-shadow:
+    0 6px 18px rgba(0, 51, 68, 0.12);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  transform: translateY(-1px);
+}
+.my-listings-tab:hover {
+  color: #003344;
+
+  background: rgba(255, 255, 255, 0.42);
+
+  border: 1px solid rgba(128, 180, 206, 0.3);
+
+  box-shadow:
+    0 5px 15px rgba(0, 51, 68, 0.10);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  transform: translateY(-1px);
+}
+
+
+.my-listings-tab.is-active strong {
+  color:
+    #ffffff;
+
+  background:
+    #003344;
+}
+
+
+
+/* ==========================================================
+   TOOLBAR
+   ========================================================== */
+
+.my-listings-toolbar {
+  display:
+    flex;
+
+  min-height:
+    2rem;
+
+  margin-bottom:
+    0.65rem;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+}
+
+
+.my-listings-toolbar p {
+  margin: 0;
+
+  color:
+    #6d8088;
+
+  font-size:
+    0.8rem;
+}
+
+
+
+/* ==========================================================
+   LIST
+   ========================================================== */
+
+.my-listings-list {
+  display:
+    grid;
+
+  gap:
+    0.9rem;
+}
+
+
+.my-listing-card {
+  display:
+    grid;
+
+  min-width:
+    0;
+
+  grid-template-columns:
+    11.5rem minmax(0, 1fr);
+
+  overflow:
+    hidden;
+
+  background:
+    #ffffff;
+
+  border:
+    1px solid #dce4e7;
+
+  border-radius:
+    1.25rem;
+
+  box-shadow:
+    0 3px 14px
+    rgba(0, 51, 68, 0.05);
+}
+
+
+.my-listing-card[hidden] {
+  display:
+    none !important;
+}
+
+
+
+/* ==========================================================
+   IMAGE
+   ========================================================== */
+
+.my-listing-card__media {
+  position:
+    relative;
+
+  display:
+    block;
+
+  min-height:
+    11.5rem;
+
+  overflow:
+    hidden;
+
+  background:
+    #eaf6fb;
+
+  border-right:
+    1px solid #e1e7e9;
+}
+
+
+.my-listing-card__media img {
+  display:
+    block;
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  min-height:
+    11.5rem;
+
+  object-fit:
+    cover;
+
+  transition:
+    transform 0.2s ease;
+}
+
+
+.my-listing-card__condition {
+  position:
+    absolute;
+
+  left:
+    0.65rem;
+
+  bottom:
+    0.65rem;
+
+  padding:
+    0.28rem
+    0.5rem;
+
+  color:
+    #ffffff;
+
+  background:
+    rgba(0, 51, 68, 0.86);
+
+  border-radius:
+    9999px;
+
+  font-size:
+    0.68rem;
+
+  font-weight:
+    700;
+}
+
+
+
+/* ==========================================================
+   CONTENT
+   ========================================================== */
+
+.my-listing-card__content {
+  display:
+    grid;
+
+  min-width:
+    0;
+
+  grid-template-rows:
+    minmax(0, 1fr)
+    auto;
+}
+
+
+.my-listing-card__main {
+  min-width:
+    0;
+
+  padding:
+    1rem 1.1rem
+    0.85rem;
+}
+
+
+.my-listing-card__title-row {
+  display:
+    flex;
+
+  min-width:
+    0;
+
+  align-items:
+    flex-start;
+
+  justify-content:
+    space-between;
+
+  gap:
+    1rem;
+}
+
+
+.my-listing-card__title-row > div {
+  min-width:
+    0;
+}
+
+
+.my-listing-card__category {
+  display:
+    block;
+
+  margin-bottom:
+    0.3rem;
+
+  color:
+    #78909a;
+
+  font-size:
+    0.72rem;
+}
+
+
+.my-listing-card__title-row h2 {
+  margin: 0;
+
+  font-size:
+    1.05rem;
+
+  line-height:
+    1.35;
+}
+
+
+.my-listing-card__title-row h2 a {
+  display:
+    -webkit-box;
+
+  overflow:
+    hidden;
+
+  color:
+    #123d4d;
+
+  text-decoration:
+    none;
+
+  -webkit-box-orient:
+    vertical;
+
+  -webkit-line-clamp:
+    2;
+}
+
+
+.my-listing-card__title-row h2 a:hover {
+  color:
+    #806d00;
+}
+
+
+
+/* PRICE */
+
+.my-listing-card__price {
+  flex:
+    0 0 auto;
+
+  margin:
+    0;
+
+  color:
+    #c83b3b;
+
+  font-size:
+    1.05rem;
+
+  font-weight:
+    700;
+
+  white-space:
+    nowrap;
+}
+
+
+
+/* ==========================================================
+   META
+   ========================================================== */
+
+.my-listing-card__meta {
+  display:
+    flex;
+
+  margin-top:
+    0.75rem;
+
+  flex-wrap:
+    wrap;
+
+  gap:
+    0.55rem 1rem;
+
+  color:
+    #71838b;
+
+  font-size:
+    0.76rem;
+}
+
+
+.my-listing-card__meta span {
+  display:
+    inline-flex;
+
+  min-width:
+    0;
+
+  align-items:
+    center;
+
+  gap:
+    0.35rem;
+}
+
+
+.my-listing-card__meta svg {
+  width:
+    0.95rem;
+
+  height:
+    0.95rem;
+
+  flex:
+    0 0 auto;
+}
+
+
+
+/* ==========================================================
+   STATUS
+   ========================================================== */
+
+.my-listing-card__status-row {
+  margin-top:
+    0.8rem;
+}
+
+
+.my-listing-status {
+  display:
+    inline-flex;
+
+  min-height:
+    1.75rem;
+
+  padding:
+    0.3rem
+    0.65rem;
+
+  align-items:
+    center;
+
+  border:
+    1px solid transparent;
+
+  border-radius:
+    9999px;
+
+  font-size:
+    0.72rem;
+
+  font-weight:
+    700;
+}
+
+
+/* ĐANG BÁN */
+
+.my-listing-status--active {
+  color:
+    #f5f8f6;
+
+  background:
+    #0ebf4c;
+
+  border-color: 
+    #b9e7d2;
+}
+
+
+/* ĐÃ BÁN */
+
+.my-listing-status--sold {
+  color:
+    #ffff;
+
+  background:
+    #d50606;
+
+  border-color:
+    #d7753d;
+}
+
+
+/* ĐÃ ẨN */
+
+.my-listing-status--hidden {
+  color:
+    #617179;
+
+  background:
+    #f0f3f4;
+
+  border-color:
+    #d6dfe2;
+}
+
+
+/* ADMIN ẨN */
+
+.my-listing-status--admin-hidden {
+  color:
+    #9a343b;
+
+  background:
+    #fff0f1;
+
+  border-color:
+    #efc8cb;
+}
+
+
+
+/* ==========================================================
+   ACTION AREA
+   ========================================================== */
+
+.my-listing-card__actions {
+  padding:
+    0.8rem 1.1rem;
+
+  background:
+    #fafcfc;
+
+  border-top:
+    1px solid #e5ebed;
+}
+
+
+.my-listing-actions {
+  display:
+    flex;
+
+  min-width:
+    0;
+
+  flex-wrap:
+    wrap;
+
+  align-items:
+    center;
+
+  gap:
+    0.5rem;
+}
+
+
+.my-listing-actions form {
+  margin:
+    0;
+}
+
+
+
+/* ==========================================================
+   ACTION BUTTON
+   ========================================================== */
+
+.my-listing-action {
+  display:
+    inline-flex;
+
+  min-height:
+    2.35rem;
+
+  padding:
+    0.45rem
+    0.7rem;
+
+  align-items:
+    center;
+
+  gap:
+    0.35rem;
+
+  border-radius:
+    0.7rem;
+
+  font-size:
+    0.76rem;
+
+  font-weight:
+    700;
+}
+
+
+.my-listing-action svg {
+  width:
+    0.95rem;
+
+  height:
+    0.95rem;
+
+  flex:
+    0 0 auto;
+}
+
+
+
+/* XEM + SỬA */
+
+.my-listing-action--view,
+.my-listing-action--edit {
+  color:
+    #315b6c;
+
+  background:
+    #ffffff;
+
+  border:
+    1px solid #cbd8dd;
+}
+
+
+.my-listing-action--view:hover,
+.my-listing-action--edit:hover {
+  color:
+    #003344;
+
+  background:
+    #eef8ff;
+
+  border-color:
+    #9dbfce;
+}
+
+
+
+/* ĐÃ BÁN / ĐĂNG LẠI */
+
+.my-listing-action--sold,
+.my-listing-action--relist {
+  color:
+    #176847;
+
+  background:
+    #edf9f3;
+
+  border:
+    1px solid #bfe3d0;
+}
+
+
+.my-listing-action--sold:hover,
+.my-listing-action--relist:hover {
+  color:
+    #0e5337;
+
+  background:
+    #ddf4e8;
+
+  border-color:
+    #9ed2b8;
+}
+
+
+
+/* ẨN */
+
+.my-listing-action--hide {
+  color:
+    #a33a40;
+
+  background:
+    #fff6f6;
+
+  border:
+    1px solid #e9c5c8;
+}
+
+
+.my-listing-action--hide:hover {
+  color:
+    #8f292f;
+
+  background:
+    #ffebec;
+
+  border-color:
+    #ddaeb2;
+}
+
+
+
+/* ADMIN NOTE */
+
+.my-listing-admin-note {
+  flex:
+    1 1 20rem;
+
+  padding:
+    0.55rem
+    0.7rem;
+
+  color:
+    #8d353b;
+
+  background:
+    #fff3f3;
+
+  border:
+    1px solid #efc7ca;
+
+  border-radius:
+    0.7rem;
+
+  font-size:
+    0.75rem;
+}
+
+
+
+/* ==========================================================
+   EMPTY
+   ========================================================== */
+
+.my-listings-empty,
+.my-listings-filter-empty {
+  display:
+    grid;
+
+  min-height:
+    20rem;
+
+  padding:
+    2rem;
+
+  place-items:
+    center;
+
+  align-content:
+    center;
+
+  text-align:
+    center;
+
+  background:
+    #ffffff;
+
+  border:
+    1px solid #dce4e7;
+
+  border-radius:
+    1.25rem;
+}
+
+
+.my-listings-empty__icon,
+.my-listings-filter-empty__icon {
+  display:
+    grid;
+
+  width:
+    3.75rem;
+
+  height:
+    3.75rem;
+
+  margin-bottom:
+    0.8rem;
+
+  place-items:
+    center;
+
+  color:
+    #39758e;
+
+  background:
+    #eef8ff;
+
+  border-radius:
+    1rem;
+}
+
+
+.my-listings-empty__icon svg,
+.my-listings-filter-empty__icon svg {
+  width:
+    1.65rem;
+
+  height:
+    1.65rem;
+}
+
+
+.my-listings-empty h2,
+.my-listings-filter-empty h2 {
+  margin:
+    0 0 0.35rem;
+
+  color:
+    #003344;
+
+  font-size:
+    1.15rem;
+}
+
+
+.my-listings-empty p,
+.my-listings-filter-empty p {
+  margin:
+    0 0 1rem;
+
+  color:
+    #6d8088;
+
+  font-size:
+    0.85rem;
+}
+
+
+
+/* ==========================================================
+   HOVER
+   ========================================================== */
+
+@media (
+  hover: hover
+) and (
+  pointer: fine
+) {
+
+  .my-listing-card:hover
+  .my-listing-card__media img {
+    transform:
+      scale(1.025);
+  }
+
+}
+
+
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (
+  max-width: 61.999rem
+) {
+
+  .my-listing-card {
+    grid-template-columns:
+      9.5rem minmax(0, 1fr);
+  }
+
+
+  .my-listing-card__media,
+  .my-listing-card__media img {
+    min-height:
+      10rem;
+  }
+
+
+  .my-listing-card__title-row {
+    flex-direction:
+      column;
+
+    gap:
+      0.45rem;
+  }
+
+}
+
+
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (
+  max-width: 47.999rem
+) {
+
+  .my-listings-page {
+    padding:
+      1.25rem 0 2.5rem;
+  }
+
+
+  .my-listings-header {
+    align-items:
+      stretch;
+
+    flex-direction:
+      column;
+  }
+
+
+  .my-listings-create {
+    width:
+      100%;
+
+    justify-content:
+      center;
+  }
+
+
+  .my-listings-tabs {
+    border-radius:
+      1rem;
+  }
+
+
+  .my-listings-tab {
+    min-width:
+      7.25rem;
+  }
+
+
+  .my-listing-card {
+    grid-template-columns:
+      7.25rem minmax(0, 1fr);
+
+    border-radius:
+      1rem;
+  }
+
+
+  .my-listing-card__media,
+  .my-listing-card__media img {
+    min-height:
+      8rem;
+  }
+
+
+  /*
+   Cho content trở thành con trực tiếp
+   của grid ngoài để action chạy full width.
+  */
+
+  .my-listing-card__content {
+    display:
+      contents;
+  }
+
+
+  .my-listing-card__main {
+    grid-column:
+      2;
+
+    padding:
+      0.8rem;
+  }
+
+
+  .my-listing-card__category {
+    display:
+      none;
+  }
+
+
+  .my-listing-card__title-row h2 {
+    font-size:
+      0.92rem;
+  }
+
+
+  .my-listing-card__price {
+    font-size:
+      0.95rem;
+  }
+
+
+  .my-listing-card__meta {
+    margin-top:
+      0.55rem;
+
+    gap:
+      0.35rem;
+  }
+
+
+  .my-listing-card__meta
+  span:last-child {
+    display:
+      none;
+  }
+
+
+  .my-listing-card__actions {
+    grid-column:
+      1 / -1;
+
+    padding:
+      0.7rem 0.8rem;
+  }
+
+
+  .my-listing-actions {
+    display:
+      grid;
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+
+  .my-listing-actions form {
+    width:
+      100%;
+  }
+
+
+  .my-listing-action {
+    width:
+      100%;
+
+    justify-content:
+      center;
+  }
+
+
+  .my-listing-admin-note {
+    grid-column:
+      1 / -1;
+  }
+
+}
+
+
+
+/* ==========================================================
+   MOBILE NHỎ
+   ========================================================== */
+
+@media (
+  max-width: 31.999rem
+) {
+
+  .my-listing-card {
+    grid-template-columns:
+      6.5rem minmax(0, 1fr);
+  }
+
+
+  .my-listing-card__media,
+  .my-listing-card__media img {
+    min-height:
+      7.25rem;
+  }
+
+
+  .my-listing-card__condition {
+    left:
+      0.4rem;
+
+    bottom:
+      0.4rem;
+
+    font-size:
+      0.62rem;
+  }
+
+
+  .my-listing-actions {
+    grid-template-columns:
+      1fr;
+  }
+
+}

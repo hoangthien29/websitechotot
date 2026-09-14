@@ -1,0 +1,25 @@
+<nav class="admin-navigation" aria-label="Điều hướng quản trị">
+  <a
+    class="admin-navigation__link"
+    href="/admin"
+    <% if (currentSection === 'dashboard') { %>aria-current="page"<% } %>
+  >Tổng quan</a>
+  <a
+    class="admin-navigation__link"
+    href="/admin/users"
+    <% if (currentSection === 'users') { %>aria-current="page"<% } %>
+  >Người dùng</a>
+  <a
+    class="admin-navigation__link"
+    href="/admin/listings"
+    <% if (currentSection === 'listings') { %>aria-current="page"<% } %>
+  >Bài đăng</a>
+  <a
+    class="admin-navigation__link"
+    href="/admin/categories"
+    <% if (currentSection === 'categories') { %>aria-current="page"<% } %>
+  >Danh mục</a>
+  <a class="admin-navigation__link admin-navigation__link--home" href="/">
+    Về trang chính
+  </a>
+</nav>

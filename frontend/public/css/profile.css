@@ -1,0 +1,2325 @@
+.profile-page {
+  min-height: 100vh;
+
+  padding:
+    2rem 0 3.5rem;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(238, 248, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0) 18rem
+    ),
+    #f5f7f8;
+}
+
+
+.profile-alert {
+  margin-bottom: 1rem;
+}
+
+
+/* ==========================================================
+   PROFILE OVERVIEW
+   ========================================================== */
+
+.profile-overview {
+  display: grid;
+
+  padding: 1.25rem;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  gap: 1.25rem;
+
+  background:
+    rgba(255, 255, 255, 0.68);
+
+  border:
+    1px solid rgba(128, 180, 206, 0.3);
+
+  border-radius: 1.3rem;
+
+  box-shadow:
+    0 7px 24px rgba(0, 51, 68, 0.07);
+
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+}
+
+
+.profile-overview__main {
+  display: flex;
+
+  min-width: 0;
+
+  align-items: center;
+
+  gap: 1rem;
+}
+
+
+/* ==========================================================
+   AVATAR
+   ========================================================== */
+
+.profile-avatar-wrap {
+  position: relative;
+
+  flex: 0 0 auto;
+}
+
+
+.profile-main-avatar {
+  display: block;
+
+  width: 7rem;
+  height: 7rem;
+
+  min-width: 7rem;
+  min-height: 7rem;
+
+  aspect-ratio: 1 / 1;
+
+  object-fit: cover;
+  object-position: center;
+
+  background: #eef4f6;
+
+  border:
+    4px solid rgba(255, 255, 255, 0.9);
+
+  border-radius: 50% !important;
+
+  box-shadow:
+    0 5px 18px rgba(0, 51, 68, 0.13);
+}
+
+
+
+/* ==========================================================
+   IDENTITY
+   ========================================================== */
+
+.profile-identity {
+  min-width: 0;
+}
+
+
+.profile-kicker {
+  display: block;
+
+  margin-bottom: 0.25rem;
+
+  color: #39758e;
+
+  font-size: 0.72rem;
+  font-weight: 700;
+
+  letter-spacing: 0.04em;
+
+  text-transform: uppercase;
+}
+
+
+.profile-identity h1 {
+  margin: 0;
+
+  overflow-wrap: anywhere;
+
+  color: #003344;
+
+  font-size: clamp(
+    1.6rem,
+    3vw,
+    2.1rem
+  );
+
+  font-weight: 700;
+}
+
+
+.profile-email {
+  margin:
+    0.3rem 0 0;
+
+  color: #667d86;
+
+  font-size: 0.86rem;
+}
+
+
+.profile-joined {
+  margin:
+    0.35rem 0 0;
+
+  color: #87979d;
+
+  font-size: 0.73rem;
+}
+
+
+.profile-joined strong {
+  color: #526b74;
+
+  font-weight: 700;
+}
+
+
+
+/* ==========================================================
+   ACTION
+   ========================================================== */
+
+.profile-actions {
+  display: flex;
+
+  max-width: 12rem;
+
+  align-content: flex-start;
+
+  flex-wrap: wrap;
+
+  justify-content: flex-end;
+
+  gap: 0.45rem;
+}
+
+
+.profile-action {
+  display: inline-flex;
+
+  min-height: 2.4rem;
+
+  padding:
+    0.45rem 0.7rem;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.35rem;
+
+  color: #315f72;
+
+  background:
+    rgba(238, 248, 255, 0.6);
+
+  border:
+    1px solid rgba(128, 180, 206, 0.34);
+
+  border-radius: 9999px;
+
+  font-size: 0.73rem;
+  font-weight: 700;
+
+  text-decoration: none;
+
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.profile-action svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+
+.profile-action:hover {
+  color: #003344;
+
+  background:
+    rgba(220, 242, 252, 0.85);
+
+  border-color:
+    rgba(57, 117, 142, 0.42);
+
+  transform:
+    translateY(-1px);
+}
+
+
+.profile-action--primary {
+  color: #ffffff;
+
+  background:
+    rgba(78, 55, 209, 0.668);
+
+  border-color:
+    rgba(9, 136, 179, 0.45);
+}
+
+
+.profile-action--primary:hover {
+  color: #ffffff;
+
+  background:
+    rgba(4, 90, 211, 0.95);
+}
+
+
+
+/* ==========================================================
+   CONTACT
+   ========================================================== */
+
+.profile-contact-grid {
+  display: grid;
+
+  grid-column:
+    1 / -1;
+
+  padding-top: 1rem;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 0.75rem;
+
+  border-top:
+    1px solid rgba(128, 180, 206, 0.22);
+}
+
+
+.profile-contact-item {
+  display: flex;
+
+  min-width: 0;
+
+  padding:
+    0.65rem 0.75rem;
+
+  align-items: center;
+
+  gap: 0.65rem;
+
+  background:
+    rgba(238, 248, 255, 0.45);
+
+  border:
+    1px solid rgba(128, 180, 206, 0.22);
+
+  border-radius: 0.85rem;
+}
+
+
+.profile-contact-icon {
+  display: grid;
+
+  width: 2.15rem;
+  height: 2.15rem;
+
+  flex: 0 0 2.15rem;
+
+  place-items: center;
+
+  color: #22647d;
+
+  background:
+    rgba(220, 242, 252, 0.75);
+
+  border-radius: 0.65rem;
+}
+
+
+.profile-contact-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+
+.profile-contact-item > div {
+  min-width: 0;
+}
+
+
+.profile-contact-item span:not(
+  .profile-contact-icon
+) {
+  display: block;
+
+  margin-bottom: 0.08rem;
+
+  color: #82939a;
+
+  font-size: 0.65rem;
+}
+
+
+.profile-contact-item strong {
+  display: block;
+
+  overflow-wrap: anywhere;
+
+  color: #163d4c;
+
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+
+
+/* ==========================================================
+   STATS
+   ========================================================== */
+
+.profile-stats {
+  display: grid;
+
+  margin-top: 1rem;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
+  gap: 0.75rem;
+}
+
+
+.profile-stat {
+  position: relative;
+
+  min-width: 0;
+
+  padding: 0.9rem;
+
+  overflow: hidden;
+
+  background:
+    rgba(255, 255, 255, 0.68);
+
+  border:
+    1px solid rgba(128, 180, 206, 0.28);
+
+  border-radius: 1rem;
+
+  box-shadow:
+    0 4px 14px rgba(0, 51, 68, 0.055);
+}
+
+
+.profile-stat::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 3px;
+
+  background:
+    linear-gradient(
+    135deg,
+    rgba(22, 140, 224, 0.9)0%,
+    rgba(237, 37, 237, 0.75) 50%,
+    rgba(12, 217, 239, 0.95) 100%
+  );
+}
+
+
+.profile-stat span {
+  display: block;
+
+  margin-bottom: 0.35rem;
+
+  color: #74878f;
+
+  font-size: 0.7rem;
+}
+
+
+.profile-stat strong {
+  color: #003344;
+
+  font-size: 1.45rem;
+  font-weight: 700;
+}
+
+
+/* ĐANG BÁN */
+
+.profile-stat--active::after {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(245, 94, 29, 0.866) 0%,
+      rgba(193, 138, 9, 0.866) 50%,
+      rgba(242, 234, 10, 0.866) 100%
+    );
+}
+
+.profile-stat--active strong {
+  color: #167048;
+}
+
+
+/* ĐÃ BÁN */
+
+.profile-stat--sold::after {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(22, 140, 224, 0.9) 0%,
+      rgba(237, 37, 237, 0.75) 50%,
+      rgba(12, 217, 239, 0.95) 100%
+    );
+}
+
+.profile-stat--sold strong {
+  color: #ad343e;
+}
+
+
+/* ĐÃ ẨN */
+
+.profile-stat--hidden::after {
+  background:
+  linear-gradient(
+    135deg, 
+  rgba(22, 140, 224, 0.9) 0%, 
+  rgba(237, 37, 237, 0.75) 50%,
+   rgba(12, 217, 239, 0.95) 100%);
+}
+
+.profile-stat--hidden strong {
+  color: #66767c;
+}
+
+
+
+/* ==========================================================
+   RECENT
+   ========================================================== */
+
+.profile-recent {
+  margin-top: 2rem;
+}
+
+
+.profile-section-header {
+  display: flex;
+
+  margin-bottom: 1rem;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 1rem;
+}
+
+
+.profile-section-header > div {
+  min-width: 0;
+}
+
+
+.profile-section-kicker {
+  display: block;
+
+  margin-bottom: 0.25rem;
+
+  color: #39758e;
+
+  font-size: 0.7rem;
+  font-weight: 700;
+
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+
+.profile-section-header h2 {
+  margin: 0;
+
+  color: #003344;
+
+  font-size: 1.4rem;
+}
+
+
+.profile-section-header p {
+  margin:
+    0.3rem 0 0;
+
+  color: #71858d;
+
+  font-size: 0.8rem;
+}
+
+
+.profile-view-all {
+  display: inline-flex;
+
+  flex: 0 0 auto;
+
+  align-items: center;
+
+  gap: 0.2rem;
+
+  color: #22647d;
+
+  font-size: 0.76rem;
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+
+.profile-view-all svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+
+.profile-view-all:hover {
+  color: #003344;
+}
+
+
+
+/* ==========================================================
+   RECENT GRID
+   ========================================================== */
+
+.profile-recent-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
+  gap: 1rem;
+}
+
+
+.profile-recent-item {
+  min-width: 0;
+}
+
+
+.profile-recent-item
+.product-card {
+  height: 100%;
+}
+
+
+
+/* ==========================================================
+   EMPTY
+   ========================================================== */
+
+.profile-empty {
+  display: flex;
+
+  min-height: 18rem;
+
+  padding: 2rem;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background:
+    rgba(255, 255, 255, 0.64);
+
+  border:
+    1px solid rgba(128, 180, 206, 0.28);
+
+  border-radius: 1.15rem;
+
+  box-shadow:
+    0 5px 17px rgba(0, 51, 68, 0.05);
+}
+
+
+.profile-empty__icon {
+  display: grid;
+
+  width: 4rem;
+  height: 4rem;
+
+  margin-bottom: 0.8rem;
+
+  place-items: center;
+
+  color: #22647d;
+
+  background:
+    rgba(220, 242, 252, 0.72);
+
+  border-radius: 1rem;
+}
+
+
+.profile-empty__icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+
+.profile-empty h3 {
+  margin:
+    0 0 0.35rem;
+
+  color: #003344;
+
+  font-size: 1.15rem;
+}
+
+
+.profile-empty p {
+  margin:
+    0 0 1rem;
+
+  color: #71858d;
+
+  font-size: 0.82rem;
+}
+
+
+.profile-empty-button {
+  display: inline-flex;
+
+  min-height: 2.6rem;
+
+  padding:
+    0.5rem 0.9rem;
+
+  align-items: center;
+
+  color: #ffffff;
+
+  background:
+    rgba(0, 51, 68, 0.9);
+
+  border-radius: 9999px;
+
+  font-size: 0.78rem;
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+
+.profile-empty-button:hover {
+  color: #ffffff;
+
+  background:
+    rgba(34, 100, 125, 0.95);
+}
+
+
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width: 61.999rem) {
+
+  .profile-stats {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+
+  .profile-recent-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 47.999rem) {
+
+  .profile-page {
+    padding:
+      1.25rem 0 2.5rem;
+  }
+
+
+  .profile-overview {
+    grid-template-columns: 1fr;
+
+    padding: 1rem;
+  }
+
+
+  .profile-overview__main {
+    align-items: center;
+  }
+
+
+  .profile-main-avatar {
+    width: 5rem;
+    height: 5rem;
+
+    min-width: 5rem;
+    min-height: 5rem;
+  }
+
+
+  .profile-actions {
+    max-width: none;
+
+    justify-content: flex-start;
+  }
+
+
+  .profile-contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .profile-section-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+}
+
+
+
+/* ==========================================================
+   MOBILE NHỎ
+   ========================================================== */
+
+@media (max-width: 31.999rem) {
+
+  .profile-overview__main {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .profile-main-avatar {
+    width: 5.5rem;
+    height: 5.5rem;
+  }
+
+
+  .profile-actions {
+    display: grid;
+
+    width: 100%;
+
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .profile-action {
+    width: 100%;
+  }
+
+
+  .profile-stats {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+
+  .profile-recent-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+/* ==========================================================
+   GĐ9B - HỒ SƠ CÔNG KHAI NGƯỜI BÁN
+   ========================================================== */
+
+.seller-profile-page {
+  min-height: 100vh;
+
+  padding:
+    2rem 0 4rem;
+
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(149, 218, 241, 0.32),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(255, 230, 128, 0.30),
+      transparent 36%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(187, 236, 226, 0.24),
+      transparent 42%
+    ),
+    #f6f8f9;
+}
+
+
+/* ==========================================================
+   CARD NGƯỜI BÁN
+   ========================================================== */
+
+.seller-profile-card {
+  display: flex;
+
+  padding:
+    1.4rem 1.5rem;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 1.5rem;
+
+  background:
+    rgba(255, 255, 255, 0.72);
+
+  border:
+    1px solid rgba(128, 180, 206, 0.30);
+
+  border-radius: 1.35rem;
+
+  box-shadow:
+    0 10px 30px rgba(0, 51, 68, 0.07);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+
+/* ==========================================================
+   THÔNG TIN NGƯỜI BÁN
+   ========================================================== */
+
+.seller-profile-main {
+  display: flex;
+
+  min-width: 0;
+
+  align-items: center;
+
+  gap: 1.1rem;
+}
+
+
+.seller-profile-avatar-wrap {
+  position: relative;
+
+  flex: 0 0 auto;
+}
+
+
+.seller-profile-avatar {
+  display: block;
+
+  width: 6.6rem;
+  height: 6.6rem;
+
+  min-width: 6.6rem;
+  min-height: 6.6rem;
+
+  aspect-ratio: 1 / 1;
+
+  object-fit: cover;
+  object-position: center;
+
+  background: #edf3f5;
+
+  border:
+    5px solid rgba(255, 255, 255, 0.92);
+
+  border-radius: 50% !important;
+
+  box-shadow:
+    0 8px 24px rgba(0, 51, 68, 0.13);
+}
+
+
+.seller-profile-online-dot {
+  position: absolute;
+
+  right: 0.25rem;
+  bottom: 0.6rem;
+
+  width: 1rem;
+  height: 1rem;
+
+  background: #35a766;
+
+  border:
+    3px solid rgba(255, 255, 255, 0.95);
+
+  border-radius: 50%;
+}
+
+
+.seller-profile-info {
+  min-width: 0;
+}
+
+
+.seller-profile-kicker,
+.seller-profile-products-kicker {
+  display: block;
+
+  margin-bottom: 0.25rem;
+
+  color: #548396;
+
+  font-size: 0.67rem;
+  font-weight: 700;
+
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+
+.seller-profile-info h1 {
+  margin: 0;
+
+  overflow: hidden;
+
+  color: #003344;
+
+  font-size:
+    clamp(
+      1.45rem,
+      3vw,
+      2rem
+    );
+
+  font-weight: 700;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.seller-profile-meta {
+  display: flex;
+
+  margin-top: 0.45rem;
+
+  flex-wrap: wrap;
+
+  gap: 0.5rem;
+}
+
+
+.seller-profile-meta span {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 0.3rem;
+
+  color: #74878f;
+
+  font-size: 0.73rem;
+}
+
+
+.seller-profile-meta svg {
+  width: 0.9rem;
+  height: 0.9rem;
+
+  color: #56889d;
+}
+
+
+.seller-profile-meta strong {
+  color: #44616c;
+
+  font-weight: 700;
+}
+
+
+/* ==========================================================
+   THỐNG KÊ NGƯỜI BÁN
+   ========================================================== */
+
+.seller-profile-stats {
+  display: grid;
+
+  flex: 0 0 auto;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(7.5rem, 1fr)
+    );
+
+  gap: 0.65rem;
+}
+
+
+.seller-profile-stat {
+  display: flex;
+
+  min-width: 7.5rem;
+
+  padding:
+    0.75rem 0.85rem;
+
+  align-items: center;
+
+  gap: 0.65rem;
+
+  background:
+    rgba(255, 255, 255, 0.60);
+
+  border:
+    1px solid rgba(128, 180, 206, 0.24);
+
+  border-radius: 0.9rem;
+}
+
+
+.seller-profile-stat-icon {
+  display: grid;
+
+  width: 2rem;
+  height: 2rem;
+
+  flex: 0 0 2rem;
+
+  place-items: center;
+
+  border-radius: 0.65rem;
+}
+
+
+.seller-profile-stat-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+
+.seller-profile-stat--active
+.seller-profile-stat-icon {
+  color: #218054;
+
+  background:
+    rgba(57, 176, 112, 0.13);
+}
+
+
+.seller-profile-stat--sold
+.seller-profile-stat-icon {
+  color: #b24a50;
+
+  background:
+    rgba(207, 84, 90, 0.12);
+}
+
+
+.seller-profile-stat > div {
+  display: flex;
+
+  flex-direction: column;
+}
+
+
+.seller-profile-stat strong {
+  color: #003344;
+
+  font-size: 1.15rem;
+
+  line-height: 1.05;
+}
+
+
+.seller-profile-stat span:last-child {
+  margin-top: 0.15rem;
+
+  color: #71848c;
+
+  font-size: 0.66rem;
+}
+
+
+/* ==========================================================
+   KHU VỰC SẢN PHẨM
+   ========================================================== */
+
+.seller-profile-products {
+  margin-top: 1.25rem;
+
+  padding: 1.35rem;
+
+  background:
+    rgba(255, 255, 255, 0.68);
+
+  border:
+    1px solid rgba(128, 180, 206, 0.27);
+
+  border-radius: 1.25rem;
+
+  box-shadow:
+    0 8px 26px rgba(0, 51, 68, 0.055);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+
+.seller-profile-products-header {
+  display: flex;
+
+  margin-bottom: 1.1rem;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 1rem;
+}
+
+
+.seller-profile-products-header h2 {
+  margin: 0;
+
+  color: #003344;
+
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+
+.seller-profile-products-header p {
+  margin:
+    0.3rem 0 0;
+
+  color: #788a91;
+
+  font-size: 0.72rem;
+}
+
+
+.seller-profile-products-count {
+  display: inline-flex;
+
+  min-height: 2rem;
+
+  padding:
+    0.35rem 0.65rem;
+
+  flex: 0 0 auto;
+
+  align-items: center;
+
+  color: #376d82;
+
+  background:
+    rgba(226, 243, 251, 0.70);
+
+  border:
+    1px solid rgba(128, 180, 206, 0.28);
+
+  border-radius: 9999px;
+
+  font-size: 0.67rem;
+  font-weight: 700;
+}
+
+
+/* ==========================================================
+   PRODUCT GRID
+   ========================================================== */
+
+.seller-profile-product-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
+  gap: 0.8rem;
+}
+
+
+.seller-profile-product-item {
+  min-width: 0;
+}
+
+
+.seller-profile-product-item
+.product-card {
+  height: 100%;
+}
+
+
+/* ==========================================================
+   EMPTY
+   ========================================================== */
+
+.seller-profile-empty {
+  display: flex;
+
+  min-height: 15rem;
+
+  padding: 2rem;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+
+  color: #778a91;
+
+  text-align: center;
+}
+
+
+.seller-profile-empty-icon {
+  display: grid;
+
+  width: 3.6rem;
+  height: 3.6rem;
+
+  margin-bottom: 0.75rem;
+
+  place-items: center;
+
+  color: #6c9caf;
+
+  background:
+    rgba(225, 243, 249, 0.75);
+
+  border-radius: 50%;
+}
+
+
+.seller-profile-empty-icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+
+.seller-profile-empty h3 {
+  margin: 0;
+
+  color: #315665;
+
+  font-size: 1rem;
+}
+
+
+.seller-profile-empty p {
+  max-width: 24rem;
+
+  margin:
+    0.35rem 0 0;
+
+  font-size: 0.72rem;
+}
+
+
+/* ==========================================================
+   PAGINATION
+   ========================================================== */
+
+.seller-profile-pagination {
+  display: flex;
+
+  margin-top: 1.3rem;
+
+  justify-content: center;
+}
+
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width: 61.999rem) {
+
+  .seller-profile-card {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .seller-profile-stats {
+    width: 100%;
+  }
+
+
+  .seller-profile-product-grid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 47.999rem) {
+
+  .seller-profile-page {
+    padding:
+      1.2rem 0 3rem;
+  }
+
+
+  .seller-profile-card {
+    padding: 1.1rem;
+  }
+
+
+  .seller-profile-main {
+    align-items: flex-start;
+  }
+
+
+  .seller-profile-avatar {
+    width: 5rem;
+    height: 5rem;
+
+    min-width: 5rem;
+    min-height: 5rem;
+  }
+
+
+  .seller-profile-online-dot {
+    right: 0.05rem;
+    bottom: 0.25rem;
+  }
+
+
+  .seller-profile-stats {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+
+  .seller-profile-products {
+    padding: 1rem;
+  }
+
+
+  .seller-profile-product-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+/* ==========================================================
+   MOBILE NHỎ
+   ========================================================== */
+
+@media (max-width: 30rem) {
+
+  .seller-profile-main {
+    width: 100%;
+
+    align-items: center;
+
+    flex-direction: column;
+
+    text-align: center;
+  }
+
+
+  .seller-profile-info h1 {
+    white-space: normal;
+  }
+
+
+  .seller-profile-meta {
+    justify-content: center;
+  }
+
+
+  .seller-profile-products-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+}
+
+
+/* ==========================================================
+   GĐ9C - CHỈNH SỬA HỒ SƠ
+   ========================================================== */
+
+.profile-edit-page {
+  min-height: 100vh;
+  padding: 2rem 0 3.5rem;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(238, 248, 255, 0.6) 0%,
+      rgba(255, 255, 255, 0) 18rem
+    ),
+    #f5f7f8;
+}
+
+
+/* ==========================================================
+   HEADER
+   ========================================================== */
+
+.profile-edit-header {
+  display: flex;
+  margin-bottom: 1.2rem;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 1rem;
+}
+
+.profile-edit-kicker,
+.profile-edit-section-label {
+  display: block;
+
+  margin-bottom: 0.25rem;
+
+  color: #39758e;
+
+  font-size: 0.7rem;
+  font-weight: 700;
+
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.profile-edit-header h1 {
+  margin: 0;
+
+  color: #003344;
+
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+
+  font-weight: 700;
+}
+
+.profile-edit-header p {
+  margin: 0.35rem 0 0;
+
+  color: #6f838b;
+
+  font-size: 0.85rem;
+}
+
+.profile-edit-back {
+  display: inline-flex;
+
+  min-height: 2.5rem;
+
+  padding: 0.45rem 0.75rem;
+
+  flex: 0 0 auto;
+
+  align-items: center;
+
+  gap: 0.3rem;
+
+  color: #315f72;
+
+  background: rgba(255, 255, 255, 0.55);
+
+  border:
+    1px solid rgba(128, 180, 206, 0.32);
+
+  border-radius: 9999px;
+
+  box-shadow:
+    0 4px 12px rgba(0, 51, 68, 0.05);
+
+  text-decoration: none;
+
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.profile-edit-back svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.profile-edit-back:hover {
+  color: #003344;
+
+  background:
+    rgba(238, 248, 255, 0.9);
+}
+
+
+/* ==========================================================
+   FORM LAYOUT
+   ========================================================== */
+
+.profile-edit-form {
+  display: grid;
+
+  grid-template-columns:
+    minmax(15rem, 0.72fr)
+    minmax(0, 1.75fr);
+
+  gap: 1rem;
+}
+
+.profile-edit-avatar-card,
+.profile-edit-fields {
+  background:
+    rgba(255, 255, 255, 0.7);
+
+  border:
+    1px solid rgba(128, 180, 206, 0.28);
+
+  border-radius: 1.2rem;
+
+  box-shadow:
+    0 6px 20px rgba(0, 51, 68, 0.06);
+
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+}
+
+
+/* ==========================================================
+   AVATAR CARD
+   ========================================================== */
+
+.profile-edit-avatar-card {
+  display: flex;
+
+  padding: 1.25rem;
+
+  align-items: center;
+
+  flex-direction: column;
+
+  text-align: center;
+}
+
+.profile-edit-avatar-card
+.profile-edit-section-label {
+  align-self: flex-start;
+}
+
+.profile-edit-avatar-wrap {
+  position: relative;
+
+  margin: 1rem 0;
+}
+
+.profile-edit-avatar-preview {
+  display: block;
+
+  width: 8.5rem;
+  height: 8.5rem;
+
+  object-fit: cover;
+  object-position: center;
+
+  background: #eef4f6;
+
+  border:
+    5px solid rgba(255, 255, 255, 0.92);
+
+  border-radius: 50% !important;
+
+  box-shadow:
+    0 8px 24px rgba(0, 51, 68, 0.14);
+}
+
+.profile-edit-avatar-badge {
+  position: absolute;
+
+  right: 0.15rem;
+  bottom: 0.55rem;
+
+  display: grid;
+
+  width: 2rem;
+  height: 2rem;
+
+  place-items: center;
+
+  color: #003344;
+
+  background:
+    rgba(255, 232, 132, 0.9);
+
+  border:
+    3px solid rgba(255, 255, 255, 0.9);
+
+  border-radius: 50%;
+}
+
+.profile-edit-avatar-badge svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+
+/* INPUT FILE THẬT - ẨN */
+
+.profile-edit-avatar-input {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+}
+
+
+/* NÚT CHỌN ẢNH */
+
+.profile-edit-avatar-button {
+  display: inline-flex;
+
+  min-height: 2.5rem;
+
+  padding: 0.45rem 0.8rem;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.35rem;
+
+  color: #225f78;
+
+  background:
+    rgba(238, 248, 255, 0.78);
+
+  border:
+    1px solid rgba(128, 180, 206, 0.4);
+
+  border-radius: 9999px;
+
+  font-size: 0.76rem;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    background-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.profile-edit-avatar-button svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.profile-edit-avatar-button:hover {
+  background:
+    rgba(220, 242, 252, 0.95);
+
+  box-shadow:
+    0 5px 14px rgba(0, 51, 68, 0.08);
+
+  transform: translateY(-1px);
+}
+
+.profile-edit-avatar-help {
+  margin: 0.55rem 0 0;
+
+  color: #82939a;
+
+  font-size: 0.67rem;
+}
+
+.profile-edit-avatar-error {
+  min-height: 1rem;
+
+  margin-top: 0.3rem;
+
+  color: #b23d45;
+
+  font-size: 0.68rem;
+}
+
+
+/* ==========================================================
+   XÓA AVATAR
+   ========================================================== */
+
+.profile-remove-avatar {
+  display: flex;
+
+  width: 100%;
+
+  margin-top: 1rem;
+
+  padding: 0.65rem;
+
+  align-items: center;
+
+  gap: 0.5rem;
+
+  color: #9f3941;
+
+  background:
+    rgba(255, 239, 241, 0.55);
+
+  border:
+    1px solid rgba(189, 62, 73, 0.16);
+
+  border-radius: 0.75rem;
+
+  font-size: 0.7rem;
+
+  cursor: pointer;
+}
+
+.profile-remove-avatar input {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  opacity: 0;
+}
+
+.profile-remove-avatar__check {
+  display: grid;
+
+  width: 1.2rem;
+  height: 1.2rem;
+
+  flex: 0 0 1.2rem;
+
+  place-items: center;
+
+  color: transparent;
+
+  background: #fff;
+
+  border:
+    1px solid rgba(189, 62, 73, 0.35);
+
+  border-radius: 0.3rem;
+}
+
+.profile-remove-avatar__check svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.profile-remove-avatar
+input:checked
++
+.profile-remove-avatar__check {
+  color: #fff;
+
+  background: #bd3e49;
+
+  border-color: #bd3e49;
+}
+
+
+/* NOTE */
+
+.profile-edit-avatar-note {
+  display: flex;
+
+  width: 100%;
+
+  margin-top: 1rem;
+
+  padding-top: 0.8rem;
+
+  align-items: center;
+
+  gap: 0.4rem;
+
+  color: #7b8c93;
+
+  border-top:
+    1px solid rgba(128, 180, 206, 0.18);
+
+  font-size: 0.65rem;
+
+  text-align: left;
+}
+
+.profile-edit-avatar-note svg {
+  width: 0.9rem;
+  height: 0.9rem;
+
+  flex: 0 0 0.9rem;
+}
+
+
+/* ==========================================================
+   RIGHT FIELDS
+   ========================================================== */
+
+.profile-edit-fields {
+  padding: 1.25rem;
+}
+
+.profile-edit-fields-header {
+  padding-bottom: 1rem;
+
+  border-bottom:
+    1px solid rgba(128, 180, 206, 0.2);
+}
+
+.profile-edit-fields-header h2 {
+  margin: 0;
+
+  color: #003344;
+
+  font-size: 1.15rem;
+}
+
+.profile-edit-fields-header p {
+  margin: 0.3rem 0 0;
+
+  color: #71858d;
+
+  font-size: 0.76rem;
+}
+
+.profile-edit-field-grid {
+  display: grid;
+
+  margin-top: 1.15rem;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 1rem;
+}
+
+.profile-edit-field--full {
+  grid-column: 1 / -1;
+}
+
+.profile-edit-field label {
+  display: block;
+
+  margin-bottom: 0.4rem;
+
+  color: #263f49;
+
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.profile-edit-field label span {
+  color: #bd3e49;
+}
+
+
+/* ==========================================================
+   CONTROL
+   ========================================================== */
+
+.profile-edit-control {
+  position: relative;
+
+  display: flex;
+
+  min-width: 0;
+
+  align-items: center;
+}
+
+.profile-edit-control__icon {
+  position: absolute;
+
+  left: 0.75rem;
+
+  z-index: 2;
+
+  display: grid;
+
+  width: 1rem;
+  height: 1rem;
+
+  place-items: center;
+
+  color: #718a94;
+
+  pointer-events: none;
+}
+
+.profile-edit-control__icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.profile-edit-control input,
+.profile-edit-control textarea {
+  width: 100%;
+  min-width: 0;
+
+  margin: 0;
+
+  padding:
+    0.7rem
+    0.8rem
+    0.7rem
+    2.35rem;
+
+  color: #183c4a;
+
+  background:
+    rgba(255, 255, 255, 0.8);
+
+  border:
+    1px solid rgba(128, 180, 206, 0.35);
+
+  border-radius: 0.75rem;
+
+  outline: none;
+
+  font-family: inherit;
+  font-size: 0.78rem;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.profile-edit-control input {
+  min-height: 2.8rem;
+}
+
+.profile-edit-control textarea {
+  min-height: 7rem;
+
+  padding-top: 0.8rem;
+
+  resize: vertical;
+}
+
+.profile-edit-control--textarea {
+  align-items: flex-start;
+}
+
+.profile-edit-control--textarea
+.profile-edit-control__icon {
+  top: 0.85rem;
+}
+
+.profile-edit-control input:focus,
+.profile-edit-control textarea:focus {
+  background: #fff;
+
+  border-color:
+    rgba(34, 100, 125, 0.62);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(34, 100, 125, 0.09);
+}
+
+
+/* INVALID */
+
+.profile-edit-control
+input.is-invalid,
+.profile-edit-control
+textarea.is-invalid {
+  border-color:
+    rgba(189, 62, 73, 0.65);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(189, 62, 73, 0.06);
+}
+
+
+/* EMAIL */
+
+.profile-edit-control--disabled input {
+  padding-right: 3.7rem;
+
+  color: #73858c;
+
+  background:
+    rgba(239, 243, 244, 0.72);
+
+  cursor: not-allowed;
+}
+
+.profile-edit-locked {
+  position: absolute;
+
+  right: 0.7rem;
+
+  padding:
+    0.2rem 0.4rem;
+
+  color: #6f8087;
+
+  background: #e6ecee;
+
+  border-radius: 9999px;
+
+  font-size: 0.58rem;
+  font-weight: 700;
+}
+
+.profile-edit-field small {
+  display: block;
+
+  margin-top: 0.3rem;
+
+  color: #8a999f;
+
+  font-size: 0.64rem;
+}
+
+
+/* ERRORS + COUNTER */
+
+.profile-edit-field-error {
+  min-height: 1rem;
+
+  margin-top: 0.25rem;
+
+  color: #b23d45;
+
+  font-size: 0.67rem;
+}
+
+.profile-edit-field-bottom {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 0.5rem;
+}
+
+.profile-edit-counter {
+  margin-top: 0.25rem;
+
+  flex: 0 0 auto;
+
+  color: #8a999f;
+
+  font-size: 0.64rem;
+}
+
+
+/* ==========================================================
+   ACTION
+   ========================================================== */
+
+.profile-edit-actions {
+  display: flex;
+
+  margin-top: 1.25rem;
+
+  padding-top: 1rem;
+
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 0.55rem;
+
+  border-top:
+    1px solid rgba(128, 180, 206, 0.2);
+}
+
+.profile-edit-cancel,
+.profile-edit-save {
+  display: inline-flex;
+
+  min-height: 2.7rem;
+
+  padding: 0.5rem 0.9rem;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.35rem;
+
+  border-radius: 0.75rem;
+
+  font-size: 0.76rem;
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+.profile-edit-cancel {
+  color: #536d77;
+
+  background: transparent;
+
+  border:
+    1px solid rgba(128, 180, 206, 0.35);
+}
+
+.profile-edit-cancel:hover {
+  color: #003344;
+
+  background:
+    rgba(238, 248, 255, 0.7);
+}
+
+.profile-edit-save {
+  color: #fff;
+
+  background:
+    rgba(56, 50, 226, 0.814);
+
+  border:
+    1px solid rgba(12, 138, 181, 0.5);
+
+  box-shadow:
+    0 5px 14px rgba(4, 131, 173, 0.14);
+
+  cursor: pointer;
+}
+
+.profile-edit-save svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.profile-edit-save:hover {
+  background:
+    rgba(5, 71, 186, 0.96);
+
+  box-shadow:
+    0 7px 17px rgba(0, 51, 68, 0.18);
+
+  transform: translateY(-1px);
+}
+
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width: 61.999rem) {
+
+  .profile-edit-form {
+    grid-template-columns:
+      minmax(13rem, 0.7fr)
+      minmax(0, 1.3fr);
+  }
+
+}
+
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 47.999rem) {
+
+  .profile-edit-page {
+    padding:
+      1.25rem 0 2.5rem;
+  }
+
+  .profile-edit-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .profile-edit-form {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-edit-field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-edit-field--full {
+    grid-column: auto;
+  }
+
+  .profile-edit-avatar-preview {
+    width: 7rem;
+    height: 7rem;
+  }
+
+}
+
+
+/* ==========================================================
+   MOBILE NHỎ
+   ========================================================== */
+
+@media (max-width: 30rem) {
+
+  .profile-edit-back {
+    width: 100%;
+
+    justify-content: center;
+  }
+
+  .profile-edit-actions {
+    display: grid;
+
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+  .profile-edit-cancel,
+  .profile-edit-save {
+    width: 100%;
+  }
+
+}

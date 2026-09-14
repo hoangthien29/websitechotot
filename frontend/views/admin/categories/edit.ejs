@@ -1,0 +1,27 @@
+<%- include('../../partials/header', { pageStyles: ['/css/admin.css'] }) %>
+
+<section class="form-page">
+  <div class="container admin-shell">
+    <%- include('../_navigation', { currentSection: 'categories' }) %>
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-8 col-xl-7">
+        <div class="form-panel">
+          <header class="form-panel-header">
+            <h1 class="h2">Chỉnh sửa danh mục</h1>
+            <p class="text-secondary">Slug hiện tại: <code><%= category.slug %></code></p>
+          </header>
+
+          <%- include('_form', {
+            formAction: '/admin/categories/' + category._id + '?_method=PUT',
+            submitLabel: 'Lưu thay đổi',
+            category,
+            errors,
+            oldInput
+          }) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('../../partials/footer') %>

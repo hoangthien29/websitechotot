@@ -1,0 +1,63 @@
+<%- include('../partials/header') %>
+
+<section class="section-space">
+  <div class="container">
+    <a class="link-secondary d-inline-block mb-4 breadcrumb-link" href="/categories">
+      ← Quay lại danh mục
+    </a>
+
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-5">
+        <div class="category-detail-media">
+          <% if (category.hasManagedImage) { %>
+            <img
+              class="category-image"
+              src="<%= category.imageUrl %>"
+              alt="Ảnh danh mục <%= category.name %>"
+              width="800"
+              height="450"
+              decoding="async"
+            >
+          <% } else { %>
+            <div class="category-card__icon category-card__icon--large" aria-hidden="true">
+              <%- include('_icon', { category }) %>
+            </div>
+          <% } %>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <h1 class="display-5 mb-3"><%= category.name %></h1>
+        <p class="lead text-secondary mb-0">
+          <%= category.description || 'Danh mục này chưa có mô tả.' %>
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <div class="page-section-head mb-4">
+        <h2 class="h4 mb-0">Sản phẩm trong danh mục</h2>
+        <a class="btn btn-outline-secondary" href="/listings?category=<%= category.slug %>">Mở bộ lọc</a>
+      </div>
+      <% if (listings.length > 0) { %>
+        <div class="row g-4">
+          <% listings.forEach((listing) => { %>
+            <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+              <%- include('../listings/_card', {
+                listing,
+                showFavoriteAction: true,
+                favoriteReturnTo: currentUrl
+              }) %>
+            </div>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <div class="empty-state">
+          <h3 class="h5">Danh mục này chưa có sản phẩm.</h3>
+          <p class="text-secondary mb-0">Hãy quay lại sau hoặc xem các danh mục khác.</p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

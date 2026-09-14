@@ -1,0 +1,1871 @@
+/* ==========================================================
+   NTT MARKETPLACE — GIAI ĐOẠN 4
+   PRODUCT DETAIL THEO BỐ CỤC ẢNH THAM KHẢO
+   ========================================================== */
+
+.listing-detail-page {
+  min-height: 100vh;
+
+  padding:
+    1.5rem 0 3.5rem;
+
+  color:
+    var(--color-text);
+
+  background:
+    #f3f3f3;
+
+  font-family:
+    var(--font-body);
+}
+
+
+.listing-detail-container {
+  width:
+    min(
+      calc(100% - 2rem),
+      75rem
+    );
+
+  margin:
+    0 auto;
+}
+
+
+/* ==========================================================
+   THÔNG BÁO
+   ========================================================== */
+
+.listing-detail-notices {
+  display: grid;
+
+  gap:
+    0.75rem;
+
+  margin-bottom:
+    1rem;
+}
+
+
+.listing-detail-notices:empty {
+  display: none;
+}
+
+
+.listing-detail-alert {
+  margin: 0;
+
+  border-radius:
+    1rem;
+}
+
+
+/* ==========================================================
+   KHỐI CHÍNH
+   ========================================================== */
+
+.listing-detail-main-card {
+  display: grid;
+
+  grid-template-columns:
+    minmax(20rem, 0.92fr)
+    minmax(0, 1.55fr);
+
+  gap:
+    1.5rem;
+
+  padding:
+    1rem;
+
+  background:
+    #ffffff;
+
+  border:
+    1px solid
+    #e1e1e1;
+
+  border-radius:
+    1.2rem;
+
+  box-shadow:
+    0 3px 12px
+    rgba(0, 51, 68, 0.05);
+}
+
+
+/* ==========================================================
+   GALLERY
+   ========================================================== */
+
+.listing-detail-gallery {
+  min-width: 0;
+}
+
+
+.listing-detail-main-media {
+  position: relative;
+
+  display: grid;
+
+  width: 100%;
+
+  overflow: hidden;
+
+  aspect-ratio:
+    1 / 1;
+
+  place-items:
+    center;
+
+  background:
+    #202020;
+
+  border-radius:
+    0.8rem;
+}
+
+
+.listing-detail-main-link {
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+}
+
+
+.listing-detail-image {
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit:
+    contain;
+
+  object-position:
+    center;
+}
+
+
+/* BỘ ĐẾM */
+
+.listing-detail-image-counter {
+  position: absolute;
+
+  right:
+    0.7rem;
+
+  bottom:
+    0.65rem;
+
+  display:
+    inline-flex;
+
+  min-height:
+    1.7rem;
+
+  padding:
+    0.25rem 0.55rem;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  color:
+    #ffffff;
+
+  background:
+    rgba(0, 0, 0, 0.68);
+
+  border-radius:
+    9999px;
+
+  font-size:
+    0.7rem;
+
+  font-weight:
+    700;
+
+  pointer-events:
+    none;
+}
+
+
+/* ==========================================================
+   THUMBNAIL
+   ========================================================== */
+
+.listing-detail-thumbnails {
+  display: flex;
+
+  min-width: 0;
+
+  margin-top:
+    0.65rem;
+
+  gap:
+    0.45rem;
+
+  overflow-x:
+    auto;
+
+  scrollbar-width:
+    thin;
+}
+
+
+.listing-detail-thumbnail {
+  width:
+    4.25rem;
+
+  min-width:
+    4.25rem;
+
+  height:
+    4.25rem;
+
+  padding:
+    0;
+
+  overflow:
+    hidden;
+
+  background:
+    #ffffff;
+
+  border:
+    2px solid
+    transparent;
+
+  border-radius:
+    0.55rem;
+
+  cursor:
+    pointer;
+}
+
+
+.listing-detail-thumbnail img {
+  display: block;
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  object-fit:
+    cover;
+}
+
+
+.listing-detail-thumbnail.is-active {
+  border-color:
+    #d8b700;
+}
+
+
+.listing-detail-thumbnail:focus-visible {
+  outline:
+    3px solid
+    rgba(9, 98, 231, 0.22);
+
+  outline-offset:
+    2px;
+}
+
+
+/* ==========================================================
+   THÔNG TIN BÊN PHẢI
+   ========================================================== */
+
+.listing-detail-info {
+  min-width:
+    0;
+
+  padding:
+    0.2rem 0.2rem
+    0.2rem 0;
+}
+
+
+/* ==========================================================
+   TITLE
+   ========================================================== */
+
+.listing-detail-title-row {
+  display: flex;
+
+  min-width:
+    0;
+
+  align-items:
+    flex-start;
+
+  justify-content:
+    space-between;
+
+  gap:
+    1rem;
+}
+
+
+.listing-detail-title-copy {
+  min-width:
+    0;
+}
+
+
+.listing-detail-title {
+  margin:
+    0;
+
+  overflow-wrap:
+    anywhere;
+
+  color:
+    #101820;
+
+  font-family:
+    var(--font-body);
+
+  font-size:
+    clamp(
+      1.3rem,
+      2.4vw,
+      1.8rem
+    );
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    -0.025em;
+
+  line-height:
+    1.25;
+}
+
+
+/* DANH MỤC + TÌNH TRẠNG */
+
+.listing-detail-submeta {
+  display: flex;
+
+  margin-top:
+    0.45rem;
+
+  flex-wrap:
+    wrap;
+
+  align-items:
+    center;
+
+  gap:
+    0.4rem;
+
+  color:
+    #767676;
+
+  font-size:
+    0.75rem;
+}
+
+
+.listing-detail-submeta a {
+  color:
+    #687a82;
+
+  text-decoration:
+    none;
+}
+
+
+.listing-detail-submeta a:hover {
+  color:
+    #8a7000;
+
+  text-decoration:
+    underline;
+}
+
+
+/* ==========================================================
+   LƯU TIN
+   ========================================================== */
+
+.listing-detail-save {
+  flex:
+    0 0 auto;
+}
+
+
+.listing-detail-save
+.favorite-form {
+  margin:
+    0;
+}
+
+
+.listing-detail-save
+.favorite-button--detail,
+
+.listing-detail-save
+.favorite-login-link,
+
+.listing-detail-save
+.favorite-owner-note {
+  display:
+    inline-flex;
+
+  min-height:
+    2rem;
+
+  padding:
+    0.35rem 0.7rem;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  gap:
+    0.3rem;
+
+  color:
+    #28353b;
+
+  background:
+    #ffffff;
+
+  border:
+    1px solid
+    #d4d4d4;
+
+  border-radius:
+    9999px;
+
+  font-family:
+    var(--font-body);
+
+  font-size:
+    0.72rem;
+
+  font-weight:
+    700;
+
+  line-height:
+    1;
+
+  text-decoration:
+    none;
+}
+
+
+.listing-detail-save
+.favorite-icon {
+  width:
+    0.95rem;
+
+  height:
+    0.95rem;
+
+  fill:
+    none;
+
+  stroke:
+    currentColor;
+
+  stroke-width:
+    1.8;
+}
+
+
+.listing-detail-save
+.favorite-button--detail.is-favorited {
+  color:
+    #5d4f00;
+
+  background:
+    #ffe884;
+
+  border-color:
+    #ddc656;
+}
+
+
+.listing-detail-save
+.favorite-button--detail.is-favorited
+.favorite-icon {
+  fill:
+    currentColor;
+}
+
+
+/* ==========================================================
+   GIÁ
+   ========================================================== */
+
+.listing-detail-price {
+  margin:
+    0.7rem 0 0;
+
+  color:
+    #ef3340;
+
+  font-family:
+    var(--font-body);
+
+  font-size:
+    clamp(
+      1.35rem,
+      2.6vw,
+      1.8rem
+    );
+
+  font-variant-numeric:
+    tabular-nums;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    -0.02em;
+}
+
+
+/* ==========================================================
+   ĐỊA ĐIỂM + NGÀY
+   ========================================================== */
+
+.listing-detail-location-date {
+  display: grid;
+
+  margin-top:
+    0.8rem;
+
+  gap:
+    0.55rem;
+}
+
+
+.listing-detail-meta-line {
+  display: flex;
+
+  min-width:
+    0;
+
+  align-items:
+    center;
+
+  gap:
+    0.45rem;
+
+  color:
+    #4e5e65;
+
+  font-size:
+    0.76rem;
+}
+
+
+.listing-detail-meta-line svg {
+  width:
+    0.95rem;
+
+  height:
+    0.95rem;
+
+  flex:
+    0 0 auto;
+
+  color:
+    #344c56;
+}
+
+
+.listing-detail-meta-line span {
+  overflow-wrap:
+    anywhere;
+}
+
+
+/* ==========================================================
+   STATUS
+   ========================================================== */
+
+.listing-detail-status-row {
+  margin-top:
+    0.7rem;
+}
+
+
+.listing-detail-status {
+  display:
+    inline-flex;
+
+  min-height:
+    1.55rem;
+
+  padding:
+    0.25rem 0.55rem;
+
+  align-items:
+    center;
+
+  border-radius:
+    0.5rem;
+
+  font-size:
+    0.67rem;
+
+  font-weight:
+    700;
+}
+
+
+.listing-detail-status--active {
+  color:
+    #edf1ef;
+
+  background:
+    #0cb946bc;
+}
+
+
+.listing-detail-status--sold {
+  color:
+    #efe6e7;
+
+  background:
+    #f30414d7;
+}
+
+
+.listing-detail-status--hidden {
+  color:
+    #755e00;
+
+  background:
+    #fff6d7;
+}
+
+
+/* ==========================================================
+   SỐ ĐIỆN THOẠI + CHAT
+   ========================================================== */
+
+.listing-detail-contact-actions {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(10rem, 1fr)
+    );
+
+  margin-top:
+    1.15rem;
+
+  gap:
+    0.55rem;
+}
+
+
+.listing-detail-phone-action,
+.listing-detail-chat-button {
+  min-height:
+    2.75rem;
+
+  border-radius:
+    0.65rem;
+}
+
+
+/* PHONE */
+
+/* ==========================================================
+   HIỆN / ẨN SỐ ĐIỆN THOẠI
+   ========================================================== */
+
+.listing-detail-phone-action {
+  display: flex;
+
+  width: 100%;
+  min-height: 2.75rem;
+
+  padding:
+    0.45rem
+    0.8rem;
+
+  flex-direction: row;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.35rem;
+
+  color: #25343a;
+
+  background: #f1f1f1;
+
+  border:
+    1px solid #ededed;
+
+  border-radius: 0.65rem;
+
+  font-family: var(--font-body);
+
+  text-align: center;
+}
+
+
+button.listing-detail-phone-action {
+  cursor: pointer;
+
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+
+button.listing-detail-phone-action:hover {
+  background: #e9e9e9;
+
+  border-color: #dddddd;
+}
+
+
+.listing-phone-label {
+  color: #25343a;
+
+  font-size: 0.78rem;
+
+  font-weight: 700;
+}
+
+
+.listing-phone-number {
+  color: #182b33;
+
+  font-size: 0.82rem;
+
+  font-weight: 700;
+}
+
+
+/* SAU KHI ĐÃ HIỆN */
+
+.listing-phone-reveal.is-revealed {
+  background: #f5f5f5;
+}
+
+
+.listing-phone-reveal.is-revealed
+.listing-phone-label {
+  display: none;
+}
+
+/* CHAT */
+
+.listing-detail-message-action,
+.listing-detail-message-action form {
+  width:
+    100%;
+
+  margin:
+    0;
+}
+
+
+.listing-detail-chat-button {
+  display:
+    inline-flex;
+
+  width:
+    100%;
+
+  padding:
+    0.55rem 0.9rem;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  color:
+    #222222;
+
+  background:
+    #ffd900;
+
+  border:
+    1px solid
+    #e5c300;
+
+  font-family:
+    var(--font-body);
+
+  font-size:
+    0.8rem;
+
+  font-weight:
+    700;
+}
+
+
+.listing-detail-chat-button:hover,
+.listing-detail-chat-button:focus-visible {
+  color:
+    #222222;
+
+  background:
+    #f1cb00;
+
+  border-color:
+    #dabb00;
+}
+
+
+.listing-detail-chat-button.is-disabled {
+  color:
+    #777777;
+
+  background:
+    #eeeeee;
+
+  border-color:
+    #dddddd;
+}
+
+
+/* ==========================================================
+   NGƯỜI BÁN
+   ========================================================== */
+
+.listing-detail-seller {
+  margin-top:
+    1rem;
+
+  padding:
+    0.85rem 0;
+
+  border-top:
+    1px solid
+    #ececec;
+
+  border-bottom:
+    1px solid
+    #ececec;
+}
+
+
+.listing-detail-seller-main {
+  display: flex;
+
+  min-width:
+    0;
+
+  align-items:
+    center;
+
+  gap:
+    0.7rem;
+}
+
+
+.listing-detail-seller-avatar,
+.listing-detail-seller-placeholder {
+  width:
+    2.75rem;
+
+  height:
+    2.75rem;
+
+  min-width:
+    2.75rem;
+
+  border-radius:
+    50%;
+}
+
+
+.listing-detail-seller-avatar {
+  object-fit:
+    cover;
+
+  border:
+    1px solid
+    #dddddd;
+}
+
+
+.listing-detail-seller-placeholder {
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  color:
+    #003344;
+
+  background:
+    #ffe884;
+
+  font-weight:
+    700;
+}
+
+
+.listing-detail-seller-copy {
+  min-width:
+    0;
+}
+
+
+.listing-detail-seller-copy h2 {
+  margin:
+    0;
+
+  overflow:
+    hidden;
+
+  color:
+    #1c2b31;
+
+  font-family:
+    var(--font-body);
+
+  font-size:
+    0.8rem;
+
+  font-weight:
+    700;
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+}
+
+
+.listing-detail-seller-copy p {
+  margin:
+    0.18rem 0 0;
+
+  color:
+    #888888;
+
+  font-size:
+    0.66rem;
+}
+
+
+/* ==========================================================
+   QUẢN LÝ BÀI ĐĂNG
+   ========================================================== */
+
+.listing-detail-owner {
+  margin-top:
+    1rem;
+
+  padding:
+    0.85rem;
+
+  background:
+    #f7f7f7;
+
+  border:
+    1px solid
+    #e7e7e7;
+
+  border-radius:
+    0.8rem;
+}
+
+
+.listing-detail-owner-heading h2 {
+  margin:
+    0;
+
+  color:
+    #1f333b;
+
+  font-family:
+    var(--font-body);
+
+  font-size:
+    0.82rem;
+
+  font-weight:
+    700;
+}
+
+
+.listing-detail-owner-heading p {
+  margin:
+    0.25rem 0 0;
+
+  color:
+    #777777;
+
+  font-size:
+    0.68rem;
+}
+
+
+.listing-detail-owner-actions {
+  margin-top:
+    0.75rem;
+}
+
+
+.listing-detail-owner-actions
+.listing-actions {
+  display: flex;
+
+  flex-wrap:
+    wrap;
+
+  gap:
+    0.45rem;
+}
+
+
+.listing-detail-owner-actions
+.listing-actions form {
+  margin:
+    0;
+}
+
+
+.listing-detail-owner-actions
+.btn {
+  min-height:
+    2.25rem;
+
+  padding:
+    0.4rem 0.65rem;
+
+  border-radius:
+    0.65rem;
+
+  font-size:
+    0.7rem;
+}
+
+
+/* ==========================================================
+   PHẦN DƯỚI
+   ========================================================== */
+
+.listing-detail-lower {
+  display: grid;
+
+  width:
+    min(
+      66%,
+      48rem
+    );
+
+  margin-top:
+    0.75rem;
+
+  gap:
+    0.75rem;
+}
+
+
+/* CARD */
+
+.listing-detail-description-card,
+.listing-detail-spec-card {
+  padding:
+    1rem 1.05rem;
+
+  background:
+    #ffffff;
+
+  border:
+    1px solid
+    #e5e5e5;
+
+  border-radius:
+    1rem;
+
+  box-shadow:
+    0 2px 8px
+    rgba(0, 51, 68, 0.04);
+}
+
+
+.listing-detail-description-card h2,
+.listing-detail-spec-card h2 {
+  margin:
+    0 0 0.7rem;
+
+  color:
+    #17262c;
+
+  font-family:
+    var(--font-body);
+
+  font-size:
+    0.88rem;
+
+  font-weight:
+    700;
+}
+
+
+/* ==========================================================
+   DESCRIPTION
+   ========================================================== */
+
+.listing-detail-description-card p {
+  margin:
+    0;
+
+  overflow-wrap:
+    anywhere;
+
+  color:
+    #334b55;
+
+  font-size:
+    0.76rem;
+
+  line-height:
+    1.7;
+
+  white-space:
+    pre-line;
+}
+
+
+/* ==========================================================
+   THÔNG TIN CHI TIẾT
+   ========================================================== */
+
+.listing-detail-spec-list {
+  margin:
+    0;
+}
+
+
+.listing-detail-spec-list > div {
+  display: grid;
+
+  grid-template-columns:
+    minmax(7rem, 0.7fr)
+    minmax(0, 2fr);
+
+  gap:
+    1rem;
+
+  padding:
+    0.58rem 0;
+
+  border-bottom:
+    1px solid
+    #eeeeee;
+}
+
+
+.listing-detail-spec-list > div:last-child {
+  border-bottom:
+    0;
+}
+
+
+.listing-detail-spec-list dt,
+.listing-detail-spec-list dd {
+  margin:
+    0;
+
+  font-size:
+    0.73rem;
+
+  line-height:
+    1.45;
+}
+
+
+.listing-detail-spec-list dt {
+  color:
+    #626f75;
+
+  font-weight:
+    500;
+}
+
+
+.listing-detail-spec-list dd {
+  overflow-wrap:
+    anywhere;
+
+  color:
+    #273a42;
+
+  font-weight:
+    600;
+}
+
+
+.listing-detail-spec-list a {
+  color:
+    #8a7000;
+
+  text-decoration:
+    none;
+}
+
+
+.listing-detail-spec-list a:hover {
+  text-decoration:
+    underline;
+}
+
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width: 61.999rem) {
+
+  .listing-detail-main-card {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .listing-detail-main-media {
+    max-height:
+      36rem;
+  }
+
+
+  .listing-detail-lower {
+    width:
+      100%;
+  }
+
+}
+
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 47.999rem) {
+
+  .listing-detail-page {
+    padding:
+      0.75rem 0 2rem;
+  }
+
+
+  .listing-detail-container {
+    width:
+      min(
+        calc(100% - 1rem),
+        75rem
+      );
+  }
+
+
+  .listing-detail-main-card {
+    gap:
+      0.9rem;
+
+    padding:
+      0.7rem;
+
+    border-radius:
+      1rem;
+  }
+
+
+  .listing-detail-main-media {
+    border-radius:
+      0.7rem;
+  }
+
+
+  .listing-detail-thumbnail {
+    width:
+      3.75rem;
+
+    min-width:
+      3.75rem;
+
+    height:
+      3.75rem;
+  }
+
+
+  .listing-detail-info {
+    padding:
+      0.2rem;
+  }
+
+
+  .listing-detail-title {
+    font-size:
+      1.2rem;
+  }
+
+
+  .listing-detail-price {
+    font-size:
+      1.4rem;
+  }
+
+
+  .listing-detail-contact-actions {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+
+  .listing-detail-description-card,
+  .listing-detail-spec-card {
+    border-radius:
+      0.85rem;
+  }
+
+}
+
+
+/* MOBILE NHỎ */
+
+@media (max-width: 30rem) {
+
+  .listing-detail-title-row {
+    gap:
+      0.6rem;
+  }
+
+
+  .listing-detail-save
+  .favorite-button--detail,
+
+  .listing-detail-save
+  .favorite-login-link,
+
+  .listing-detail-save
+  .favorite-owner-note {
+    padding-inline:
+      0.55rem;
+  }
+
+
+  .listing-detail-contact-actions {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .listing-detail-spec-list > div {
+    grid-template-columns:
+      1fr;
+
+    gap:
+      0.2rem;
+  }
+
+}
+
+
+/* ==========================================================
+   ACCESSIBILITY
+   ========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .listing-detail-page *,
+  .listing-detail-page *::before,
+  .listing-detail-page *::after {
+    scroll-behavior:
+      auto !important;
+
+    transition:
+      none !important;
+
+    animation:
+      none !important;
+  }
+
+}
+/* ==========================================================
+   SẢN PHẨM LIÊN QUAN
+   ========================================================== */
+
+.listing-related-section {
+  width: 100%;
+
+  margin-top: 2rem;
+
+  padding-top: 1.5rem;
+
+  border-top:
+    1px solid #dddddd;
+}
+
+
+/* HEADER */
+
+.listing-related-heading {
+  display: flex;
+
+  margin-bottom: 1rem;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 1rem;
+}
+
+
+.listing-related-eyebrow {
+  display: block;
+
+  margin-bottom: 0.15rem;
+
+  color: #8a7000;
+
+  font-size: 0.67rem;
+
+  font-weight: 700;
+
+  letter-spacing: 0.04em;
+
+  text-transform: uppercase;
+}
+
+
+.listing-related-heading h2 {
+  margin: 0;
+
+  color: #17262c;
+
+  font-family: var(--font-body);
+
+  font-size: 1.05rem;
+
+  font-weight: 700;
+}
+
+
+/* XEM THÊM */
+
+.listing-related-view-all {
+  display: inline-flex;
+
+  min-height: 2.25rem;
+
+  padding: 0.35rem 0;
+
+  align-items: center;
+
+  gap: 0.3rem;
+
+  color: #8a7000;
+
+  font-size: 0.75rem;
+
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+
+.listing-related-view-all svg {
+  width: 1rem;
+  height: 1rem;
+
+  transition:
+    transform 0.2s ease;
+}
+
+
+.listing-related-view-all:hover {
+  color: #5f4f00;
+}
+
+
+.listing-related-view-all:hover svg {
+  transform:
+    translateX(3px);
+}
+
+
+/* ==========================================================
+   GRID
+   ========================================================== */
+
+.listing-related-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      5,
+      minmax(0, 1fr)
+    );
+
+  gap: 0.85rem;
+
+  align-items: stretch;
+}
+
+
+/* CARD NHỎ HƠN TRANG CHỦ */
+
+.listing-related-grid
+.marketplace-product-card {
+  border-radius: 1rem;
+}
+
+
+.listing-related-grid
+.marketplace-product-card__title {
+  font-size: 0.85rem;
+}
+
+
+.listing-related-grid
+.marketplace-product-card__price {
+  font-size: 0.95rem;
+}
+
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 74.999rem) {
+
+  .listing-related-grid {
+    grid-template-columns:
+      repeat(
+        4,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+@media (max-width: 61.999rem) {
+
+  .listing-related-grid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+@media (max-width: 47.999rem) {
+
+  .listing-related-section {
+    margin-top: 1.5rem;
+
+    padding-top: 1.25rem;
+  }
+
+
+  .listing-related-heading {
+    align-items: center;
+  }
+
+
+  .listing-related-eyebrow {
+    display: none;
+  }
+
+
+  .listing-related-heading h2 {
+    font-size: 1rem;
+  }
+
+
+  .listing-related-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    gap: 0.7rem;
+  }
+
+}
+/* ==========================================================
+   QUICK CHAT - CHI TIẾT SẢN PHẨM
+   ========================================================== */
+
+.detail-quick-chat {
+  display: grid;
+  width: 100%;
+
+  margin-top: 0.75rem;
+  padding: 0.55rem;
+
+  grid-template-columns:
+    minmax(0, 1fr) auto;
+
+  align-items: center;
+  gap: 0.55rem;
+
+  overflow: hidden;
+
+  background:
+    rgba(245, 247, 248, 0.85);
+
+  border:
+    1px solid #e2e7e9;
+
+  border-radius: 0.85rem;
+}
+
+
+/* ==========================================================
+   PHẦN NHẬP
+   ========================================================== */
+
+.detail-quick-chat__input {
+  display: flex;
+
+  min-width: 0;
+
+  align-items: center;
+
+  gap: 0.5rem;
+}
+
+
+/* ICON CHAT - QUAN TRỌNG */
+.detail-quick-chat__input svg {
+  display: block !important;
+
+  width: 1.1rem !important;
+  height: 1.1rem !important;
+
+  min-width: 1.1rem !important;
+  min-height: 1.1rem !important;
+
+  max-width: 1.1rem !important;
+  max-height: 1.1rem !important;
+
+  flex: 0 0 1.1rem;
+
+  color: #39758e;
+}
+
+
+/* INPUT / TEXTAREA */
+
+.detail-quick-chat__input input,
+.detail-quick-chat__input textarea {
+  width: 100%;
+  min-width: 0;
+
+  margin: 0;
+
+  padding:
+    0.6rem 0.7rem;
+
+  color: #25343a;
+
+  background:
+    rgba(255, 255, 255, 0.72);
+
+  border:
+    1px solid #dce5e8;
+
+  border-radius: 0.65rem;
+
+  outline: none;
+
+  font-family: inherit;
+  font-size: 0.78rem;
+
+  line-height: 1.4;
+}
+
+
+.detail-quick-chat__input textarea {
+  min-height: 2.6rem;
+  max-height: 6rem;
+
+  resize: vertical;
+}
+
+
+.detail-quick-chat__input input:focus,
+.detail-quick-chat__input textarea:focus {
+  background: #ffffff;
+
+  border-color:
+    rgba(57, 117, 142, 0.55);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(57, 117, 142, 0.08);
+}
+
+
+/* ==========================================================
+   NÚT GỬI
+   ========================================================== */
+
+.detail-quick-chat__send {
+  display: inline-flex;
+
+  min-width: 4rem;
+  min-height: 2.55rem;
+
+  padding:
+    0.45rem 0.8rem;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.3rem;
+
+  color: #e8f1f4;
+
+  background: #2b4bdbbe;
+
+  border:
+    1px solid #191277;
+
+  border-radius: 0.65rem;
+
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+
+.detail-quick-chat__send:hover {
+  background: #050ced;
+
+  border-color: #1620ea;
+
+  box-shadow:
+    0 4px 12px
+    rgba(0, 51, 68, 0.08);
+
+  transform:
+    translateY(-1px);
+}
+
+
+/* NẾU NÚT GỬI CÓ ICON */
+
+.detail-quick-chat__send svg {
+  display: block !important;
+
+  width: 1rem !important;
+  height: 1rem !important;
+
+  min-width: 1rem !important;
+  min-height: 1rem !important;
+
+  max-width: 1rem !important;
+  max-height: 1rem !important;
+
+  flex: 0 0 1rem;
+}
+
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 30rem) {
+
+  .detail-quick-chat {
+    grid-template-columns:
+      minmax(0, 1fr) auto;
+
+    padding: 0.45rem;
+
+    gap: 0.4rem;
+  }
+
+
+  .detail-quick-chat__send {
+    min-width: 3.4rem;
+
+    padding-inline:
+      0.6rem;
+  }
+
+}
+/* Người bán có thể bấm để xem hồ sơ */
+
+.listing-detail-seller-profile-link {
+  display: flex;
+
+  width: fit-content;
+  max-width: 100%;
+
+  align-items: center;
+
+  gap: 0.7rem;
+
+  color: inherit;
+
+  text-decoration: none;
+
+  border-radius: 0.75rem;
+
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+
+
+.listing-detail-seller-profile-link:hover {
+  color: inherit;
+
+  opacity: 0.88;
+
+  transform:
+    translateX(2px);
+}
+
+
+.listing-detail-seller-profile-link
+.listing-detail-seller-avatar {
+  border-radius: 50%;
+}
+
+
+.listing-detail-seller-profile-link
+.listing-detail-seller-copy p {
+  color: #39758e;
+}

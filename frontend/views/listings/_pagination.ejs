@@ -1,0 +1,212 @@
+<% if (pagination.totalPages > 1) { %>
+
+  <nav
+    class="market-pagination"
+    aria-label="Phân trang sản phẩm"
+  >
+
+    <ul class="pagination">
+
+
+      <!-- TRANG ĐẦU -->
+      <li
+        class="
+          page-item
+          <%= pagination.firstUrl
+            ? ''
+            : 'disabled'
+          %>
+        "
+      >
+
+        <% if (pagination.firstUrl) { %>
+
+          <a
+            class="page-link market-page-edge"
+            href="<%= pagination.firstUrl %>"
+            aria-label="Trang đầu"
+            title="Trang đầu"
+          >
+            «
+          </a>
+
+        <% } else { %>
+
+          <span
+            class="page-link market-page-edge"
+            aria-disabled="true"
+          >
+            «
+          </span>
+
+        <% } %>
+
+      </li>
+
+
+
+      <!-- TRANG TRƯỚC -->
+      <li
+        class="
+          page-item
+          <%= pagination.previousUrl
+            ? ''
+            : 'disabled'
+          %>
+        "
+      >
+
+        <% if (pagination.previousUrl) { %>
+
+          <a
+            class="page-link market-page-edge"
+            href="<%= pagination.previousUrl %>"
+            aria-label="Trang trước"
+          >
+            ‹
+          </a>
+
+        <% } else { %>
+
+          <span
+            class="page-link market-page-edge"
+            aria-disabled="true"
+          >
+            ‹
+          </span>
+
+        <% } %>
+
+      </li>
+
+
+
+      <!-- SỐ TRANG -->
+      <% pagination.pages.forEach((pageItem) => { %>
+
+        <li
+          class="
+            page-item
+            <%= pageItem.isCurrent
+              ? 'active'
+              : ''
+            %>
+          "
+        >
+
+          <% if (pageItem.isCurrent) { %>
+
+            <span
+              class="page-link"
+              aria-current="page"
+            >
+              <%= pageItem.number %>
+            </span>
+
+          <% } else { %>
+
+            <a
+              class="page-link"
+              href="<%= pageItem.url %>"
+            >
+              <%= pageItem.number %>
+            </a>
+
+          <% } %>
+
+        </li>
+
+      <% }); %>
+
+
+
+      <!-- TRANG SAU -->
+      <li
+        class="
+          page-item
+          <%= pagination.nextUrl
+            ? ''
+            : 'disabled'
+          %>
+        "
+      >
+
+        <% if (pagination.nextUrl) { %>
+
+          <a
+            class="page-link market-page-edge"
+            href="<%= pagination.nextUrl %>"
+            aria-label="Trang sau"
+          >
+            ›
+          </a>
+
+        <% } else { %>
+
+          <span
+            class="page-link market-page-edge"
+            aria-disabled="true"
+          >
+            ›
+          </span>
+
+        <% } %>
+
+      </li>
+
+
+
+      <!-- TRANG CUỐI -->
+      <li
+        class="
+          page-item
+          <%= pagination.lastUrl
+            ? ''
+            : 'disabled'
+          %>
+        "
+      >
+
+        <% if (pagination.lastUrl) { %>
+
+          <a
+            class="page-link market-page-edge"
+            href="<%= pagination.lastUrl %>"
+            aria-label="Trang cuối"
+          >
+            »
+          </a>
+
+        <% } else { %>
+
+          <span
+            class="page-link market-page-edge"
+            aria-disabled="true"
+          >
+            »
+          </span>
+
+        <% } %>
+
+      </li>
+
+    </ul>
+
+
+    <p class="market-pagination-summary">
+
+      Trang
+
+      <strong>
+        <%= pagination.page %>
+      </strong>
+
+      /
+
+      <%= pagination.totalPages %>
+
+    </p>
+
+  </nav>
+
+<% } %>

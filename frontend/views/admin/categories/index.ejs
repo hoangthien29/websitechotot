@@ -1,0 +1,107 @@
+<%- include('../../partials/header', { pageStyles: ['/css/admin.css'] }) %>
+
+<section class="section-space">
+  <div class="container admin-shell">
+    <%- include('../_navigation', { currentSection: 'categories' }) %>
+    <div class="page-heading mb-4">
+      <div>
+        <h1 class="mb-2">Quản lý danh mục</h1>
+        <p class="text-secondary mb-0">Tạo, chỉnh sửa và thay đổi trạng thái danh mục.</p>
+      </div>
+      <a class="btn btn-primary" href="/admin/categories/create">Thêm danh mục</a>
+    </div>
+
+    <% if (successMessage) { %>
+      <div class="alert alert-success" role="status"><%= successMessage %></div>
+    <% } %>
+
+    <% if (errors.general) { %>
+      <div class="alert alert-danger" role="alert"><%= errors.general %></div>
+    <% } %>
+
+    <% if (categories.length > 0) { %>
+      <div class="table-responsive admin-table-shell">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">Ảnh</th>
+              <th scope="col">Tên</th>
+              <th scope="col">Slug</th>
+              <th scope="col">Mô tả</th>
+              <th scope="col">Trạng thái</th>
+              <th scope="col">Ngày tạo</th>
+              <th scope="col" class="text-end">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% categories.forEach((category) => { %>
+              <tr>
+                <td>
+                  <div class="admin-category-thumbnail">
+                    <% if (category.hasManagedImage) { %>
+                      <img
+                        src="<%= category.imageUrl %>"
+                        alt=""
+                        width="80"
+                        height="50"
+                        loading="lazy"
+                        decoding="async"
+                      >
+                    <% } else { %>
+                      <div class="admin-category-thumbnail__fallback" aria-hidden="true">
+                        <%- include('../../categories/_icon', { category }) %>
+                      </div>
+                    <% } %>
+                  </div>
+                </td>
+                <td class="fw-semibold"><%= category.name %></td>
+                <td><code><%= category.slug %></code></td>
+                <td class="admin-description"><%= category.descriptionPreview || '—' %></td>
+                <td>
+                  <% if (category.status === 'active') { %>
+                    <span class="badge status-badge status-badge--active">Đang hoạt động</span>
+                  <% } else { %>
+                    <span class="badge status-badge status-badge--hidden">Đang ẩn</span>
+                  <% } %>
+                </td>
+                <td><%= category.formattedCreatedAt %></td>
+                <td>
+                  <div class="d-flex justify-content-end flex-wrap gap-2">
+                    <a
+                      class="btn btn-sm btn-outline-primary"
+                      href="/admin/categories/<%= category._id %>/edit"
+                    >
+                      Chỉnh sửa
+                    </a>
+                    <form
+                      method="POST"
+                      action="/admin/categories/<%= category._id %>/status?_method=PATCH"
+                    >
+                      <%- include('../../partials/csrf') %>
+                      <input
+                        type="hidden"
+                        name="status"
+                        value="<%= category.status === 'active' ? 'inactive' : 'active' %>"
+                      >
+                      <button class="btn btn-sm btn-outline-secondary" type="submit">
+                        <%= category.status === 'active' ? 'Ẩn danh mục' : 'Kích hoạt' %>
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <div class="empty-state" role="status">
+        <h2 class="h4">Chưa có danh mục nào.</h2>
+        <p class="text-secondary">Tạo danh mục đầu tiên để bắt đầu phân loại sản phẩm.</p>
+        <a class="btn btn-primary" href="/admin/categories/create">Thêm danh mục</a>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('../../partials/footer') %>

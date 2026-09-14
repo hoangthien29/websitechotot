@@ -1,0 +1,256 @@
+<%- include('../partials/header', {
+  pageStyles: ['/css/favorites.css']
+}) %>
+
+<section
+  class="favorites-page"
+  aria-labelledby="favorites-title"
+>
+
+  <div class="container">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="favorites-header">
+
+      <div class="favorites-heading">
+
+        <span class="favorites-kicker">
+         Danh sách quan tâm
+        </span>
+      </div>
+
+
+      <a
+        class="favorites-explore-button"
+        href="/listings"
+      >
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle
+            cx="11"
+            cy="11"
+            r="7"
+          ></circle>
+
+          <path
+            d="m20 20-4-4"
+          ></path>
+        </svg>
+
+        <span>
+          Khám phá sản phẩm
+        </span>
+
+      </a>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         ERROR
+         ===================================================== -->
+
+    <% if (Object.keys(errors).length > 0) { %>
+
+      <div
+        class="alert alert-danger favorites-alert"
+        role="alert"
+      >
+        <%= errors.page || errors.general || 'Yêu cầu không hợp lệ.' %>
+      </div>
+
+    <% } else { %>
+
+
+      <!-- ===================================================
+           SUMMARY
+           =================================================== -->
+
+      <div class="favorites-summary-bar">
+
+        <div class="favorites-summary-main">
+
+          <span
+            class="favorites-summary-icon"
+            aria-hidden="true"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="
+                  M20.8 4.6
+                  a5.5 5.5 0 0 0-7.8 0
+                  L12 5.7
+                  l-1.1-1.1
+                  a5.5 5.5 0 0 0-7.8 7.8
+                  l1.1 1.1
+                  L12 21
+                  l7.8-7.5
+                  1.1-1.1
+                  a5.5 5.5 0 0 0-.1-7.8Z
+                "
+              ></path>
+            </svg>
+          </span>
+
+
+          <div>
+            <strong>
+              <%= totalItems %>
+            </strong>
+
+            <span>
+              sản phẩm đã lưu
+            </span>
+          </div>
+
+        </div>
+
+
+        <% if (pagination.totalPages > 1) { %>
+
+          <span class="favorites-page-number">
+            Trang
+            <strong>
+              <%= currentPage %>
+            </strong>
+            /
+            <%= pagination.totalPages %>
+          </span>
+
+        <% } %>
+
+      </div>
+
+
+
+      <% if (listings.length > 0) { %>
+
+
+        <!-- =================================================
+             PRODUCT GRID
+             ================================================= -->
+
+        <div class="favorites-grid">
+
+          <% listings.forEach((listing) => { %>
+
+            <div class="favorites-grid__item">
+
+              <%- include('../listings/_card', {
+                listing,
+                showFavoriteAction: true,
+                favoriteReturnTo: currentUrl
+              }) %>
+
+            </div>
+
+          <% }); %>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PAGINATION
+             ================================================= -->
+
+        <div class="favorites-pagination">
+
+          <%- include(
+            '../listings/_pagination',
+            {
+              pagination
+            }
+          ) %>
+
+        </div>
+
+
+      <% } else { %>
+
+
+        <!-- =================================================
+             EMPTY
+             ================================================= -->
+
+        <div
+          class="favorite-empty-state"
+          role="status"
+        >
+
+          <div
+            class="favorite-empty-icon"
+            aria-hidden="true"
+          >
+
+            <svg
+              class="favorite-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="
+                  M20.8 4.6
+                  a5.5 5.5 0 0 0-7.8 0
+                  L12 5.7
+                  l-1.1-1.1
+                  a5.5 5.5 0 0 0-7.8 7.8
+                  l1.1 1.1
+                  L12 21
+                  l7.8-7.5
+                  1.1-1.1
+                  a5.5 5.5 0 0 0-.1-7.8Z
+                "
+              ></path>
+            </svg>
+
+          </div>
+
+
+          <span class="favorite-empty-kicker">
+            Danh sách đang trống
+          </span>
+
+          <a
+            class="favorite-empty-button"
+            href="/listings"
+          >
+            Khám phá sản phẩm
+          </a>
+
+        </div>
+
+      <% } %>
+
+
+    <% } %>
+
+  </div>
+
+</section>
+
+
+<%- include('../partials/footer') %>

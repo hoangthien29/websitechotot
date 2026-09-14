@@ -1,0 +1,568 @@
+<%- include('../partials/header', { pageStyles: ['/css/my-listings.css'] }) %>
+
+<%
+  const getManageStatus = (listing) => {
+    if (
+      listing.isHiddenByAdmin ||
+      listing.status === 'hidden'
+    ) {
+      return 'hidden';
+    }
+
+    return listing.status;
+  };
+
+
+  const activeCount = listings.filter(
+    (listing) =>
+      getManageStatus(listing) === 'active'
+  ).length;
+
+
+  const soldCount = listings.filter(
+    (listing) =>
+      getManageStatus(listing) === 'sold'
+  ).length;
+
+
+  const hiddenCount = listings.filter(
+    (listing) =>
+      getManageStatus(listing) === 'hidden'
+  ).length;
+
+
+  const defaultFilter =
+    activeCount > 0
+      ? 'active'
+      : soldCount > 0
+        ? 'sold'
+        : 'hidden';
+%>
+
+
+<section
+  class="my-listings-page"
+  data-my-listings-page
+  data-default-filter="<%= defaultFilter %>"
+>
+
+  <div class="container">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="my-listings-header">
+
+      <div class="my-listings-heading">
+
+        <span class="my-listings-kicker">
+          <h1>Quản lý tin đăng</h1>
+        </span>
+      </div>
+
+
+      <a
+        class="btn my-listings-create"
+        href="/listings/create"
+      >
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M12 5v14"></path>
+          <path d="M5 12h14"></path>
+        </svg>
+
+        <span>
+          Đăng sản phẩm mới
+        </span>
+
+      </a>
+
+    </header>
+
+
+    <!-- =====================================================
+         THÔNG BÁO
+         ===================================================== -->
+
+    <% if (successMessage) { %>
+
+      <div
+        class="alert alert-success my-listings-alert"
+        role="status"
+      >
+        <%= successMessage %>
+      </div>
+
+    <% } %>
+
+
+    <% if (errors.general) { %>
+
+      <div
+        class="alert alert-danger my-listings-alert"
+        role="alert"
+      >
+        <%= errors.general %>
+      </div>
+
+    <% } %>
+
+
+
+    <% if (listings.length > 0) { %>
+
+
+      <!-- ===================================================
+           TAB TRẠNG THÁI
+           =================================================== -->
+
+      <div
+        class="my-listings-tabs"
+        role="tablist"
+        aria-label="Lọc bài đăng của tôi"
+      >
+
+
+        <!-- ĐANG BÁN -->
+
+        <button
+          class="my-listings-tab"
+          type="button"
+          role="tab"
+          data-listing-filter="active"
+          aria-selected="false"
+        >
+
+          <span>
+            Đang bán
+          </span>
+
+          <strong>
+            <%= activeCount %>
+          </strong>
+
+        </button>
+
+
+
+        <!-- ĐÃ BÁN -->
+
+        <button
+          class="my-listings-tab"
+          type="button"
+          role="tab"
+          data-listing-filter="sold"
+          aria-selected="false"
+        >
+
+          <span>
+            Đã bán
+          </span>
+
+          <strong>
+            <%= soldCount %>
+          </strong>
+
+        </button>
+
+
+
+        <!-- ĐÃ ẨN -->
+
+        <button
+          class="my-listings-tab"
+          type="button"
+          role="tab"
+          data-listing-filter="hidden"
+          aria-selected="false"
+        >
+
+          <span>
+            Đã ẩn
+          </span>
+
+          <strong>
+            <%= hiddenCount %>
+          </strong>
+
+        </button>
+
+      </div>
+
+
+
+      <!-- ===================================================
+           TỔNG SỐ
+           =================================================== -->
+
+      <div class="my-listings-toolbar">
+
+        <p data-listing-filter-summary>
+        </p>
+
+      </div>
+
+
+
+      <!-- ===================================================
+           DANH SÁCH TIN
+           =================================================== -->
+
+      <div
+        class="my-listings-list"
+        data-my-listings-list
+      >
+
+        <% listings.forEach((listing) => { %>
+
+          <%
+            const manageStatus =
+              getManageStatus(listing);
+
+            const categoryName =
+              listing.category?.name ||
+              'Chưa xác định';
+          %>
+
+
+          <article
+            class="my-listing-card"
+            data-my-listing-card
+            data-listing-status="<%= manageStatus %>"
+          >
+
+
+            <!-- =============================================
+                 ẢNH
+                 ============================================= -->
+
+            <a
+              class="my-listing-card__media"
+              href="/listings/<%= listing._id %>"
+              aria-label="Xem chi tiết <%= listing.title %>"
+            >
+
+              <img
+                src="<%= listing.primaryImage %>"
+                alt="Ảnh sản phẩm <%= listing.title %>"
+                width="800"
+                height="600"
+                loading="lazy"
+              >
+
+
+              <span class="my-listing-card__condition">
+
+                <%= listing.conditionLabel %>
+
+              </span>
+
+            </a>
+
+
+
+            <!-- =============================================
+                 NỘI DUNG
+                 ============================================= -->
+
+            <div class="my-listing-card__content">
+
+
+              <div class="my-listing-card__main">
+
+
+                <!-- TITLE + PRICE -->
+
+                <div class="my-listing-card__title-row">
+
+
+                  <div>
+
+                    <span class="my-listing-card__category">
+                      <%= categoryName %>
+                    </span>
+
+
+                    <h2>
+
+                      <a
+                        href="/listings/<%= listing._id %>"
+                      >
+                        <%= listing.title %>
+                      </a>
+
+                    </h2>
+
+                  </div>
+
+
+                  <p class="my-listing-card__price">
+
+                    <%= listing.formattedPrice %>
+
+                  </p>
+
+                </div>
+
+
+
+                <!-- META -->
+
+                <div class="my-listing-card__meta">
+
+
+                  <!-- LOCATION -->
+
+                  <span>
+
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      aria-hidden="true"
+                    >
+
+                      <path
+                        d="
+                          M20 10
+                          c0 5-8 11-8 11
+                          S4 15 4 10
+                          a8 8 0 1 1 16 0Z
+                        "
+                      ></path>
+
+                      <circle
+                        cx="12"
+                        cy="10"
+                        r="2.5"
+                      ></circle>
+
+                    </svg>
+
+                    <%= listing.location %>
+
+                  </span>
+
+
+
+                  <!-- DATE -->
+
+                  <span>
+
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      aria-hidden="true"
+                    >
+
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                      ></circle>
+
+                      <path
+                        d="M12 7v5l3 2"
+                      ></path>
+
+                    </svg>
+
+                    Đăng ngày
+                    <%= listing.formattedCreatedAt %>
+
+                  </span>
+
+                </div>
+
+
+
+                <!-- STATUS -->
+
+                <div class="my-listing-card__status-row">
+
+                  <% if (listing.isHiddenByAdmin) { %>
+
+                    <span
+                      class="
+                        my-listing-status
+                        my-listing-status--admin-hidden
+                      "
+                    >
+                      Ẩn bởi quản trị viên
+                    </span>
+
+                  <% } else { %>
+
+                    <span
+                      class="
+                        my-listing-status
+                        my-listing-status--<%= listing.status %>
+                      "
+                    >
+                      <%= listing.statusLabel %>
+                    </span>
+
+                  <% } %>
+
+                </div>
+
+
+              </div>
+
+
+
+              <!-- ===========================================
+                   ACTION
+                   =========================================== -->
+
+              <div class="my-listing-card__actions">
+
+                <%- include(
+                  '_actions',
+                  {
+                    listing
+                  }
+                ) %>
+
+              </div>
+
+
+            </div>
+
+          </article>
+
+        <% }); %>
+
+      </div>
+
+
+
+      <!-- ===================================================
+           FILTER EMPTY
+           =================================================== -->
+
+      <div
+        class="my-listings-filter-empty"
+        data-listing-filter-empty
+        hidden
+      >
+
+        <div
+          class="my-listings-filter-empty__icon"
+          aria-hidden="true"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+
+            <path d="M4 7h16"></path>
+            <path d="M7 12h10"></path>
+            <path d="M10 17h4"></path>
+
+          </svg>
+
+        </div>
+
+
+        <h2>
+          Không có bài đăng ở trạng thái này
+        </h2>
+
+        <p>
+          Chọn trạng thái khác để xem các bài đăng còn lại.
+        </p>
+
+      </div>
+
+
+    <% } else { %>
+
+
+      <!-- ===================================================
+           CHƯA CÓ BÀI
+           =================================================== -->
+
+      <div
+        class="my-listings-empty"
+        role="status"
+      >
+
+        <div
+          class="my-listings-empty__icon"
+          aria-hidden="true"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+
+            <rect
+              x="3"
+              y="4"
+              width="18"
+              height="16"
+              rx="3"
+            ></rect>
+
+            <path d="M8 9h8"></path>
+
+            <path d="M8 13h5"></path>
+
+          </svg>
+
+        </div>
+
+
+        <h2>
+          Bạn chưa có bài đăng nào
+        </h2>
+
+        <p>
+          Tạo bài đăng đầu tiên để bắt đầu kết nối
+          với người mua.
+        </p>
+
+        <a
+          class="btn btn-primary"
+          href="/listings/create"
+        >
+          Đăng sản phẩm
+        </a>
+
+      </div>
+
+
+    <% } %>
+
+  </div>
+
+</section>
+
+
+<script
+  src="/js/my-listings.js"
+  defer
+></script>
+
+
+<%- include('../partials/footer') %>

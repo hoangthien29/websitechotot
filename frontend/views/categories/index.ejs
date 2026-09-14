@@ -1,0 +1,57 @@
+<%- include('../partials/header') %>
+
+<section class="section-space">
+  <div class="container">
+    <div class="page-heading">
+      <div>
+        <h1 class="mb-2">Danh mục sản phẩm</h1>
+        <p class="text-secondary mb-0">Chọn danh mục phù hợp để khám phá các tin đăng.</p>
+      </div>
+      <a class="btn btn-outline-secondary" href="/">Trang chủ</a>
+    </div>
+
+    <% if (categories.length > 0) { %>
+      <div class="row g-4 mt-3">
+        <% categories.forEach((category) => { %>
+          <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <a class="category-card-link" href="/categories/<%= category.slug %>">
+              <article class="category-card h-100 d-flex flex-column">
+                <div class="category-media mb-4">
+                  <% if (category.hasManagedImage) { %>
+                    <img
+                      class="category-image"
+                      src="<%= category.imageUrl %>"
+                      alt="Ảnh danh mục <%= category.name %>"
+                      width="800"
+                      height="450"
+                      loading="lazy"
+                      decoding="async"
+                    >
+                  <% } else { %>
+                    <div class="category-card__icon" aria-hidden="true">
+                      <%- include('_icon', { category }) %>
+                    </div>
+                  <% } %>
+                </div>
+                <h2 class="h5 fw-bold"><%= category.name %></h2>
+                <p class="text-secondary flex-grow-1">
+                  <%= category.description || 'Khám phá các sản phẩm trong danh mục này.' %>
+                </p>
+                <span class="category-card__cta">
+                  Xem sản phẩm <span aria-hidden="true">→</span>
+                </span>
+              </article>
+            </a>
+          </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <div class="empty-state mt-4" role="status">
+        <h2 class="h4">Chưa có danh mục hoạt động.</h2>
+        <p class="text-secondary mb-0">Danh mục sẽ xuất hiện tại đây sau khi được kích hoạt.</p>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

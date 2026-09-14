@@ -1,0 +1,189 @@
+<%- include('partials/header') %>
+
+<div class="home-marketplace-page">
+
+  <h1 class="visually-hidden">
+    NTT Marketplace
+  </h1>
+    <!-- =====================================================
+     DANH MỤC
+      ===================================================== -->
+      <section
+        class="home-market-section home-market-categories"
+        aria-label="Danh mục sản phẩm"
+      >
+        <div class="container">
+
+          <div class="home-category-panel">
+
+            <% if (categories.length > 0) { %>
+
+              <div
+                class="home-category-grid home-category-grid--stitch"
+              >
+
+                <% categories.forEach((category) => { %>
+
+                  <a
+                    class="
+                      home-category-link
+                      home-category-link--stitch
+                    "
+                    href="/categories/<%= category.slug %>"
+                    title="Xem sản phẩm trong danh mục <%= category.name %>"
+                  >
+
+                    <span
+                      class="home-category-icon"
+                      aria-hidden="true"
+                    >
+                      <%- include(
+                        'categories/_icon',
+                        { category }
+                      ) %>
+                    </span>
+
+                    <span class="home-category-name">
+                      <%= category.name %>
+                    </span>
+
+                  </a>
+
+                <% }); %>
+
+              </div>
+
+            <% } else { %>
+
+              <div
+                class="empty-state home-market-empty"
+                role="status"
+              >
+                <h3>Chưa có danh mục hoạt động</h3>
+
+                <p>
+                  Danh mục sẽ xuất hiện tại đây khi
+                  được quản trị viên kích hoạt.
+                </p>
+              </div>
+
+            <% } %>
+
+          </div>
+
+        </div>
+      </section>
+    <!-- =====================================================
+     SẢN PHẨM TRANG CHỦ
+     ===================================================== -->
+  <section
+    class="home-market-section home-market-products home-feed-section"
+    id="products"
+    aria-labelledby="homeProductsTitle"
+  >
+
+    <div class="container">
+
+      <div class="home-feed-panel">
+
+        <!-- =================================================
+            TAB GIỐNG GIAO DIỆN MẪU
+            ================================================= -->
+        <div class="home-feed-header">
+
+          <div
+            class="home-feed-tabs"
+            aria-label="Bộ lọc sản phẩm trang chủ"
+          >
+
+            <span
+              class="home-feed-tab home-feed-tab--active"
+              id="homeProductsTitle"
+            >
+              Dành cho bạn
+            </span>
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+            DANH SÁCH SẢN PHẨM
+            ================================================= -->
+        <% if (listings.length > 0) { %>
+
+          <div class="home-product-grid home-feed-grid">
+
+            <% listings.forEach((listing) => { %>
+
+              <%- include(
+                'listings/_card',
+                {
+                  listing,
+                  showFavoriteAction: true,
+                  favoriteReturnTo: currentUrl,
+                  homeCard: true
+                }
+              ) %>
+
+            <% }); %>
+
+          </div>
+
+
+          <!-- MOBILE -->
+          <div class="home-products-more">
+
+            <a
+              class="
+                btn
+                home-products-more__button
+              "
+              href="/listings?sort=newest"
+            >
+              Xem thêm tin khác
+            </a>
+
+          </div>
+
+
+        <% } else { %>
+
+          <div
+            class="empty-state home-market-empty"
+            role="status"
+          >
+
+            <h3>
+              Chưa có sản phẩm đang bán
+            </h3>
+
+            <p>
+              Đăng tin đầu tiên để bắt đầu
+              kết nối với người mua.
+            </p>
+
+            <a
+              class="btn btn-primary"
+              href="<%= isAuthenticated
+                ? '/listings/create'
+                : '/login'
+              %>"
+            >
+              Đăng tin
+            </a>
+
+          </div>
+
+        <% } %>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<%- include('partials/footer') %>

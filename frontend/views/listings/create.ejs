@@ -1,0 +1,89 @@
+<%- include('../partials/header', { pageStyles: ['/css/listing-form.css'] }) %>
+<section class="listing-editor-page">
+  <div class="container">
+
+    <div class="listing-editor-header">
+
+      <a
+        class="listing-editor-back"
+        href="/listings"
+        aria-label="Quay lại danh sách sản phẩm"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m15 18-6-6 6-6"></path>
+        </svg>
+
+        <span>Quay lại</span>
+      </a>
+
+
+      <div class="listing-editor-heading">
+        <h1>
+          Đăng sản phẩm
+        </h1>
+      </div>
+
+    </div>
+
+
+    <% if (!canSubmit) { %>
+
+      <div
+        class="alert alert-warning listing-editor-alert"
+        role="alert"
+      >
+        Hiện chưa có danh mục hoạt động.
+        Bạn chưa thể tạo bài đăng.
+      </div>
+
+    <% } %>
+
+
+    <%- include('_form', {
+
+      formAction: '/listings',
+
+      submitLabel: 'Đăng sản phẩm',
+
+      cancelUrl: '/listings',
+
+      canSubmit,
+
+      categories,
+
+      errors,
+
+      oldInput,
+
+      existingImages,
+
+      maxImages,
+
+      remainingImageSlots,
+
+      retryImages,
+
+      selectedRemoveImages,
+
+      isEdit: false
+
+    }) %>
+
+  </div>
+</section>
+
+
+<script
+  src="/js/listing-form.js"
+  defer
+></script>
+
+<%- include('../partials/footer') %>

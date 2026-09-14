@@ -1,0 +1,244 @@
+<%- include('../partials/header', {
+  pageStyles: ['/css/profile.css']
+}) %>
+
+<section class="seller-profile-page">
+  <div class="container">
+
+    <!-- =====================================================
+         THÔNG TIN NGƯỜI BÁN
+         ===================================================== -->
+    <section class="seller-profile-card">
+
+      <div class="seller-profile-main">
+
+        <div class="seller-profile-avatar-wrap">
+          <img
+            class="seller-profile-avatar"
+            src="<%= seller.avatarUrl %>"
+            alt="Ảnh đại diện của <%= seller.name %>"
+            width="120"
+            height="120"
+          >
+
+          <span
+            class="seller-profile-online-dot"
+            title="Tài khoản đang hoạt động"
+          ></span>
+        </div>
+
+
+        <div class="seller-profile-info">
+
+          <span class="seller-profile-kicker">
+            Người bán
+          </span>
+
+          <h1>
+            <%= seller.name %>
+          </h1>
+
+          <div class="seller-profile-meta">
+
+            <span>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                aria-hidden="true"
+              >
+                <rect
+                  x="3"
+                  y="5"
+                  width="18"
+                  height="16"
+                  rx="2"
+                ></rect>
+
+                <path d="M16 3v4"></path>
+                <path d="M8 3v4"></path>
+                <path d="M3 10h18"></path>
+              </svg>
+
+              Thành viên từ
+              <strong>
+                <%= seller.formattedCreatedAt %>
+              </strong>
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- THỐNG KÊ -->
+
+      <div class="seller-profile-stats">
+
+        <div class="seller-profile-stat seller-profile-stat--active">
+
+          <span class="seller-profile-stat-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              aria-hidden="true"
+            >
+              <path d="M3 7h18"></path>
+              <path d="M5 7l1-4h12l1 4"></path>
+              <path d="M5 7v14h14V7"></path>
+              <path d="M9 11h6"></path>
+            </svg>
+          </span>
+
+          <div>
+            <strong>
+              <%= stats.activeListings %>
+            </strong>
+
+            <span>
+              Đang bán
+            </span>
+          </div>
+
+        </div>
+
+
+        <div class="seller-profile-stat seller-profile-stat--sold">
+
+          <span class="seller-profile-stat-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              aria-hidden="true"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="9"
+              ></circle>
+
+              <path d="m8 12 3 3 5-6"></path>
+            </svg>
+          </span>
+
+          <div>
+            <strong>
+              <%= stats.soldListings %>
+            </strong>
+
+            <span>
+              Đã bán
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SẢN PHẨM ĐANG BÁN
+         ===================================================== -->
+
+    <section class="seller-profile-products">
+
+      <header class="seller-profile-products-header">
+
+        <div>
+
+          <h2>
+            Sản phẩm đang bán
+          </h2>
+
+        </div>
+
+
+        <% if (stats.activeListings > 0) { %>
+
+          <span class="seller-profile-products-count">
+            <%= stats.activeListings %> sản phẩm
+          </span>
+
+        <% } %>
+
+      </header>
+
+
+      <% if (listings.length > 0) { %>
+
+        <div class="seller-profile-product-grid">
+
+          <% listings.forEach((listing) => { %>
+
+            <div class="seller-profile-product-item">
+
+              <%- include('../listings/_card', {
+                listing
+              }) %>
+
+            </div>
+
+          <% }); %>
+
+        </div>
+
+
+        <% if (
+          pagination &&
+          pagination.totalPages > 1
+        ) { %>
+
+          <div class="seller-profile-pagination">
+
+            <%- include('../partials/_pagination', {
+              pagination
+            }) %>
+
+          </div>
+
+        <% } %>
+
+      <% } else { %>
+
+        <div class="seller-profile-empty">
+
+          <div class="seller-profile-empty-icon">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              aria-hidden="true"
+            >
+              <path d="M3 7h18"></path>
+              <path d="M5 7l1-4h12l1 4"></path>
+              <path d="M5 7v14h14V7"></path>
+              <path d="M9 11h6"></path>
+            </svg>
+
+          </div>
+
+          <h3>
+            Chưa có sản phẩm đang bán
+          </h3>
+
+        </div>
+
+      <% } %>
+
+    </section>
+
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

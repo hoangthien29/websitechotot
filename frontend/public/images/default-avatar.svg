@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="title description">
+  <title id="title">Ảnh đại diện mặc định</title>
+  <desc id="description">Biểu tượng người dùng trên nền xanh</desc>
+  <rect width="240" height="240" rx="120" fill="#eaf2ff"/>
+  <circle cx="120" cy="91" r="44" fill="#175cd3"/>
+  <path d="M43 211c8-48 37-74 77-74s69 26 77 74" fill="#175cd3"/>
+</svg>

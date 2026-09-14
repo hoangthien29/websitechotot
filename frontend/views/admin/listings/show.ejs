@@ -1,0 +1,135 @@
+<%- include('../../partials/header') %>
+
+<section class="admin-page" aria-labelledby="admin-listing-title">
+  <div class="container admin-shell">
+    <%- include('../_navigation', { currentSection: 'listings' }) %>
+
+    <nav class="admin-breadcrumb" aria-label="Đường dẫn trang">
+      <a href="/admin/listings">Bài đăng</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Chi tiết</span>
+    </nav>
+
+    <% if (successMessage) { %>
+      <div class="alert alert-success" role="status"><%= successMessage %></div>
+    <% } %>
+    <% if (errors.general) { %>
+      <div class="alert alert-danger" role="alert"><%= errors.general %></div>
+    <% } %>
+
+    <header class="admin-page-heading admin-page-heading--detail">
+      <div>
+        <div class="admin-heading-badges">
+          <span class="badge admin-status admin-status--<%= listing.status %>"><%= listing.statusLabel %></span>
+          <% if (listing.isHiddenByAdmin) { %>
+            <span class="badge admin-status admin-status--pending">Admin ẩn</span>
+          <% } %>
+        </div>
+        <h1 id="admin-listing-title"><%= listing.title %></h1>
+        <p><%= listing.formattedPrice %> · <%= listing.location %></p>
+      </div>
+      <% if (listing.status !== 'hidden') { %>
+        <a class="btn btn-outline-secondary" href="/listings/<%= listing._id %>" target="_blank" rel="noopener">Xem trang công khai</a>
+      <% } %>
+    </header>
+
+    <div class="admin-listing-detail-grid">
+      <section class="admin-panel" aria-labelledby="admin-listing-images">
+        <div class="admin-panel__heading">
+          <h2 id="admin-listing-images">Hình ảnh</h2>
+          <span><%= listing.imageCount %> ảnh</span>
+        </div>
+        <% if (listing.hasImages) { %>
+          <div class="admin-image-grid">
+            <% listing.images.forEach((image, index) => { %>
+              <a href="<%= image %>" target="_blank" rel="noopener" aria-label="Mở ảnh <%= index + 1 %> kích thước đầy đủ">
+                <img src="<%= image %>" alt="Ảnh <%= index + 1 %> của <%= listing.title %>" width="800" height="600" loading="<%= index === 0 ? 'eager' : 'lazy' %>">
+              </a>
+            <% }); %>
+          </div>
+        <% } else { %>
+          <div class="admin-image-placeholder">
+            <img src="<%= listing.primaryImage %>" alt="Bài đăng chưa có ảnh" width="800" height="600">
+          </div>
+        <% } %>
+      </section>
+
+      <aside class="admin-panel" aria-labelledby="admin-listing-moderation">
+        <div class="admin-panel__heading">
+          <h2 id="admin-listing-moderation">Kiểm duyệt</h2>
+        </div>
+        <dl class="admin-spec-list">
+          <div><dt>Nguồn trạng thái ẩn</dt><dd><%= listing.moderationLabel %></dd></div>
+          <% if (listing.isHiddenByAdmin) { %>
+            <div><dt>Trạng thái trước đó</dt><dd><%= listing.moderation.previousStatus || 'active (fallback)' %></dd></div>
+            <div><dt>Thời điểm</dt><dd><%= listing.formattedModeratedAt || '—' %></dd></div>
+            <div>
+              <dt>Quản trị viên</dt>
+              <dd><%= listing.moderation.moderatedBy ? listing.moderation.moderatedBy.name : '—' %></dd>
+            </div>
+            <div><dt>Lý do</dt><dd><%= listing.moderation.reason || '—' %></dd></div>
+          <% } %>
+        </dl>
+
+        <% if (listing.status === 'active' || listing.status === 'sold') { %>
+          <form class="admin-action-form" method="POST" action="/admin/listings/<%= listing._id %>/hide?_method=PATCH">
+            <%- include('../../partials/csrf') %>
+            <label for="moderationReason">Lý do kiểm duyệt</label>
+            <textarea
+              class="form-control<%= errors.reason ? ' is-invalid' : '' %>"
+              id="moderationReason"
+              name="reason"
+              minlength="10"
+              maxlength="500"
+              aria-describedby="moderationReasonError moderationReasonHelp"
+              required
+            ><%= oldInput.reason %></textarea>
+            <div class="invalid-feedback field-feedback-slot" id="moderationReasonError"><%= errors.reason || '' %></div>
+            <p class="form-text" id="moderationReasonHelp">Ẩn bài nhưng giữ nguyên ảnh, Favorite và lịch sử Conversation/Message.</p>
+            <button class="btn btn-outline-danger" type="submit">Ẩn bài đăng</button>
+          </form>
+        <% } else if (listing.isHiddenByAdmin) { %>
+          <form method="POST" action="/admin/listings/<%= listing._id %>/restore?_method=PATCH">
+            <%- include('../../partials/csrf') %>
+            <button class="btn btn-outline-success" type="submit">Khôi phục bài đăng</button>
+          </form>
+        <% } else { %>
+          <p class="admin-empty-copy">Bài đăng do người bán tự ẩn; quản trị viên không thể khôi phục.</p>
+        <% } %>
+      </aside>
+    </div>
+
+    <div class="admin-detail-grid">
+      <section class="admin-panel" aria-labelledby="admin-listing-information">
+        <div class="admin-panel__heading">
+          <h2 id="admin-listing-information">Thông tin bài đăng</h2>
+        </div>
+        <dl class="admin-spec-list">
+          <div><dt>Danh mục</dt><dd><%= listing.category ? listing.category.name : 'Không còn tồn tại' %></dd></div>
+          <div><dt>Người bán</dt><dd><%= listing.seller ? `${listing.seller.name} · ${listing.seller.email}` : 'Không còn tồn tại' %></dd></div>
+          <div><dt>Tình trạng</dt><dd><%= listing.conditionLabel %></dd></div>
+          <div><dt>Ngày đăng</dt><dd><%= listing.formattedCreatedAt %></dd></div>
+          <div><dt>Cập nhật</dt><dd><%= listing.formattedUpdatedAt %></dd></div>
+        </dl>
+        <h3>Mô tả</h3>
+        <p class="admin-description-copy"><%= listing.description %></p>
+      </section>
+
+      <section class="admin-panel" aria-labelledby="admin-listing-counts">
+        <div class="admin-panel__heading">
+          <h2 id="admin-listing-counts">Dữ liệu liên quan</h2>
+        </div>
+        <dl class="admin-ledger__grid admin-ledger__grid--compact">
+          <div><dt>Favorite</dt><dd><%= stats.favoriteCount %></dd></div>
+          <div><dt>Conversation</dt><dd><%= stats.conversationCount %></dd></div>
+          <div><dt>Message</dt><dd><%= stats.messageCount %></dd></div>
+        </dl>
+        <p class="admin-privacy-note">
+          Khu vực Admin chỉ đếm bản ghi liên quan, không tải hoặc hiển thị nội dung Message.
+        </p>
+      </section>
+    </div>
+  </div>
+</section>
+
+<%- include('../../partials/footer') %>

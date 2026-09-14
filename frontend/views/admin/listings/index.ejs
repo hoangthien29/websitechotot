@@ -1,0 +1,124 @@
+<%- include('../../partials/header') %>
+
+<section class="admin-page" aria-labelledby="admin-listings-title">
+  <div class="container admin-shell">
+    <%- include('../_navigation', { currentSection: 'listings' }) %>
+
+    <header class="admin-page-heading">
+      <div>
+        <h1 id="admin-listings-title">Kiểm duyệt bài đăng</h1>
+        <p><%= totalItems %> bài đăng phù hợp với bộ lọc hiện tại.</p>
+      </div>
+      <a class="btn btn-outline-secondary" href="/admin/listings">Xóa bộ lọc</a>
+    </header>
+
+    <% if (errors.general) { %>
+      <div class="alert alert-danger" role="alert"><%= errors.general %></div>
+    <% } %>
+
+    <form class="admin-filter admin-filter--listings" action="/admin/listings" method="GET">
+      <div class="admin-filter__field admin-filter__field--wide">
+        <label for="adminListingKeyword">Tiêu đề hoặc mô tả</label>
+        <input class="form-control" id="adminListingKeyword" name="keyword" type="search" maxlength="100" value="<%= filters.keyword %>">
+      </div>
+      <div class="admin-filter__field">
+        <label for="adminListingCategory">Danh mục</label>
+        <select class="form-select" id="adminListingCategory" name="category">
+          <option value="">Tất cả</option>
+          <% categories.forEach((category) => { %>
+            <option value="<%= category.slug %>"<%= filters.category === category.slug ? ' selected' : '' %>>
+              <%= category.name %><%= category.status === 'inactive' ? ' (ẩn)' : '' %>
+            </option>
+          <% }); %>
+        </select>
+      </div>
+      <div class="admin-filter__field">
+        <label for="adminListingStatus">Trạng thái</label>
+        <select class="form-select" id="adminListingStatus" name="status">
+          <option value="all"<%= filters.status === 'all' ? ' selected' : '' %>>Tất cả</option>
+          <option value="active"<%= filters.status === 'active' ? ' selected' : '' %>>Đang bán</option>
+          <option value="sold"<%= filters.status === 'sold' ? ' selected' : '' %>>Đã bán</option>
+          <option value="hidden"<%= filters.status === 'hidden' ? ' selected' : '' %>>Đã ẩn</option>
+        </select>
+      </div>
+      <div class="admin-filter__field">
+        <label for="adminListingModeration">Kiểm duyệt</label>
+        <select class="form-select" id="adminListingModeration" name="moderation">
+          <option value="all"<%= filters.moderation === 'all' ? ' selected' : '' %>>Tất cả</option>
+          <option value="admin-hidden"<%= filters.moderation === 'admin-hidden' ? ' selected' : '' %>>Admin ẩn</option>
+          <option value="owner-hidden"<%= filters.moderation === 'owner-hidden' ? ' selected' : '' %>>Người bán ẩn</option>
+          <option value="not-hidden"<%= filters.moderation === 'not-hidden' ? ' selected' : '' %>>Không bị ẩn</option>
+        </select>
+      </div>
+      <div class="admin-filter__field">
+        <label for="adminListingSeller">Người bán</label>
+        <input class="form-control" id="adminListingSeller" name="seller" type="search" maxlength="100" value="<%= filters.seller %>">
+      </div>
+      <div class="admin-filter__field">
+        <label for="adminListingSort">Sắp xếp</label>
+        <select class="form-select" id="adminListingSort" name="sort">
+          <option value="newest"<%= filters.sort === 'newest' ? ' selected' : '' %>>Mới nhất</option>
+          <option value="oldest"<%= filters.sort === 'oldest' ? ' selected' : '' %>>Cũ nhất</option>
+          <option value="price-asc"<%= filters.sort === 'price-asc' ? ' selected' : '' %>>Giá tăng dần</option>
+          <option value="price-desc"<%= filters.sort === 'price-desc' ? ' selected' : '' %>>Giá giảm dần</option>
+          <option value="title-asc"<%= filters.sort === 'title-asc' ? ' selected' : '' %>>Tiêu đề A–Z</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" type="submit">Áp dụng</button>
+    </form>
+
+    <% if (listings.length > 0) { %>
+      <div class="admin-data-table" role="region" aria-label="Danh sách bài đăng" tabindex="0">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Bài đăng</th>
+              <th scope="col">Người bán</th>
+              <th scope="col">Danh mục</th>
+              <th scope="col">Trạng thái</th>
+              <th scope="col">Kiểm duyệt</th>
+              <th scope="col">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% listings.forEach((listing) => { %>
+              <tr>
+                <td data-label="Bài đăng">
+                  <a class="admin-listing-cell" href="/admin/listings/<%= listing._id %>">
+                    <img src="<%= listing.primaryImage %>" alt="" width="72" height="54">
+                    <span>
+                      <strong><%= listing.title %></strong>
+                      <small><%= listing.formattedPrice %></small>
+                    </span>
+                  </a>
+                </td>
+                <td data-label="Người bán">
+                  <%= listing.seller ? listing.seller.name : 'Không còn tồn tại' %>
+                </td>
+                <td data-label="Danh mục">
+                  <%= listing.category ? listing.category.name : 'Không còn tồn tại' %>
+                </td>
+                <td data-label="Trạng thái">
+                  <span class="badge admin-status admin-status--<%= listing.status %>"><%= listing.statusLabel %></span>
+                </td>
+                <td data-label="Kiểm duyệt"><%= listing.moderationLabel %></td>
+                <td data-label="Thao tác">
+                  <a class="btn btn-sm btn-outline-primary" href="/admin/listings/<%= listing._id %>">Kiểm tra</a>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+      <%- include('../_pagination', { pagination }) %>
+    <% } else { %>
+      <div class="admin-empty-state" role="status">
+        <h2>Không có bài đăng phù hợp.</h2>
+        <p>Điều chỉnh từ khóa hoặc bộ lọc để xem kết quả khác.</p>
+        <a class="btn btn-outline-primary" href="/admin/listings">Xem tất cả bài đăng</a>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('../../partials/footer') %>

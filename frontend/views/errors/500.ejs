@@ -1,0 +1,13 @@
+<%- include('../partials/header') %>
+
+<section class="error-section container text-center">
+  <div class="error-code" aria-hidden="true"><%= statusCode %></div>
+  <p class="error-label">Đã xảy ra lỗi</p>
+  <h1 class="mb-3">Hệ thống chưa thể xử lý yêu cầu.</h1>
+  <p class="text-secondary mx-auto mb-4 error-copy">
+    Vui lòng thử lại sau. Thông tin kỹ thuật đã được giữ kín để bảo vệ hệ thống.
+  </p>
+  <a class="btn btn-primary" href="/">Về trang chủ</a>
+</section>
+
+<%- include('../partials/footer') %>

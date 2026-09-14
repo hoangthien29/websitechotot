@@ -1,0 +1,14 @@
+<%- include('../partials/header', { pageStyles: ['/css/messages.css'] }) %>
+
+<section class="error-section container text-center">
+  <div class="error-code" aria-hidden="true">422</div>
+  <p class="error-label">Không thể bắt đầu trò chuyện</p>
+  <h1 class="mb-3">Cuộc trò chuyện mới chưa thể được tạo.</h1>
+  <p class="text-secondary mx-auto mb-4 error-copy"><%= message %></p>
+  <div class="d-flex flex-wrap justify-content-center gap-2">
+    <a class="btn btn-primary" href="<%= listingUrl %>">Quay lại sản phẩm</a>
+    <a class="btn btn-outline-secondary" href="/messages">Xem tin nhắn</a>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

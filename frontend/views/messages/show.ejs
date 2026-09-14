@@ -1,0 +1,278 @@
+<%- include('../partials/header', { pageStyles: ['/css/messages.css'] }) %>
+
+<section class="section-space message-detail-page" aria-labelledby="conversation-title">
+  <div class="container message-detail-container">
+<!-- =====================================================
+     HEADER NGƯỜI ĐANG CHAT
+    ===================================================== -->
+    <header class="conversation-header conversation-header--modern">
+
+      <div class="conversation-header-person">
+
+        <img
+          class="conversation-header-avatar"
+          src="<%= conversation.otherParticipant.avatarUrl %>"
+          alt="Ảnh đại diện của <%= conversation.otherParticipant.name %>"
+          width="56"
+          height="56"
+        >
+
+        <div class="conversation-header-copy">
+
+          <h1 id="conversation-title">
+            <%= conversation.otherParticipant.name %>
+          </h1>
+
+        </div>
+
+      </div>
+
+
+      <a
+        class="conversation-back-button"
+        href="/messages"
+      >
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m15 18-6-6 6-6"></path>
+        </svg>
+
+        <span>
+          Tin nhắn
+        </span>
+
+      </a>
+
+    </header>
+    <!-- =====================================================
+        SẢN PHẨM ĐANG TRAO ĐỔI
+        ===================================================== -->
+    <section
+      class="conversation-listing-context conversation-listing-context--modern"
+      aria-labelledby="conversation-listing-title"
+    >
+
+      <div class="conversation-context-media">
+
+        <img
+          class="conversation-context-image"
+          src="<%= conversation.listing.primaryImage %>"
+          alt="Ảnh bài đăng <%= conversation.listing.title %>"
+          width="160"
+          height="120"
+        >
+
+      </div>
+
+
+      <div class="conversation-context-copy">
+
+        <div class="conversation-context-heading">
+
+          <div class="conversation-context-title">
+
+            <span class="conversation-context-kicker">
+              Sản phẩm đang trao đổi
+            </span>
+
+            <h2 id="conversation-listing-title">
+              <%= conversation.listing.title %>
+            </h2>
+
+          </div>
+
+
+          <span
+            class="
+              badge
+              status-badge
+              status-badge--<%= conversation.listing.status %>
+            "
+          >
+            <%= conversation.listing.statusLabel %>
+          </span>
+
+        </div>
+
+
+        <div class="conversation-context-footer">
+
+          <% if (conversation.listing.formattedPrice) { %>
+
+            <p class="conversation-context-price">
+              <%= conversation.listing.formattedPrice %>
+            </p>
+
+          <% } %>
+
+
+          <% if (conversation.listing.detailUrl) { %>
+
+            <a
+              class="conversation-context-link"
+              href="<%= conversation.listing.detailUrl %>"
+            >
+
+              <span>
+                Xem sản phẩm
+              </span>
+
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m9 18 6-6-6-6"></path>
+              </svg>
+
+            </a>
+
+          <% } else { %>
+
+            <p class="conversation-hidden-note">
+              Bài đăng đã ẩn · lịch sử trò chuyện vẫn được giữ.
+            </p>
+
+          <% } %>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <% if (errors.page || errors.general) { %>
+      <div class="alert alert-danger messages-alert" role="alert">
+        <%= errors.page || errors.general %>
+      </div>
+    <% } %>
+
+    <div class="message-page-navigation" aria-label="Phân trang tin nhắn">
+      <% if (pagination.nextUrl) { %>
+        <a class="btn btn-outline-secondary" href="<%= pagination.nextUrl %>">
+          Xem tin nhắn cũ hơn
+        </a>
+      <% } %>
+      <% if (pagination.previousUrl) { %>
+        <a class="btn btn-outline-secondary" href="<%= pagination.previousUrl %>#latest">
+          Xem tin nhắn mới hơn
+        </a>
+      <% } %>
+    </div>
+
+    <section class="message-thread" aria-label="Nội dung cuộc trò chuyện">
+      <% if (messages.length > 0) { %>
+        <ol class="message-list">
+          <% messages.forEach((message) => { %>
+            <li class="message-row <%= message.isMine ? 'is-mine' : 'is-other' %>">
+              <% if (!message.isMine) { %>
+                <img
+                  class="message-avatar"
+                  src="<%= message.senderAvatarUrl %>"
+                  alt=""
+                  width="36"
+                  height="36"
+                  loading="lazy"
+                >
+              <% } %>
+              <article class="message-bubble <%= message.isMine ? 'message-bubble--mine' : 'message-bubble--other' %>">
+                <p class="message-sender-label">
+                  <%= message.isMine ? 'Bạn' : message.senderName %>
+                </p>
+                <p class="message-content"><%= message.content %></p>
+                <footer class="message-meta">
+                  <time><%= message.formattedCreatedAt %></time>
+                  <% if (message.isMine) { %>
+                    <span><%= message.isRead ? 'Đã xem' : 'Đã gửi.' %></span>
+                  <% } %>
+                </footer>
+              </article>
+            </li>
+          <% }); %>
+        </ol>
+      <% } else { %>
+        <div class="message-thread-empty" role="status">
+          <h2>Chưa có tin nhắn.</h2>
+        </div>
+      <% } %>
+      <div id="latest" tabindex="-1" aria-hidden="true"></div>
+    </section>
+
+    <% if (canSend) { %>
+      <form
+        class="message-compose-form"
+        method="POST"
+        action="/messages/<%= conversation.id %>"
+      >
+        <%- include('../partials/csrf') %>
+        <div class="message-compose-heading">
+          <label for="messageContent">Nội dung tin nhắn</label>
+        </div>
+        <div class="message-compose-control">
+
+          <textarea
+            class="form-control <%= errors.content ? 'is-invalid' : '' %>"
+            id="messageContent"
+            name="content"
+            rows="4"
+            maxlength="2000"
+            required
+            aria-required="true"
+            aria-invalid="<%= errors.content ? 'true' : 'false' %>"
+            aria-describedby="messageContentFeedback"
+            placeholder="Hỏi người bán về tình trạng hoặc cách nhận sản phẩm"
+          ><%= oldInput.content %></textarea>
+
+
+          <button
+            class="message-send-button"
+            type="submit"
+            aria-label="Gửi tin nhắn"
+            title="Gửi tin nhắn"
+          >
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M22 2 11 13"></path>
+              <path d="m22 2-7 20-4-9-9-4Z"></path>
+            </svg>
+
+          </button>
+
+        </div>
+        <div
+          class="<%= errors.content ? 'invalid-feedback d-block' : 'form-text' %> field-feedback-slot"
+          id="messageContentFeedback"
+        >
+          <%= errors.content || '' %>
+        </div>
+      </form>
+    <% } else { %>
+      <div class="message-readonly-notice" role="status">
+        <h2>Cuộc trò chuyện đang ở chế độ xem.</h2>
+        <p>Bài đăng đã được ẩn nên không thể gửi tin nhắn mới.</p>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

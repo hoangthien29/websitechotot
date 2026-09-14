@@ -1,0 +1,227 @@
+    </main>
+
+    <footer class="site-footer site-footer--premium">
+
+      <!-- =========================================
+           FOOTER MAIN
+           ========================================= -->
+      <div class="container">
+
+        <div class="site-footer-shell">
+
+          <!-- ===============================
+               BRAND
+               =============================== -->
+          <div class="site-footer-brand">
+
+            <a
+              class="site-footer-logo"
+              href="/"
+              aria-label="NTT Marketplace - Trang chủ"
+            >
+              <span class="site-footer-logo__ntt">
+                NTT
+              </span>
+
+              <span class="site-footer-logo__market">
+                Marketplace
+              </span>
+            </a>
+
+            <p class="site-footer-description">
+              Nền tảng kết nối người mua và người bán,
+              giúp những món đồ phù hợp tìm được chủ nhân mới
+              một cách nhanh chóng và thuận tiện.
+            </p>
+
+
+            <!-- CTA -->
+            <div class="site-footer-cta">
+
+              <div class="site-footer-cta__content">
+
+                <span class="site-footer-cta__eyebrow">
+                  Bạn có món đồ muốn bán?
+                </span>
+
+                <strong class="site-footer-cta__title">
+                  Đăng tin chỉ trong vài phút
+                </strong>
+
+              </div>
+
+
+              <a
+                class="site-footer-cta__button"
+                href="<%= isAuthenticated ? '/listings/create' : '/login' %>"
+              >
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 8v8"></path>
+                  <path d="M8 12h8"></path>
+                </svg>
+
+                <span>
+                  Đăng tin ngay
+                </span>
+
+              </a>
+
+            </div>
+
+          </div>
+
+
+          <!-- ===============================
+               NAVIGATION
+               =============================== -->
+          <div class="site-footer-navigation">
+
+            <!-- KHÁM PHÁ -->
+            <nav
+              class="site-footer-column"
+              aria-label="Khám phá Marketplace"
+            >
+
+              <h2 class="site-footer-heading">
+                Khám phá
+              </h2>
+
+              <a href="/listings">
+                Tất cả sản phẩm
+              </a>
+
+              <a href="/categories">
+                Danh mục sản phẩm
+              </a>
+
+              <a href="/listings?sort=newest">
+                Tin đăng mới nhất
+              </a>
+
+              <a
+                href="<%= isAuthenticated ? '/listings/create' : '/login' %>"
+              >
+                Đăng sản phẩm
+              </a>
+
+            </nav>
+
+
+            <!-- TÀI KHOẢN -->
+            <nav
+              class="site-footer-column"
+              aria-label="Tài khoản"
+            >
+
+              <h2 class="site-footer-heading">
+                Tài khoản
+              </h2>
+
+              <% if (isAuthenticated) { %>
+
+                <a href="/profile">
+                  Hồ sơ của tôi
+                </a>
+
+                <a href="/my-listings">
+                  Quản lý tin đăng
+                </a>
+
+                <a href="/favorites">
+                  Tin đã lưu
+                </a>
+
+                <a href="/messages">
+                  Tin nhắn
+
+                  <% if (
+                    typeof unreadMessageCount !== 'undefined' &&
+                    unreadMessageCount > 0
+                  ) { %>
+
+                    <span class="site-footer-unread">
+                      <%= unreadMessageCount > 99
+                        ? '99+'
+                        : unreadMessageCount
+                      %>
+                    </span>
+
+                  <% } %>
+                </a>
+
+              <% } else { %>
+
+                <a href="/login">
+                  Đăng nhập
+                </a>
+
+                <a href="/register">
+                  Tạo tài khoản
+                </a>
+
+              <% } %>
+
+            </nav>
+
+
+            <!-- HỆ THỐNG -->
+            <nav
+              class="site-footer-column"
+              aria-label="Hệ thống NTT Marketplace"
+            >
+
+              <h2 class="site-footer-heading">
+                NTT Marketplace
+              </h2>
+
+              <a href="/">
+                Trang chủ
+              </a>
+
+              <a href="/categories">
+                Danh mục
+              </a>
+
+              <% if (
+                isAuthenticated &&
+                currentUser &&
+                currentUser.role === 'admin'
+              ) { %>
+
+                <a
+                  href="/admin"
+                  class="site-footer-admin-link"
+                >
+                  Quản trị hệ thống
+                </a>
+
+              <% } %>
+
+            </nav>
+
+          </div>
+
+        </div>
+
+      </div>
+    </footer>
+
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+
+    <script src="/js/main.js"></script>
+
+  </body>
+</html>
