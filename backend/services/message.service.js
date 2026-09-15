@@ -16,6 +16,7 @@ const MESSAGE_LISTING_HIDDEN = 'MESSAGE_LISTING_HIDDEN';
 const MESSAGE_LISTING_HIDDEN_MESSAGE =
   'Bài đăng đã được ẩn nên không thể gửi tin nhắn mới.';
 const MESSAGE_METADATA_UPDATE_FAILED = 'MESSAGE_METADATA_UPDATE_FAILED';
+const ALLOWED_ATTACHMENT_TYPES = new Set(['image', 'video']);
 
 const createMessageError = (code, message) => {
   const error = new Error(message);
@@ -24,6 +25,41 @@ const createMessageError = (code, message) => {
 };
 
 const getReferenceId = (value) => value?._id || value;
+
+const normalizeAttachments = (attachments = []) => {
+  if (typeof attachments === 'string') {
+    try {
+      return normalizeAttachments(JSON.parse(attachments));
+    } catch (error) {
+      return [];
+    }
+  }
+
+  if (!Array.isArray(attachments)) {
+    return [];
+  }
+
+  return attachments
+    .filter((item) => item && typeof item === 'object')
+    .map((item) => {
+      const type = String(item.type || '').toLowerCase();
+      const url = typeof item.url === 'string' ? item.url.trim() : '';
+
+      if (!ALLOWED_ATTACHMENT_TYPES.has(type) || !url) {
+        return null;
+      }
+
+      return {
+        type,
+        url,
+        thumbnail: typeof item.thumbnail === 'string' ? item.thumbnail.trim() : '',
+        mimeType: typeof item.mimeType === 'string' ? item.mimeType.trim() : '',
+        size: Number.isFinite(Number(item.size)) ? Number(item.size) : 0,
+      };
+    })
+    .filter(Boolean)
+    .slice(0, 10);
+};
 
 const getEmptyPage = () => ({
   items: [],
@@ -41,17 +77,22 @@ const getEmptyPage = () => ({
   },
 });
 
-const normalizeMessageContent = (content) => {
+const normalizeMessageContent = (content, attachments = []) => {
+  const normalizedAttachments = normalizeAttachments(attachments);
+
   if (typeof content !== 'string') {
-    throw createMessageError(
-      MESSAGE_CONTENT_INVALID,
-      MESSAGE_CONTENT_REQUIRED_MESSAGE,
-    );
+    if (normalizedAttachments.length === 0) {
+      throw createMessageError(
+        MESSAGE_CONTENT_INVALID,
+        MESSAGE_CONTENT_REQUIRED_MESSAGE,
+      );
+    }
+    return '';
   }
 
   const normalizedContent = content.trim();
 
-  if (!normalizedContent) {
+  if (!normalizedContent && normalizedAttachments.length === 0) {
     throw createMessageError(
       MESSAGE_CONTENT_INVALID,
       MESSAGE_CONTENT_REQUIRED_MESSAGE,
@@ -87,7 +128,7 @@ const getMessagesPage = async (
 
   const [newestFirstItems, totalItems] = await Promise.all([
     Message.find(filter)
-      .select('conversation sender recipient content readAt createdAt')
+      .select('conversation sender recipient content attachments readAt createdAt')
       .populate('sender', 'name avatar')
       .sort({ createdAt: -1, _id: -1 })
       .skip(skip)
@@ -117,11 +158,12 @@ const getMessagesPage = async (
   };
 };
 
-const sendMessage = async ({ conversation, senderId, content }) => {
+const sendMessage = async ({ conversation, senderId, content, attachments }) => {
   const conversationId = getReferenceId(conversation);
   const buyerId = getReferenceId(conversation?.buyer);
   const sellerId = getReferenceId(conversation?.seller);
   const listingId = getReferenceId(conversation?.listing);
+  const normalizedAttachments = normalizeAttachments(attachments);
 
   if (
     !mongoose.isValidObjectId(conversationId) ||
@@ -148,8 +190,15 @@ const sendMessage = async ({ conversation, senderId, content }) => {
   }
 
   const recipientId = sender === buyer ? sellerId : buyerId;
-  const normalizedContent = normalizeMessageContent(content);
-  const lastMessagePreview = normalizedContent.slice(0, 200);
+  const normalizedContent = normalizeMessageContent(content, normalizedAttachments);
+  const lastMessagePreview =
+    normalizedContent.length > 0
+      ? normalizedContent.slice(0, 200)
+      : normalizedAttachments.length > 0
+        ? normalizedAttachments[0].type === 'video'
+          ? 'Đã gửi video'
+          : 'Đã gửi ảnh'
+        : '';
   const session = await mongoose.startSession();
   let createdMessage = null;
 
@@ -174,6 +223,7 @@ const sendMessage = async ({ conversation, senderId, content }) => {
             sender: senderId,
             recipient: recipientId,
             content: normalizedContent,
+            attachments: normalizedAttachments,
             readAt: null,
           },
         ],

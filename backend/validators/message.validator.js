@@ -22,15 +22,61 @@ const listingConversationValidator = [
 
 const sendMessageValidator = [
   body('content')
+    .optional({ values: 'falsy' })
     .isString()
     .withMessage('Vui lòng nhập nội dung tin nhắn.')
     .bail()
     .trim()
-    .notEmpty()
-    .withMessage('Vui lòng nhập nội dung tin nhắn.')
-    .bail()
-    .isLength({ max: 2000 })
-    .withMessage('Tin nhắn không được vượt quá 2.000 ký tự.'),
+    .custom((value, { req }) => {
+      const contentIsEmpty = !value || !value.trim();
+      const attachments = req.body?.attachments;
+      const hasAttachments = Array.isArray(attachments)
+        ? attachments.length > 0
+        : typeof attachments === 'string' && attachments.trim().length > 0;
+
+      if (contentIsEmpty && !hasAttachments) {
+        throw new Error('Vui lòng nhập nội dung tin nhắn.');
+      }
+
+      if (typeof value === 'string' && value.trim().length > 2000) {
+        throw new Error('Tin nhắn không được vượt quá 2.000 ký tự.');
+      }
+
+      return true;
+    }),
+  body('attachments')
+    .optional()
+    .custom((value) => {
+      if (value === undefined || value === null || value === '') {
+        return true;
+      }
+
+      let attachments;
+      try {
+        attachments = Array.isArray(value) ? value : JSON.parse(value);
+      } catch {
+        throw new Error('Định dạng file đính kèm không hợp lệ.');
+      }
+      if (!Array.isArray(attachments)) {
+        throw new Error('Định dạng file đính kèm không hợp lệ.');
+      }
+
+      for (const attachment of attachments) {
+        if (!attachment || typeof attachment !== 'object') {
+          throw new Error('Định dạng file đính kèm không hợp lệ.');
+        }
+
+        if (!['image', 'video'].includes(String(attachment.type || '').toLowerCase())) {
+          throw new Error('Chỉ hỗ trợ ảnh hoặc video.');
+        }
+
+        if (typeof attachment.url !== 'string' || !attachment.url.trim()) {
+          throw new Error('Đường dẫn file đính kèm không hợp lệ.');
+        }
+      }
+
+      return true;
+    }),
 ];
 
 const createPageValidator = () =>

@@ -34,6 +34,8 @@ const isManagedMultipartMutation = (req) => {
   return (
     (method === 'PUT' && pathname === '/profile') ||
     (method === 'POST' && pathname === '/listings') ||
+    (method === 'POST' && /^\/messages\/[0-9a-f]{24}$/i.test(pathname)) ||
+    (method === 'POST' && /^\/messages\/[0-9a-f]{24}\/media$/i.test(pathname)) ||
     (method === 'PUT' && /^\/listings\/[0-9a-f]{24}$/i.test(pathname)) ||
     (method === 'POST' && pathname === '/admin/categories') ||
     (method === 'PUT' && /^\/admin\/categories\/[0-9a-f]{24}$/i.test(pathname))

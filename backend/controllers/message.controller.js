@@ -3,7 +3,11 @@ const { validationResult } = require('express-validator');
 const conversationService = require('../services/conversation.service');
 const messageService = require('../services/message.service');
 const {
-  buildConversationMessagesUrl,
+  buildMessagePayload,
+  emitMessage,
+} = require('../services/message.dispatcher');
+const socketModule = require('../socket/socket');
+const {
   buildMessagesUrl,
   createConversationMessagesPagination,
   createMessagesPagination,
@@ -21,6 +25,16 @@ const getFieldErrors = (req) => {
 
 const getGeneralError = (errors) =>
   errors._unknown_fields || errors.general || '';
+
+const wantsJson = (req) =>
+  req.xhr || req.get('Accept')?.includes('application/json');
+
+const sendMessageError = (res, status, code, message, fieldErrors) =>
+  res.status(status).json({
+    code,
+    message,
+    ...(fieldErrors ? { fieldErrors } : {}),
+  });
 
 const renderNotFound = (req, res) =>
   res.status(404).render('errors/404', {
@@ -148,7 +162,7 @@ const startConversation = async (req, res, next) => {
         req.user._id,
       );
 
-    return res.redirect(303, `/messages/${conversation._id}#latest`);
+    return res.redirect(303, `/messages#conversation=${conversation._id}`);
   } catch (error) {
     if (
       error.code === conversationService.CONVERSATION_LISTING_NOT_FOUND
@@ -190,46 +204,61 @@ const showConversation = async (req, res, next) => {
       return renderNotFound(req, res);
     }
 
-    const page = errors.page || getGeneralError(errors)
-      ? 1
-      : Number(req.query.page || 1);
-    const readResult = await messageService.markConversationAsRead(
+    return res.redirect(302, `/messages#conversation=${conversation._id}`);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const getConversationPanel = async (req, res, next) => {
+  const errors = getFieldErrors(req);
+
+  if (errors.conversationId) {
+    return res.status(404).send('Conversation not found');
+  }
+
+  try {
+    const conversation =
+      await conversationService.getConversationForParticipant(
+        req.params.conversationId,
+        req.user._id,
+      );
+
+    if (!conversation) {
+      return res.status(404).send('Conversation not found');
+    }
+
+    await messageService.markConversationAsRead(
       conversation._id,
       req.user._id,
     );
-    res.locals.unreadMessageCount = Math.max(
-      0,
-      Number(res.locals.unreadMessageCount || 0) -
-        readResult.markedCount,
-    );
-    const messageResult = await messageService.getMessagesPage(
-      conversation._id,
-      page,
-      messageService.MESSAGES_PER_PAGE,
-    );
 
-    if (
-      Object.keys(errors).length === 0 &&
-      messageResult.pagination.totalItems > 0 &&
-      page > messageResult.pagination.totalPages
-    ) {
-      return res.redirect(
-        302,
-        buildConversationMessagesUrl(
-          conversation._id,
-          messageResult.pagination.totalPages,
-        ),
+    const messageResult =
+      await messageService.getMessagesPage(
+        conversation._id,
+        1,
+        messageService.MESSAGES_PER_PAGE,
       );
-    }
 
-    return await renderConversation(req, res, conversation, {
-      statusCode: Object.keys(errors).length > 0 ? 422 : 200,
-      page,
-      messageResult,
-      errors: {
-        page: errors.page,
-        general: getGeneralError(errors),
-      },
+    const presentedConversation = presentConversation(
+      conversation,
+      req.user._id,
+    );
+
+    return res.render('messages/_conversationPanel', {
+      conversation: presentedConversation,
+      messages: messageResult.items.map((message) =>
+        presentMessage(message, req.user._id),
+      ),
+      pagination: createConversationMessagesPagination(
+        messageResult.pagination,
+        conversation._id,
+      ),
+      canSend: ['active', 'sold'].includes(
+        presentedConversation.listing.status,
+      ),
+      errors: {},
+      oldInput: { content: '' },
     });
   } catch (error) {
     return next(error);
@@ -238,8 +267,17 @@ const showConversation = async (req, res, next) => {
 
 const sendMessage = async (req, res, next) => {
   const errors = getFieldErrors(req);
+  const requestBody = req.body || {};
 
   if (errors.conversationId) {
+    if (wantsJson(req)) {
+      return sendMessageError(
+        res,
+        404,
+        'MESSAGE_CONVERSATION_NOT_FOUND',
+        'Không tìm thấy cuộc trò chuyện.',
+      );
+    }
     return renderNotFound(req, res);
   }
 
@@ -251,39 +289,90 @@ const sendMessage = async (req, res, next) => {
       );
 
     if (!conversation) {
+      if (wantsJson(req)) {
+        return sendMessageError(
+          res,
+          404,
+          'MESSAGE_CONVERSATION_NOT_FOUND',
+          'Không tìm thấy cuộc trò chuyện.',
+        );
+      }
       return renderNotFound(req, res);
     }
 
-    if (errors.content) {
+    if (Object.keys(errors).length > 0) {
+      if (wantsJson(req)) {
+        return sendMessageError(
+          res,
+          422,
+          'MESSAGE_VALIDATION_FAILED',
+          errors.content || errors.attachments || getGeneralError(errors),
+          Object.fromEntries(
+            Object.entries(errors).filter(([field]) =>
+              ['content', 'attachments'].includes(field),
+            ),
+          ),
+        );
+      }
       return await renderConversation(req, res, conversation, {
         statusCode: 422,
-        errors: { content: errors.content },
-        oldInput: req.body,
+        errors: {
+          content: errors.content,
+          general: errors.attachments || getGeneralError(errors),
+        },
+        oldInput: requestBody,
       });
     }
 
+    let createdMessage;
+
     try {
-      await messageService.sendMessage({
+      createdMessage = await messageService.sendMessage({
         conversation,
         senderId: req.user._id,
-        content: req.body.content,
+        content: requestBody.content,
+        attachments: requestBody.attachments,
       });
     } catch (error) {
       if (
         error.code === messageService.MESSAGE_LISTING_HIDDEN ||
         error.code === messageService.MESSAGE_CONTENT_INVALID
       ) {
+        if (wantsJson(req)) {
+          return sendMessageError(
+            res,
+            422,
+            error.code === messageService.MESSAGE_CONTENT_INVALID
+              ? 'MESSAGE_VALIDATION_FAILED'
+              : 'MESSAGE_LISTING_HIDDEN',
+            error.message,
+            error.code === messageService.MESSAGE_CONTENT_INVALID
+              ? { content: error.message }
+              : undefined,
+          );
+        }
         return await renderConversation(req, res, conversation, {
           statusCode: 422,
           errors:
             error.code === messageService.MESSAGE_CONTENT_INVALID
               ? { content: error.message }
               : { general: error.message },
-          oldInput: req.body,
+          oldInput: requestBody,
         });
       }
 
       throw error;
+    }
+
+    const payload = buildMessagePayload({
+      conversation,
+      message: createdMessage,
+      sender: req.user,
+    });
+    emitMessage(socketModule.getSocketServer(), payload);
+
+    if (wantsJson(req)) {
+      return res.status(201).json(payload);
     }
 
     return res.redirect(
@@ -299,5 +388,6 @@ module.exports = {
   listConversations,
   sendMessage,
   showConversation,
+  getConversationPanel,
   startConversation,
 };

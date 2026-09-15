@@ -1,5 +1,36 @@
 const mongoose = require('mongoose');
 
+const attachmentSchema = new mongoose.Schema(
+  {
+    type: {
+      type: String,
+      enum: ['image', 'video'],
+      required: [true, 'Loại file đính kèm là bắt buộc.'],
+    },
+    url: {
+      type: String,
+      required: [true, 'Đường dẫn file đính kèm là bắt buộc.'],
+      trim: true,
+    },
+    thumbnail: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    mimeType: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    size: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+  },
+  { _id: false },
+);
+
 const messageSchema = new mongoose.Schema(
   {
     conversation: {
@@ -22,11 +53,11 @@ const messageSchema = new mongoose.Schema(
     },
     content: {
       type: String,
-      required: [true, 'Nội dung tin nhắn là bắt buộc.'],
       trim: true,
-      minlength: [1, 'Nội dung tin nhắn là bắt buộc.'],
-      maxlength: [2000, 'Tin nhắn không được vượt quá 2.000 ký tự.'],
+      maxlength: [5000],
+      default: '',
     },
+    attachments: [attachmentSchema],
     readAt: {
       type: Date,
       default: null,

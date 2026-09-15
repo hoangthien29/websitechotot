@@ -11,7 +11,15 @@ const presentMessage = (message, currentUserId) => {
 
   return {
     id: data._id.toString(),
-    content: data.content,
+    content: data.content || '',
+    attachments: Array.isArray(data.attachments)
+      ? data.attachments.map((attachment) => ({
+          ...attachment,
+          type: attachment.type || 'image',
+          url: attachment.url || '',
+          thumbnail: attachment.thumbnail || '',
+        }))
+      : [],
     formattedCreatedAt: formatDateTime(data.createdAt),
     isMine: senderId === currentUserId?.toString(),
     isRead: Boolean(data.readAt),

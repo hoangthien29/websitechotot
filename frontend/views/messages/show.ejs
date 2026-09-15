@@ -176,7 +176,10 @@
       <% if (messages.length > 0) { %>
         <ol class="message-list">
           <% messages.forEach((message) => { %>
-            <li class="message-row <%= message.isMine ? 'is-mine' : 'is-other' %>">
+            <li
+              class="message-row <%= message.isMine ? 'is-mine' : 'is-other' %>"
+              data-message-id="<%= message.id %>"
+            >
               <% if (!message.isMine) { %>
                 <img
                   class="message-avatar"
@@ -210,15 +213,34 @@
       <div id="latest" tabindex="-1" aria-hidden="true"></div>
     </section>
 
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        document.body.dataset.currentConversationId = '<%= conversation.id %>';
+      });
+    </script>
+
     <% if (canSend) { %>
       <form
         class="message-compose-form"
         method="POST"
         action="/messages/<%= conversation.id %>"
+        enctype="multipart/form-data"
       >
         <%- include('../partials/csrf') %>
+        <input type="hidden" name="attachments" id="messageAttachments" value="[]">
         <div class="message-compose-heading">
           <label for="messageContent">Nội dung tin nhắn</label>
+          <div class="message-media-actions">
+            <label class="message-attachment-btn" for="messageMediaInput">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                <circle cx="8.5" cy="10.5" r="1.5"></circle>
+                <path d="m21 15-5-5L7 19"></path>
+              </svg>
+              <span>Ảnh/Video</span>
+              <input id="messageMediaInput" type="file" accept="image/*,video/*" multiple hidden>
+            </label>
+          </div>
         </div>
         <div class="message-compose-control">
 
@@ -228,13 +250,11 @@
             name="content"
             rows="4"
             maxlength="2000"
-            required
             aria-required="true"
             aria-invalid="<%= errors.content ? 'true' : 'false' %>"
             aria-describedby="messageContentFeedback"
             placeholder="Hỏi người bán về tình trạng hoặc cách nhận sản phẩm"
           ><%= oldInput.content %></textarea>
-
 
           <button
             class="message-send-button"
@@ -259,6 +279,7 @@
           </button>
 
         </div>
+        <div class="message-compose-preview" id="messageComposePreview" aria-live="polite"></div>
         <div
           class="<%= errors.content ? 'invalid-feedback d-block' : 'form-text' %> field-feedback-slot"
           id="messageContentFeedback"
@@ -274,5 +295,211 @@
     <% } %>
   </div>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('.message-compose-form');
+    if (!form) return;
+
+    const conversationId = '<%= conversation.id %>';
+    const mediaInput = document.getElementById('messageMediaInput');
+    const attachmentsField = document.getElementById('messageAttachments');
+    const preview = document.getElementById('messageComposePreview');
+
+    const addPreviewChip = (label, type) => {
+      const chip = document.createElement('span');
+      chip.className = 'message-compose-preview__chip';
+      const icon = document.createElement('span');
+      icon.textContent = type === 'video' ? '🎬' : '🖼️';
+      const text = document.createElement('span');
+      text.textContent = label;
+      chip.append(icon, text);
+      preview.appendChild(chip);
+    };
+
+    const handleFileUpload = async (files) => {
+      if (!files || files.length === 0) {
+        return;
+      }
+
+      const formData = new FormData();
+      Array.from(files).forEach((file) => formData.append('files', file));
+
+      const response = await fetch(`/messages/${conversationId}/media`, {
+        method: 'POST',
+        body: formData,
+        credentials: 'same-origin',
+        headers: {
+          'X-Requested-With': 'fetch',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Không thể tải ảnh/video lên.');
+      }
+
+      const payload = await response.json();
+      const attachments = Array.isArray(payload.attachments) ? payload.attachments : [];
+
+      attachmentsField.value = JSON.stringify(attachments);
+      preview.innerHTML = '';
+      attachments.forEach((attachment) => {
+        addPreviewChip(
+          attachment.type === 'video' ? 'Video' : 'Ảnh',
+          attachment.type,
+        );
+      });
+    };
+
+    mediaInput?.addEventListener('change', async (event) => {
+      const files = event.target.files;
+      if (!files || files.length === 0) return;
+
+      try {
+        await handleFileUpload(files);
+      } catch (error) {
+        preview.innerHTML = '';
+        preview.textContent = error.message || 'Không thể tải ảnh/video.';
+      } finally {
+        event.target.value = '';
+      }
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const textarea = document.getElementById('messageContent');
+      const messageText = textarea ? textarea.value.trim() : '';
+      const attachments = JSON.parse(attachmentsField.value || '[]');
+      const hasText = messageText.length > 0;
+      const hasAttachments = Array.isArray(attachments) && attachments.length > 0;
+
+      if (!hasText && !hasAttachments) {
+        return;
+      }
+
+      const list = document.querySelector('.message-list');
+      if (list) {
+        const item = document.createElement('li');
+        item.className = 'message-row is-mine';
+
+        const bubble = document.createElement('article');
+        bubble.className = 'message-bubble message-bubble--mine';
+
+        const label = document.createElement('p');
+        label.className = 'message-sender-label';
+        label.textContent = 'Bạn';
+
+        const body = document.createElement('p');
+        body.className = 'message-content';
+        body.textContent = messageText || 'Đã gửi ảnh/video';
+
+        const meta = document.createElement('footer');
+        meta.className = 'message-meta';
+        const time = document.createElement('time');
+        time.textContent = 'Vừa xong';
+        meta.appendChild(time);
+
+        bubble.append(label, body, meta);
+        item.appendChild(bubble);
+        list.appendChild(item);
+
+        const latestAnchor = document.getElementById('latest');
+        if (latestAnchor) {
+          latestAnchor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+
+      if (textarea) {
+        textarea.value = '';
+      }
+      if (preview) {
+        preview.innerHTML = '';
+      }
+      attachmentsField.value = '[]';
+
+      const files = mediaInput?.files;
+      if (files && files.length > 0) {
+        try {
+          await handleFileUpload(files);
+        } catch (error) {
+          preview.innerHTML = '';
+          preview.textContent = error.message || 'Không thể tải ảnh/video.';
+        } finally {
+          if (mediaInput) {
+            mediaInput.value = '';
+          }
+        }
+      }
+
+      const formData = new FormData(form);
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        credentials: 'same-origin',
+        headers: {
+          Accept: 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+      });
+
+      const payload = await response.json();
+      if (!response.ok) {
+        throw new Error(payload.message || 'Không thể gửi tin nhắn.');
+      }
+    });
+
+    if (window.io && conversationId) {
+      const socket = window.io();
+      socket.emit('joinConversation', conversationId);
+
+      socket.on('chatMessageReceived', (payload) => {
+        if (!payload || payload.conversationId !== conversationId) {
+          return;
+        }
+
+        const message = payload.message || {};
+        const list = document.querySelector('.message-list');
+        if (!list) return;
+        if (message.id && list.querySelector(`[data-message-id="${message.id}"]`)) {
+          return;
+        }
+
+        const item = document.createElement('li');
+        item.className = 'message-row is-mine';
+        item.dataset.messageId = message.id || '';
+
+        const bubble = document.createElement('article');
+        bubble.className = 'message-bubble message-bubble--mine';
+
+        const label = document.createElement('p');
+        label.className = 'message-sender-label';
+        label.textContent = message.senderName || 'Bạn';
+
+        const body = document.createElement('p');
+        body.className = 'message-content';
+        body.textContent = message.content || '';
+
+        const meta = document.createElement('footer');
+        meta.className = 'message-meta';
+        const time = document.createElement('time');
+        time.textContent = new Date(message.createdAt || Date.now()).toLocaleTimeString('vi-VN', {
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+        meta.appendChild(time);
+
+        bubble.append(label, body, meta);
+        item.appendChild(bubble);
+        list.appendChild(item);
+
+        const latestAnchor = document.getElementById('latest');
+        if (latestAnchor) {
+          latestAnchor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+    }
+  });
+</script>
 
 <%- include('../partials/footer') %>

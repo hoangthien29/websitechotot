@@ -1,5 +1,6 @@
 const express = require('express');
 
+const router = express.Router();
 const authController = require('../controllers/auth.controller');
 const { authLimiter } = require('../config/rateLimit');
 const {
@@ -11,7 +12,6 @@ const {
   registerValidator,
 } = require('../validators/auth.validator');
 
-const router = express.Router();
 
 router.get('/register', requireGuest, authController.showRegisterForm);
 router.post(
@@ -31,4 +31,8 @@ router.post(
 );
 router.post('/logout', requireAuth, authController.logout);
 
+router.get('/auth/google/callback', authController.googleCallback);
+router.get('/auth/google', authController.googleLogin);
+router.get('/google/callback', authController.googleCallback);
+router.get('/google', authController.googleLogin);
 module.exports = router;

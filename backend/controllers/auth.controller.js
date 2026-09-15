@@ -6,6 +6,30 @@ const authService = require('../services/auth.service');
 const REGISTER_SUCCESS_MESSAGE =
   'Đăng ký thành công. Bạn có thể đăng nhập ngay bây giờ.';
 const LOGOUT_SUCCESS_MESSAGE = 'Bạn đã đăng xuất thành công.';
+const GOOGLE_AUTH_FAILED_MESSAGE = 'Đăng nhập Google thất bại. Vui lòng thử lại.';
+
+const getGoogleRedirectUri = () =>
+  process.env.GOOGLE_REDIRECT_URI ||
+  `${process.env.APP_BASE_URL || 'http://localhost:3000'}/auth/google/callback`;
+
+const getGoogleAuthUrl = () => {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+
+  if (!clientId) {
+    return null;
+  }
+
+  const params = new URLSearchParams({
+    client_id: clientId,
+    redirect_uri: getGoogleRedirectUri(),
+    response_type: 'code',
+    scope: 'openid email profile',
+    access_type: 'offline',
+    prompt: 'consent',
+  });
+
+  return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+};
 
 const getOldInput = (body = {}) => ({
   name: typeof body.name === 'string' ? body.name : '',
@@ -189,7 +213,95 @@ const logout = async (req, res, next) => {
   }
 };
 
+const googleLogin = (req, res) => {
+  const googleAuthUrl = getGoogleAuthUrl();
+
+  if (!googleAuthUrl) {
+    return res.redirect(303, '/login?googleAuthDisabled=1');
+  }
+
+  return res.redirect(303, googleAuthUrl);
+};
+
+const googleCallback = async (req, res, next) => {
+  const { code } = req.query;
+
+  if (!code || typeof code !== 'string') {
+    return res.redirect(303, '/login?googleAuthError=1');
+  }
+
+  try {
+    const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        code,
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        redirect_uri: getGoogleRedirectUri(),
+        grant_type: 'authorization_code',
+      }),
+    });
+
+    if (!tokenResponse.ok) {
+      throw authService.createGoogleAuthError?.(GOOGLE_AUTH_FAILED_MESSAGE) ||
+        new Error(GOOGLE_AUTH_FAILED_MESSAGE);
+    }
+
+    const tokenData = await tokenResponse.json();
+    const userInfoResponse = await fetch(
+      'https://openidconnect.googleapis.com/v1/userinfo',
+      {
+        headers: {
+          Authorization: `Bearer ${tokenData.access_token}`,
+        },
+      },
+    );
+
+    if (!userInfoResponse.ok) {
+      throw authService.createGoogleAuthError?.(GOOGLE_AUTH_FAILED_MESSAGE) ||
+        new Error(GOOGLE_AUTH_FAILED_MESSAGE);
+    }
+
+    const profile = await userInfoResponse.json();
+    const { user } = await authService.findOrCreateGoogleUser(profile);
+
+    await regenerateSession(req);
+    req.session.userId = user._id.toString();
+    await saveSession(req);
+
+    return res.redirect(303, '/');
+  } catch (error) {
+    if (error.code === authService.ACCOUNT_BLOCKED) {
+      return renderLoginForm(res, {
+        statusCode: 403,
+        errors: { general: authService.ACCOUNT_BLOCKED_MESSAGE },
+      });
+    }
+
+    if (error.code === authService.ACCOUNT_PENDING) {
+      return renderLoginForm(res, {
+        statusCode: 403,
+        errors: { general: authService.ACCOUNT_PENDING_MESSAGE },
+      });
+    }
+
+    if (error.code === authService.GOOGLE_AUTH_ERROR) {
+      return renderLoginForm(res, {
+        statusCode: 401,
+        errors: { general: error.message },
+      });
+    }
+
+    return next(error);
+  }
+};
+
 module.exports = {
+  googleCallback,
+  googleLogin,
   login,
   logout,
   register,

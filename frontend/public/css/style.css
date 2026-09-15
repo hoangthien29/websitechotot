@@ -2287,6 +2287,10 @@ textarea.form-control:focus {
   line-height: 1;
 }
 
+.site-navbar .nav-unread-badge[hidden] {
+  display: none;
+}
+
 .site-nav-button {
   width: auto;
   min-height: 2.75rem;

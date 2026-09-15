@@ -93,7 +93,9 @@ app.use(
 app.use(express.json({ limit: '32kb', strict: true }));
 app.use(methodOverride('_method'));
 
-app.use(createSessionMiddleware());
+const sessionMiddleware = createSessionMiddleware();
+app.locals.sessionMiddleware = sessionMiddleware;
+app.use(sessionMiddleware);
 app.use(loadCurrentUser);
 app.use(loadUnreadMessageCount);
 app.use(csrfProtection);

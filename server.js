@@ -11,6 +11,7 @@ const {
   closeSessionStore,
   waitForSessionStore,
 } = require('./backend/config/session');
+const { closeSocket, initSocket } = require('./backend/socket/socket');
 
 const SHUTDOWN_TIMEOUT_MS = 10000;
 
@@ -56,6 +57,7 @@ const shutdown = async (signal) => {
   fallbackTimer.unref();
 
   try {
+    await closeSocket();
     await closeHttpServer();
     await closeSessionStore();
     await closeDatabase();
@@ -113,6 +115,7 @@ const startServer = async () => {
       );
     });
 
+    initSocket(server, app.locals.sessionMiddleware);
     server.on('error', handleServerError);
   } catch (error) {
     if (isShuttingDown) {

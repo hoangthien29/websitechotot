@@ -1,0 +1,137 @@
+<div class="message-panel-shell" data-conversation-id="<%= conversation.id %>">
+  <div class="message-panel-header">
+    <div class="message-panel-user">
+      <img
+        class="message-avatar"
+        src="<%= conversation.otherParticipant.avatarUrl %>"
+        alt=""
+        width="36"
+        height="36"
+        loading="lazy"
+      >
+      <div>
+        <span class="message-panel-kicker">Đang trò chuyện</span>
+        <h2><%= conversation.otherParticipant.name %></h2>
+      </div>
+    </div>
+    <span class="message-panel-status"><%= conversation.listing.statusLabel %></span>
+  </div>
+
+  <section class="message-thread" aria-label="Nội dung cuộc trò chuyện">
+    <% if (messages.length > 0) { %>
+      <ol class="message-list">
+        <% messages.forEach((message) => { %>
+          <li
+            class="message-row <%= message.isMine ? 'is-mine' : 'is-other' %>"
+            data-message-id="<%= message.id %>"
+          >
+            <% if (!message.isMine) { %>
+              <img
+                class="message-avatar"
+                src="<%= message.senderAvatarUrl %>"
+                alt=""
+                width="36"
+                height="36"
+                loading="lazy"
+              >
+            <% } %>
+            <article class="message-bubble <%= message.isMine ? 'message-bubble--mine' : 'message-bubble--other' %>">
+              <p class="message-sender-label">
+                <%= message.isMine ? 'Bạn' : message.senderName %>
+              </p>
+
+              <% if (message.content) { %>
+                <p class="message-content"><%= message.content %></p>
+              <% } %>
+
+              <% if (Array.isArray(message.attachments) && message.attachments.length > 0) { %>
+                <div class="message-attachments">
+                  <% message.attachments.forEach((attachment) => { %>
+                    <% if (attachment.type === 'video') { %>
+                      <video class="message-attachment media-video" controls preload="metadata" playsinline>
+                        <source src="<%= attachment.url %>" type="<%= attachment.mimeType || 'video/mp4' %>">
+                      </video>
+                    <% } else { %>
+                      <img class="message-attachment media-image" src="<%= attachment.url %>" alt="Ảnh tin nhắn" loading="lazy">
+                    <% } %>
+                  <% }); %>
+                </div>
+              <% } %>
+
+              <footer class="message-meta">
+                <time><%= message.formattedCreatedAt %></time>
+                <% if (message.isMine) { %>
+                  <span><%= message.isRead ? 'Đã xem' : 'Đã gửi.' %></span>
+                <% } %>
+              </footer>
+            </article>
+          </li>
+        <% }); %>
+      </ol>
+    <% } else { %>
+      <div class="message-thread-empty" role="status">
+        <h2>Chưa có tin nhắn.</h2>
+      </div>
+    <% } %>
+    <div id="latest" tabindex="-1" aria-hidden="true"></div>
+  </section>
+
+  <% if (canSend) { %>
+    <form
+      class="message-compose-form"
+      method="POST"
+      action="/messages/<%= conversation.id %>"
+      enctype="multipart/form-data"
+    >
+      <%- include('../partials/csrf') %>
+      <input type="hidden" name="attachments" id="messageAttachments" value="[]">
+
+      <div class="message-compose-heading">
+        <label for="messageContent">Nội dung tin nhắn</label>
+        <div class="message-media-actions">
+          <label class="message-attachment-btn" for="messageMediaInput">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+              <circle cx="8.5" cy="10.5" r="1.5"></circle>
+              <path d="m21 15-5-5L7 19"></path>
+            </svg>
+            <span>Ảnh/Video</span>
+            <input id="messageMediaInput" type="file" accept="image/*,video/*" multiple hidden>
+          </label>
+        </div>
+      </div>
+
+      <div class="message-compose-control">
+        <textarea
+          class="form-control <%= errors.content ? 'is-invalid' : '' %>"
+          id="messageContent"
+          name="content"
+          rows="3"
+          maxlength="2000"
+          aria-required="true"
+          aria-invalid="<%= errors.content ? 'true' : 'false' %>"
+          aria-describedby="messageContentFeedback"
+          placeholder="Hỏi người bán về tình trạng hoặc cách nhận sản phẩm"
+        ><%= oldInput.content %></textarea>
+
+        <button class="message-send-button" type="submit" aria-label="Gửi tin nhắn" title="Gửi tin nhắn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 2 11 13"></path>
+            <path d="m22 2-7 20-4-9-9-4Z"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="message-compose-preview" id="messageComposePreview" aria-live="polite"></div>
+
+      <div class="<%= errors.content ? 'invalid-feedback d-block' : 'form-text' %> field-feedback-slot" id="messageContentFeedback">
+        <%= errors.content || '' %>
+      </div>
+    </form>
+  <% } else { %>
+    <div class="message-readonly-notice" role="status">
+      <h2>Cuộc trò chuyện đang ở chế độ xem.</h2>
+      <p>Bài đăng đã được ẩn nên không thể gửi tin nhắn mới.</p>
+    </div>
+  <% } %>
+</div>

@@ -1,3 +1,4 @@
+const crypto = require('node:crypto');
 const bcrypt = require('bcrypt');
 
 const User = require('../models/User');
@@ -12,6 +13,9 @@ const ACCOUNT_BLOCKED = 'ACCOUNT_BLOCKED';
 const ACCOUNT_BLOCKED_MESSAGE = 'Tài khoản của bạn đã bị khóa.';
 const ACCOUNT_PENDING = 'ACCOUNT_PENDING';
 const ACCOUNT_PENDING_MESSAGE = 'Tài khoản của bạn chưa được kích hoạt.';
+const GOOGLE_AUTH_ERROR = 'GOOGLE_AUTH_ERROR';
+const GOOGLE_AUTH_ERROR_MESSAGE =
+  'Đăng nhập Google không thành công. Vui lòng thử lại.';
 
 const createEmailAlreadyExistsError = () => {
   const error = new Error(EMAIL_ALREADY_EXISTS_MESSAGE);
@@ -22,6 +26,12 @@ const createEmailAlreadyExistsError = () => {
 const createAuthError = (code, message) => {
   const error = new Error(message);
   error.code = code;
+  return error;
+};
+
+const createGoogleAuthError = (message = GOOGLE_AUTH_ERROR_MESSAGE) => {
+  const error = new Error(message);
+  error.code = GOOGLE_AUTH_ERROR;
   return error;
 };
 
@@ -89,6 +99,76 @@ const authenticateUser = async ({ email, password }) => {
   };
 };
 
+const findOrCreateGoogleUser = async (profile = {}) => {
+  const email = String(profile.email || '').trim().toLowerCase();
+  const rawName = String(profile.name || '').trim();
+
+  if (!email) {
+    throw createGoogleAuthError('Email Google không hợp lệ.');
+  }
+
+  const existingUserQuery = User.findOne({ email });
+  const existingUser =
+    typeof existingUserQuery?.select === 'function'
+      ? await existingUserQuery.select('+password')
+      : await existingUserQuery;
+
+  if (existingUser) {
+    if (existingUser.status === 'blocked') {
+      throw createAuthError(ACCOUNT_BLOCKED, ACCOUNT_BLOCKED_MESSAGE);
+    }
+
+    if (existingUser.status === 'pending') {
+      throw createAuthError(ACCOUNT_PENDING, ACCOUNT_PENDING_MESSAGE);
+    }
+
+    return {
+      created: false,
+      user: {
+        _id: existingUser._id,
+        name: existingUser.name,
+        email: existingUser.email,
+        avatar: existingUser.avatar,
+        role: existingUser.role,
+        status: existingUser.status,
+      },
+    };
+  }
+
+  const generatedPassword = crypto.randomBytes(32).toString('hex');
+  const hashedPassword = await bcrypt.hash(generatedPassword, BCRYPT_SALT_ROUNDS);
+  const safeName = rawName || 'Google User';
+
+  try {
+    const user = await User.create({
+      name: safeName,
+      email,
+      password: hashedPassword,
+      avatar: typeof profile.picture === 'string' ? profile.picture : '',
+      role: 'user',
+      status: 'active',
+    });
+
+    return {
+      created: true,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar,
+        role: user.role,
+        status: user.status,
+      },
+    };
+  } catch (error) {
+    if (error.code === 11000) {
+      throw createEmailAlreadyExistsError();
+    }
+
+    throw error;
+  }
+};
+
 module.exports = {
   ACCOUNT_BLOCKED,
   ACCOUNT_BLOCKED_MESSAGE,
@@ -97,8 +177,12 @@ module.exports = {
   BCRYPT_SALT_ROUNDS,
   EMAIL_ALREADY_EXISTS,
   EMAIL_ALREADY_EXISTS_MESSAGE,
+  GOOGLE_AUTH_ERROR,
+  GOOGLE_AUTH_ERROR_MESSAGE,
   INVALID_CREDENTIALS,
   INVALID_CREDENTIALS_MESSAGE,
   authenticateUser,
+  createGoogleAuthError,
+  findOrCreateGoogleUser,
   registerUser,
 };

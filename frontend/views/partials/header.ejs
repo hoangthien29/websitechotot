@@ -26,7 +26,7 @@
     <% } %>
   </head>
 
-  <body>
+  <body data-current-user-id="<%= currentUser && currentUser._id ? currentUser._id.toString() : '' %>">
 
     <header class="site-header sticky-top">
 
