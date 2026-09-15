@@ -1,5 +1,7 @@
 const { body, checkExact, param, query } = require('express-validator');
 
+const ACTION_META_KEYS = new Set(['_csrf', '_method']);
+
 const listingIdRule = param('id')
   .isString()
   .withMessage('Bài đăng không tồn tại.')
@@ -7,17 +9,43 @@ const listingIdRule = param('id')
   .isMongoId()
   .withMessage('Bài đăng không tồn tại.');
 
-const emptyActionBodyRule = body().custom((value) => {
-  if (
-    value &&
-    typeof value === 'object' &&
-    !Array.isArray(value) &&
-    Object.keys(value).length === 0
-  ) {
+const validateActionBody = (value, allowedKeys = [], errorMessage) => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
     return true;
   }
 
-  throw new Error('Dữ liệu thay đổi bài đăng không được hỗ trợ.');
+  const allowed = new Set([...ACTION_META_KEYS, ...allowedKeys]);
+  const keys = Object.keys(value);
+
+  if (keys.length === 0) {
+    return true;
+  }
+
+  const hasOnlyAllowedKeys = keys.every((key) => allowed.has(key));
+
+  if (hasOnlyAllowedKeys) {
+    return true;
+  }
+
+  throw new Error(errorMessage);
+};
+
+const emptyActionBodyRule = body().custom((value) => {
+  validateActionBody(
+    value,
+    ['reason'],
+    'Dữ liệu thay đổi bài đăng không được hỗ trợ.',
+  );
+  return true;
+});
+
+const hideActionBodyRule = body().custom((value) => {
+  validateActionBody(
+    value,
+    ['reason'],
+    'Dữ liệu kiểm duyệt bài đăng không được hỗ trợ.',
+  );
+  return true;
 });
 
 const adminListingsQueryValidator = checkExact(
@@ -89,33 +117,25 @@ const adminListingsQueryValidator = checkExact(
   },
 );
 
-const adminListingIdValidator = checkExact(
-  [listingIdRule, emptyActionBodyRule],
-  {
-    locations: ['params', 'body'],
-    message: 'Dữ liệu thay đổi bài đăng không được hỗ trợ.',
-  },
-);
+const adminListingIdValidator = [
+  listingIdRule,
+  emptyActionBodyRule,
+];
 
-const hideListingValidator = checkExact(
-  [
-    listingIdRule,
-    body('reason')
-      .isString()
-      .withMessage('Lý do kiểm duyệt không hợp lệ.')
-      .bail()
-      .trim()
-      .notEmpty()
-      .withMessage('Vui lòng nhập lý do kiểm duyệt.')
-      .bail()
-      .isLength({ min: 10, max: 500 })
-      .withMessage('Lý do kiểm duyệt phải có từ 10 đến 500 ký tự.'),
-  ],
-  {
-    locations: ['params', 'body'],
-    message: 'Dữ liệu kiểm duyệt bài đăng không được hỗ trợ.',
-  },
-);
+const hideListingValidator = [
+  listingIdRule,
+  hideActionBodyRule,
+  body('reason')
+    .isString()
+    .withMessage('Lý do kiểm duyệt không hợp lệ.')
+    .bail()
+    .trim()
+    .notEmpty()
+    .withMessage('Vui lòng nhập lý do kiểm duyệt.')
+    .bail()
+    .isLength({ min: 10, max: 500 })
+    .withMessage('Lý do kiểm duyệt phải có từ 10 đến 500 ký tự.'),
+];
 
 module.exports = {
   adminListingIdValidator,

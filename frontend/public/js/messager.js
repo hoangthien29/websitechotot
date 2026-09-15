@@ -50,6 +50,26 @@ document.addEventListener('DOMContentLoaded', () => {
     row.className = `message-row ${isMine ? 'is-mine' : 'is-other'}`;
     row.dataset.messageId = message.id || '';
 
+    if (!isMine) {
+      const avatarLink = document.createElement('a');
+      avatarLink.className = 'message-avatar-link';
+      avatarLink.href = message.senderProfileUrl || '#';
+      avatarLink.setAttribute(
+        'aria-label',
+        `Xem trang cá nhân của ${message.senderName || 'người dùng'}`,
+      );
+
+      const avatar = document.createElement('img');
+      avatar.className = 'message-avatar';
+      avatar.src = message.senderAvatarUrl || '/images/default-avatar.svg';
+      avatar.alt = message.senderName || 'Người dùng';
+      avatar.width = 36;
+      avatar.height = 36;
+      avatar.loading = 'lazy';
+      avatarLink.appendChild(avatar);
+      row.appendChild(avatarLink);
+    }
+
     const bubble = document.createElement('article');
     bubble.className = `message-bubble ${isMine ? 'message-bubble--mine' : 'message-bubble--other'}`;
     const label = document.createElement('p');
@@ -178,6 +198,9 @@ document.addEventListener('DOMContentLoaded', () => {
           ),
           lastMessageAt: payload.message.createdAt,
           unreadDelta: 0,
+          unreadCountForThisUser: 0,
+          totalUnread: 0,
+          senderId: currentUserId,
           markLatest: true,
         },
       }));
@@ -246,6 +269,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('[data-id]').forEach((item) => {
     item.addEventListener('click', async (event) => {
+      const profileLink = event.target.closest(
+        '.message-avatar-link, .conversation-redesign-avatar-link, .conversation-header-avatar-link',
+      );
+
+      if (profileLink) {
+        return;
+      }
+
       event.preventDefault();
 
       const response = await fetch(`/messages/${item.dataset.id}/panel`, {

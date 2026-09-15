@@ -46,6 +46,25 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    const setHeaderTotalUnread = (totalUnread = 0) => {
+      const iconWrap = document.querySelector('.nav-messages-link .site-icon-link__icon-wrap');
+      if (!iconWrap) {
+        return;
+      }
+
+      let badge = iconWrap.querySelector('.nav-unread-badge');
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'nav-unread-badge';
+        badge.setAttribute('aria-hidden', 'true');
+        iconWrap.appendChild(badge);
+      }
+
+      const safeTotal = Math.max(0, Math.min(Number(totalUnread) || 0, 99));
+      badge.textContent = safeTotal >= 99 ? '99+' : String(safeTotal);
+      badge.hidden = safeTotal <= 0;
+    };
+
     const updateConversationPreview = (payload) => {
       const card = document.querySelector(
         `[data-conversation-id="${payload.conversationId}"]`,
@@ -57,8 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const preview = card.querySelector('.conversation-redesign-preview');
       const time = card.querySelector('.conversation-redesign-time');
-      const unread = card.querySelector('.conversation-redesign-unread');
-      const unreadDelta = Number(payload.unreadDelta || 0);
+      const unreadEl = card.querySelector('.conversation-redesign-unread');
+      const explicitUnreadCount = Number(
+        payload.unreadCountForThisUser ?? payload.unreadDelta ?? 0,
+      );
+      const unreadCount = Number.isFinite(explicitUnreadCount)
+        ? Math.max(0, Math.min(explicitUnreadCount, 99))
+        : 0;
 
       if (preview) {
         preview.textContent = payload.preview || preview.textContent;
@@ -73,24 +97,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
-      if (unreadDelta > 0) {
-        const nextUnread = unread || document.createElement('span');
+      if (unreadCount > 0) {
+        let nextUnread = unreadEl || document.createElement('span');
         nextUnread.className = 'conversation-redesign-unread';
-        const currentUnread = unread
-          ? Number.parseInt(unread.textContent, 10) || 0
-          : 0;
-        const nextCount = Math.min(currentUnread + unreadDelta, 99);
-        nextUnread.textContent = nextCount >= 99 ? '99+' : String(nextCount);
-        if (!unread) {
+        nextUnread.textContent = unreadCount >= 99 ? '99+' : String(unreadCount);
+        if (!unreadEl) {
           card.querySelector('.conversation-redesign-link')?.appendChild(nextUnread);
         }
+      } else if (unreadEl) {
+        unreadEl.remove();
       }
 
-      if (unreadDelta > 0) {
-        card.classList.add('has-unread');
-      }
+      card.classList.toggle('has-unread', unreadCount > 0);
       card.classList.toggle('has-latest', Boolean(payload.markLatest));
       card.parentElement?.prepend(card);
+
+      if (typeof payload.totalUnread === 'number') {
+        setHeaderTotalUnread(payload.totalUnread);
+      }
     };
 
     const updateNavBadge = (delta = 1) => {
@@ -135,7 +159,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       updateConversationPreview(payload);
-      if (payload.unreadDelta > 0
+
+      if (typeof payload.totalUnread === 'number') {
+        setHeaderTotalUnread(payload.totalUnread);
+      } else if (payload.unreadDelta > 0
         && document.body.dataset.currentConversationId !== String(payload.conversationId)) {
         updateNavBadge(payload.unreadDelta);
       }
@@ -144,7 +171,13 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('messageNotification', handleMessageNotification);
     document.addEventListener('messageSent', (event) => {
       if (event.detail?.conversationId) {
-        updateConversationPreview(event.detail);
+        const payload = {
+          ...event.detail,
+          unreadCountForThisUser: Number(event.detail.unreadCountForThisUser ?? 0),
+          totalUnread: Number(event.detail.totalUnread ?? 0),
+          markLatest: true,
+        };
+        updateConversationPreview(payload);
       }
     });
 
@@ -164,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
-    socket.on('chatMessageReceived', (payload) => {
+    const handleIncomingMessage = (payload) => {
       if (!payload || !payload.conversationId || !payload.message) {
         return;
       }
@@ -200,6 +233,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const row = document.createElement('li');
         row.className = `message-row ${isMine ? 'is-mine' : 'is-other'}`;
         row.dataset.messageId = message.id || '';
+
+        if (!isMine) {
+          const avatarLink = document.createElement('a');
+          avatarLink.className = 'message-avatar-link';
+          avatarLink.href = message.senderProfileUrl || '#';
+          avatarLink.setAttribute(
+            'aria-label',
+            `Xem trang cá nhân của ${message.senderName || 'người dùng'}`,
+          );
+
+          const avatar = document.createElement('img');
+          avatar.className = 'message-avatar';
+          avatar.src = message.senderAvatarUrl || '/images/default-avatar.svg';
+          avatar.alt = message.senderName || 'Người dùng';
+          avatar.width = 36;
+          avatar.height = 36;
+          avatar.loading = 'lazy';
+          avatarLink.appendChild(avatar);
+          row.appendChild(avatarLink);
+        }
 
         const bubble = document.createElement('article');
         bubble.className = `message-bubble ${isMine ? 'message-bubble--mine' : 'message-bubble--other'}`;
@@ -263,12 +316,46 @@ document.addEventListener('DOMContentLoaded', () => {
         senderId: message.senderId || '',
         unreadDelta: 0,
       });
+    };
+
+    socket.on('chatMessageReceived', handleIncomingMessage);
+    socket.on('new_message', (message) => {
+      if (!message || !message.conversationId) {
+        return;
+      }
+      handleIncomingMessage({
+        conversationId: message.conversationId,
+        message,
+      });
+    });
+
+    socket.on('conversation_update', (payload) => {
+      if (!payload || !payload.conversationId) {
+        return;
+      }
+
+      const preview = payload.preview || 'Đã gửi tin nhắn';
+      const unreadCount = Number(payload.unreadCountForThisUser || 0);
+      updateConversationPreview({
+        conversationId: payload.conversationId,
+        preview,
+        lastMessageAt: payload.lastMessageAt || Date.now(),
+        senderId: payload.senderId || '',
+        unreadCountForThisUser: unreadCount,
+        totalUnread: payload.totalUnread,
+        markLatest: Boolean(payload.markLatest),
+      });
+
+      if (typeof payload.totalUnread === 'number') {
+        setHeaderTotalUnread(payload.totalUnread);
+      }
     });
 
     document.addEventListener('conversationPanelLoaded', (event) => {
       const conversationId = event.detail?.conversationId;
       if (conversationId) {
         socket.emit('joinConversation', conversationId);
+        socket.emit('mark_read', { conversationId, userId: currentUserId });
       }
     });
 

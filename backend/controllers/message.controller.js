@@ -369,7 +369,27 @@ const sendMessage = async (req, res, next) => {
       message: createdMessage,
       sender: req.user,
     });
-    emitMessage(socketModule.getSocketServer(), payload);
+
+    const senderId = req.user._id.toString();
+    const recipientId = conversation.buyer?.toString() === senderId
+      ? conversation.seller?.toString()
+      : conversation.buyer?.toString();
+
+    const [senderUnreadCount, recipientUnreadCount, senderTotalUnread, recipientTotalUnread] = await Promise.all([
+      messageService.getConversationUnreadCount(conversation._id, senderId),
+      messageService.getConversationUnreadCount(conversation._id, recipientId),
+      messageService.countUnreadMessages(senderId),
+      messageService.countUnreadMessages(recipientId),
+    ]);
+
+    emitMessage(socketModule.getSocketServer(), payload, {
+      senderId,
+      recipientId,
+      senderUnreadCount,
+      recipientUnreadCount,
+      senderTotalUnread,
+      recipientTotalUnread,
+    });
 
     if (wantsJson(req)) {
       return res.status(201).json(payload);

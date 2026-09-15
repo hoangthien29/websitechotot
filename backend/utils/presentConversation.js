@@ -41,6 +41,7 @@ const presentConversation = (conversation, currentUserId) => {
       avatarUrl: isManagedAvatarPath(otherParticipant?.avatar)
         ? otherParticipant.avatar
         : DEFAULT_AVATAR,
+      profileUrl: otherParticipantId ? `/users/${otherParticipantId}` : '#',
     },
     listing: {
       id: getReferenceId(listing)?.toString() || '',

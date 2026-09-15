@@ -1,6 +1,11 @@
 <div class="message-panel-shell" data-conversation-id="<%= conversation.id %>">
   <div class="message-panel-header">
     <div class="message-panel-user">
+    <a
+      class="message-avatar-link"
+      href="<%= conversation.otherParticipant.id ? '/users/' + conversation.otherParticipant.id : '#' %>"
+      aria-label="Xem trang cá nhân của <%= conversation.otherParticipant.name %>"
+    >
       <img
         class="message-avatar"
         src="<%= conversation.otherParticipant.avatarUrl %>"
@@ -9,11 +14,12 @@
         height="36"
         loading="lazy"
       >
-      <div>
-        <span class="message-panel-kicker">Đang trò chuyện</span>
-        <h2><%= conversation.otherParticipant.name %></h2>
-      </div>
+    </a>
+    <div>
+      <span class="message-panel-kicker">Đang trò chuyện</span>
+      <h2><%= conversation.otherParticipant.name %></h2>
     </div>
+  </div>
     <span class="message-panel-status"><%= conversation.listing.statusLabel %></span>
   </div>
 
@@ -26,14 +32,20 @@
             data-message-id="<%= message.id %>"
           >
             <% if (!message.isMine) { %>
-              <img
-                class="message-avatar"
-                src="<%= message.senderAvatarUrl %>"
-                alt=""
-                width="36"
-                height="36"
-                loading="lazy"
+              <a
+                class="message-avatar-link"
+                href="<%= message.senderId ? '/users/' + message.senderId : '#' %>"
+                aria-label="Xem trang cá nhân của <%= message.senderName %>"
               >
+                <img
+                  class="message-avatar"
+                  src="<%= message.senderAvatarUrl %>"
+                  alt=""
+                  width="36"
+                  height="36"
+                  loading="lazy"
+                >
+              </a>
             <% } %>
             <article class="message-bubble <%= message.isMine ? 'message-bubble--mine' : 'message-bubble--other' %>">
               <p class="message-sender-label">

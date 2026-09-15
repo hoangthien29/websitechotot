@@ -9,6 +9,8 @@ const buildMessagePayload = ({ conversation, message, sender }) => ({
     senderId: String(sender?._id || message?.sender || ''),
     recipientId: String(message?.recipient || ''),
     senderName: sender?.name || 'Bạn',
+    senderAvatarUrl: sender?.avatar || '/images/default-avatar.svg',
+    senderProfileUrl: sender?._id ? `/users/${String(sender._id)}` : '#',
     createdAt: message?.createdAt || new Date().toISOString(),
     isMine: true,
   },
@@ -28,38 +30,117 @@ const getMessagePreview = (message) => {
   return 'Đã gửi tin nhắn';
 };
 
-const emitMessage = (socketServer, payload) => {
+const buildConversationUpdate = ({
+  conversationId,
+  preview,
+  lastMessageAt,
+  unreadCountForThisUser,
+  totalUnread,
+  senderId,
+  recipientId,
+  markLatest,
+}) => ({
+  conversationId,
+  preview,
+  lastMessageAt,
+  unreadCountForThisUser: Number(unreadCountForThisUser || 0),
+  totalUnread: Number(totalUnread || 0),
+  senderId,
+  recipientId,
+  markLatest,
+});
+
+const emitMessage = (
+  socketServer,
+  payload,
+  options = {},
+) => {
   if (!socketServer || !payload?.conversationId || !payload.message) {
     return;
   }
 
-  const { conversationId, message } = payload;
-  socketServer.to(conversationId).emit('chatMessageReceived', payload);
-  socketServer.to(conversationId).emit('conversationUpdated', {
+  const {
     conversationId,
-    preview: getMessagePreview(message),
-    lastMessageAt: message.createdAt,
-    senderId: message.senderId,
-    recipientId: message.recipientId,
-    unreadDelta: 0,
-  });
+    message,
+  } = payload;
 
-  if (message.recipientId) {
-    socketServer.to(`user:${message.recipientId}`).emit('messageNotification', {
-      ...payload,
-      preview: getMessagePreview(message),
-      lastMessageAt: message.createdAt,
-      unreadDelta: 1,
+  const preview = getMessagePreview(message);
+  const lastMessageAt = message.createdAt;
+  const senderId = String(message.senderId || options.senderId || '');
+  const recipientId = String(message.recipientId || options.recipientId || '');
+  const senderUnreadCount = Number(options.senderUnreadCount || 0);
+  const recipientUnreadCount = Number(options.recipientUnreadCount || 0);
+  const senderTotalUnread = Number(options.senderTotalUnread || 0);
+  const recipientTotalUnread = Number(options.recipientTotalUnread || 0);
+
+  const conversationPayload = {
+    conversationId,
+    preview,
+    lastMessageAt,
+    senderId,
+    recipientId,
+    unreadDelta: 0,
+  };
+
+  socketServer.to(conversationId).emit('new_message', {
+    ...payload.message,
+    conversationId,
+  });
+  socketServer.to(conversationId).emit('chatMessageReceived', payload);
+  socketServer.to(conversationId).emit('conversationUpdated', conversationPayload);
+  socketServer.to(conversationId).emit('conversation_update', buildConversationUpdate({
+    conversationId,
+    preview,
+    lastMessageAt,
+    unreadCountForThisUser: 0,
+    totalUnread: senderTotalUnread,
+    senderId,
+    recipientId,
+    markLatest: true,
+  }));
+
+  if (recipientId) {
+    const recipientUpdate = buildConversationUpdate({
+      conversationId,
+      preview,
+      lastMessageAt,
+      unreadCountForThisUser: recipientUnreadCount,
+      totalUnread: recipientTotalUnread,
+      senderId,
+      recipientId,
+      markLatest: true,
     });
+    socketServer.to(`user:${recipientId}`).emit('messageNotification', {
+      ...payload,
+      preview,
+      lastMessageAt,
+      unreadDelta: 1,
+      unreadCountForThisUser: recipientUnreadCount,
+      totalUnread: recipientTotalUnread,
+    });
+    socketServer.to(`user:${recipientId}`).emit('conversation_update', recipientUpdate);
   }
 
-  if (message.senderId) {
-    socketServer.to(`user:${message.senderId}`).emit('messageNotification', {
-      ...payload,
-      preview: getMessagePreview(message),
-      lastMessageAt: message.createdAt,
-      unreadDelta: 0,
+  if (senderId) {
+    const senderUpdate = buildConversationUpdate({
+      conversationId,
+      preview,
+      lastMessageAt,
+      unreadCountForThisUser: senderUnreadCount,
+      totalUnread: senderTotalUnread,
+      senderId,
+      recipientId,
+      markLatest: false,
     });
+    socketServer.to(`user:${senderId}`).emit('messageNotification', {
+      ...payload,
+      preview,
+      lastMessageAt,
+      unreadDelta: 0,
+      unreadCountForThisUser: senderUnreadCount,
+      totalUnread: senderTotalUnread,
+    });
+    socketServer.to(`user:${senderId}`).emit('conversation_update', senderUpdate);
   }
 };
 

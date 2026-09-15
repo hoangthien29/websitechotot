@@ -1,6 +1,7 @@
 const { Server } = require('socket.io');
 const mongoose = require('mongoose');
 const Conversation = require('../models/Conversation');
+const messageService = require('../services/message.service');
 
 let io;
 
@@ -63,6 +64,39 @@ const initSocket = (server, sessionMiddleware) => {
       if (conversationId) {
         socket.leave(String(conversationId));
       }
+    });
+
+    socket.on('mark_read', async ({ conversationId, userId } = {}) => {
+      if (!socket.userId || !mongoose.isValidObjectId(conversationId)) {
+        return;
+      }
+
+      const targetUserId = String(userId || socket.userId);
+      if (targetUserId !== String(socket.userId)) {
+        return;
+      }
+
+      await messageService.markConversationAsRead(conversationId, targetUserId);
+      const unreadCountForThisUser = await messageService.getConversationUnreadCount(
+        conversationId,
+        targetUserId,
+      );
+      const totalUnread = await messageService.countUnreadMessages(targetUserId);
+
+      socket.to(`user:${targetUserId}`).emit('conversation_update', {
+        conversationId: String(conversationId),
+        preview: '',
+        lastMessageAt: new Date().toISOString(),
+        unreadCountForThisUser,
+        totalUnread,
+      });
+      socket.emit('conversation_update', {
+        conversationId: String(conversationId),
+        preview: '',
+        lastMessageAt: new Date().toISOString(),
+        unreadCountForThisUser: 0,
+        totalUnread,
+      });
     });
 
   });

@@ -9,13 +9,19 @@
 
       <div class="conversation-header-person">
 
-        <img
-          class="conversation-header-avatar"
-          src="<%= conversation.otherParticipant.avatarUrl %>"
-          alt="Ảnh đại diện của <%= conversation.otherParticipant.name %>"
-          width="56"
-          height="56"
+        <a
+          class="conversation-header-avatar-link"
+          href="<%= conversation.otherParticipant.id ? '/users/' + conversation.otherParticipant.id : '#' %>"
+          aria-label="Xem trang cá nhân của <%= conversation.otherParticipant.name %>"
         >
+          <img
+            class="conversation-header-avatar"
+            src="<%= conversation.otherParticipant.avatarUrl %>"
+            alt="Ảnh đại diện của <%= conversation.otherParticipant.name %>"
+            width="56"
+            height="56"
+          >
+        </a>
 
         <div class="conversation-header-copy">
 
@@ -181,14 +187,20 @@
               data-message-id="<%= message.id %>"
             >
               <% if (!message.isMine) { %>
-                <img
-                  class="message-avatar"
-                  src="<%= message.senderAvatarUrl %>"
-                  alt=""
-                  width="36"
-                  height="36"
-                  loading="lazy"
+                <a
+                  class="message-avatar-link"
+                  href="<%= message.senderId ? '/users/' + message.senderId : '#' %>"
+                  aria-label="Xem trang cá nhân của <%= message.senderName %>"
                 >
+                  <img
+                    class="message-avatar"
+                    src="<%= message.senderAvatarUrl %>"
+                    alt=""
+                    width="36"
+                    height="36"
+                    loading="lazy"
+                  >
+                </a>
               <% } %>
               <article class="message-bubble <%= message.isMine ? 'message-bubble--mine' : 'message-bubble--other' %>">
                 <p class="message-sender-label">

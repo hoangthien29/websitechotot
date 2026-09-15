@@ -11,6 +11,7 @@ const presentMessage = (message, currentUserId) => {
 
   return {
     id: data._id.toString(),
+    senderId: senderId || '',
     content: data.content || '',
     attachments: Array.isArray(data.attachments)
       ? data.attachments.map((attachment) => ({
@@ -27,6 +28,7 @@ const presentMessage = (message, currentUserId) => {
     senderAvatarUrl: isManagedAvatarPath(data.sender?.avatar)
       ? data.sender.avatar
       : DEFAULT_AVATAR,
+    senderProfileUrl: senderId ? `/users/${senderId}` : '#',
   };
 };
 

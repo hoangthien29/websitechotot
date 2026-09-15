@@ -306,6 +306,18 @@ const countUnreadMessages = (userId) => {
   });
 };
 
+const getConversationUnreadCount = async (conversationId, userId) => {
+  if (!mongoose.isValidObjectId(conversationId) || !mongoose.isValidObjectId(userId)) {
+    return 0;
+  }
+
+  return Message.countDocuments({
+    conversation: conversationId,
+    recipient: userId,
+    readAt: null,
+  });
+};
+
 module.exports = {
   MESSAGES_PER_PAGE,
   MESSAGE_CONTENT_INVALID,
@@ -317,6 +329,7 @@ module.exports = {
   MESSAGE_LISTING_HIDDEN_MESSAGE,
   MESSAGE_METADATA_UPDATE_FAILED,
   countUnreadMessages,
+  getConversationUnreadCount,
   getMessagesPage,
   markConversationAsRead,
   normalizeMessageContent,

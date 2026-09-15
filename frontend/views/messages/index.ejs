@@ -37,29 +37,37 @@
               data-conversation-id="<%= conversation.id %>"
             >
 
-              <a
-                class="conversation-redesign-link"
-                href="#"
-                data-id="<%= conversation.id %>"
-                aria-label="Mở trò chuyện với <%= conversation.otherParticipant.name %>"
-              >
+              <div class="conversation-redesign-row">
 
-                <img
-                  class="conversation-redesign-avatar"
-                  src="<%= conversation.otherParticipant.avatarUrl %>"
-                  width="44"
-                  height="44"
-                  alt=""
+                <a
+                  class="conversation-redesign-avatar-link"
+                  href="<%= conversation.otherParticipant.id ? '/users/' + conversation.otherParticipant.id : '#' %>"
+                  aria-label="Xem trang cá nhân của <%= conversation.otherParticipant.name %>"
                 >
+                  <img
+                    class="conversation-redesign-avatar"
+                    src="<%= conversation.otherParticipant.avatarUrl %>"
+                    width="44"
+                    height="44"
+                    alt=""
+                  >
+                </a>
 
-                <div class="conversation-redesign-user__copy">
-                  <div class="conversation-redesign-user__line">
-                    <h2><%= conversation.otherParticipant.name %></h2>
-                    <time class="conversation-redesign-time"><%= conversation.formattedLastMessageAt %></time>
+                <a
+                  class="conversation-redesign-link"
+                  href="#"
+                  data-id="<%= conversation.id %>"
+                  aria-label="Mở trò chuyện với <%= conversation.otherParticipant.name %>"
+                >
+                  <div class="conversation-redesign-user__copy">
+                    <div class="conversation-redesign-user__line">
+                      <h2><%= conversation.otherParticipant.name %></h2>
+                      <time class="conversation-redesign-time"><%= conversation.formattedLastMessageAt %></time>
+                    </div>
+
+                    <p class="conversation-redesign-preview"><%= conversation.lastMessagePreview %></p>
                   </div>
-
-                  <p class="conversation-redesign-preview"><%= conversation.lastMessagePreview %></p>
-                </div>
+                </a>
 
                 <% if (conversation.unreadCount > 0) { %>
                   <span class="conversation-redesign-unread">
@@ -67,7 +75,7 @@
                   </span>
                 <% } %>
 
-              </a>
+              </div>
 
             </article>
 
